@@ -366,30 +366,93 @@ footer{background:var(--ink2);padding:44px 68px;display:flex;align-items:center;
       <div class="eng-bar">
         <div class="eng-bar-l">Deal Sourcing &amp; Preliminary Diligence Engine &#8212; European M&amp;A</div>
         <div class="eng-acts">
-          <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="eng-act active" id="btnFullscreen">&#10162; Full Screen</a>
-          <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="eng-act active" id="btnLaunch">&#8599; Launch App</a>
+          <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="eng-act active">&#10162; Full Screen</a>
+          <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="eng-act active">&#8599; Launch App</a>
         </div>
       </div>
       <div class="eng-launch-panel">
-        <div class="eng-lp-inner">
-          <div class="eng-lp-badge">&#9679; Live Application</div>
-          <div class="eng-lp-title">Deal Sourcing &amp;<br><em>Diligence Engine</em></div>
-          <div class="eng-lp-sub">A Python-based deal workflow replicating early-stage M&amp;A analyst work &#8212; from universe screening through FDD-style preliminary diligence review. Built on Euronext Paris / SBF 120 public data.</div>
-          <div class="eng-lp-modules">
-            <div class="eng-lp-mod"><span class="eng-lp-num">01</span><span>Universe Screener</span></div>
-            <div class="eng-lp-mod"><span class="eng-lp-num">02</span><span>Target Ranker</span></div>
-            <div class="eng-lp-mod"><span class="eng-lp-num">03</span><span>Financial Statements</span></div>
-            <div class="eng-lp-mod"><span class="eng-lp-num">04</span><span>Diligence View</span></div>
-            <div class="eng-lp-mod"><span class="eng-lp-num">05</span><span>Deal Signal Monitor</span></div>
-            <div class="eng-lp-mod"><span class="eng-lp-num">06</span><span>Shortlist &amp; Export</span></div>
+
+        <!-- PREVIEW WINDOW -->
+        <div class="eng-preview">
+          <div class="eng-preview-screen">
+            <div class="eng-prev-bar">
+              <div class="eng-prev-dot" style="background:#eb5757"></div>
+              <div class="eng-prev-dot" style="background:#f6b93b"></div>
+              <div class="eng-prev-dot" style="background:#78e08f"></div>
+              <span class="eng-prev-url">aryanskothari-deal-sourcing.streamlit.app</span>
+            </div>
+            <div class="eng-prev-body">
+              <div class="eng-prev-header">
+                <span class="eng-prev-h-title">Deal Sourcing &amp; Preliminary <em>Diligence Engine</em></span>
+                <span class="eng-prev-h-badge">V1.0 · SBF 120</span>
+              </div>
+              <div class="eng-prev-nav">
+                <span class="eng-prev-nav-item active">Home</span>
+                <span class="eng-prev-nav-item">Screener</span>
+                <span class="eng-prev-nav-item">Ranker</span>
+                <span class="eng-prev-nav-item">Financials</span>
+                <span class="eng-prev-nav-item">Diligence</span>
+                <span class="eng-prev-nav-item">Signals</span>
+              </div>
+              <div class="eng-prev-metrics">
+                <div class="eng-prev-metric"><div class="eng-prev-metric-val">12</div><div class="eng-prev-metric-lbl">Companies</div></div>
+                <div class="eng-prev-metric"><div class="eng-prev-metric-val" style="color:#9B6F29">96</div><div class="eng-prev-metric-lbl">Top Score</div></div>
+                <div class="eng-prev-metric"><div class="eng-prev-metric-val">€9.6bn</div><div class="eng-prev-metric-lbl">Median Cap</div></div>
+                <div class="eng-prev-metric"><div class="eng-prev-metric-val">7.3×</div><div class="eng-prev-metric-lbl">EV/EBITDA</div></div>
+              </div>
+              <div class="eng-prev-chart">
+                <div class="eng-prev-chart-label">Top 10 Targets by Acquisition Score</div>
+                <div class="eng-prev-bars">
+                  <div class="eng-prev-bar-item" style="height:42%"></div>
+                  <div class="eng-prev-bar-item" style="height:47%"></div>
+                  <div class="eng-prev-bar-item" style="height:52%"></div>
+                  <div class="eng-prev-bar-item" style="height:55%"></div>
+                  <div class="eng-prev-bar-item" style="height:60%"></div>
+                  <div class="eng-prev-bar-item" style="height:63%"></div>
+                  <div class="eng-prev-bar-item" style="height:67%"></div>
+                  <div class="eng-prev-bar-item" style="height:70%"></div>
+                  <div class="eng-prev-bar-item" style="height:74%"></div>
+                  <div class="eng-prev-bar-item" style="height:100%"></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="eng-lp-cta">
-            Launch Full Engine &#8599;
-          </a>
-          <div class="eng-lp-note">Opens in new tab &middot; No login required &middot; Built with Python + Streamlit</div>
+          <div class="eng-preview-overlay"></div>
         </div>
+
+        <!-- INFO + CTA -->
+        <div class="eng-lp-info">
+          <div>
+            <div class="eng-lp-badge">Live Application</div>
+            <div class="eng-lp-title">Deal Sourcing &amp; Preliminary <em>Diligence Engine</em></div>
+            <div class="eng-lp-sub">8-pillar acquisition scoring · FDD-style diligence · SBF 120 universe · Built with Python &amp; Streamlit</div>
+            <button class="eng-lp-toggle" id="engToggle" onclick="
+              this.classList.toggle('open');
+              var m = document.getElementById('engModules');
+              m.classList.toggle('open');
+              this.textContent = this.classList.contains('open') ? 'View Less' : 'View More';
+              this.classList.contains('open') ? this.classList.add('open') : '';
+            ">View More</button>
+            <div class="eng-lp-modules" id="engModules">
+              <div class="eng-lp-mod"><span class="eng-lp-num">01</span>Universe Screener</div>
+              <div class="eng-lp-mod"><span class="eng-lp-num">02</span>Target Ranker</div>
+              <div class="eng-lp-mod"><span class="eng-lp-num">03</span>Financial Statements</div>
+              <div class="eng-lp-mod"><span class="eng-lp-num">04</span>Diligence View</div>
+              <div class="eng-lp-mod"><span class="eng-lp-num">05</span>Deal Signal Monitor</div>
+              <div class="eng-lp-mod"><span class="eng-lp-num">06</span>Shortlist &amp; Export</div>
+            </div>
+          </div>
+          <div>
+            <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="eng-lp-cta">
+              Launch Full Engine &#8599;
+            </a>
+            <div class="eng-lp-note">Opens in new tab &middot; No login required &middot; Python + Streamlit</div>
+          </div>
+        </div>
+
       </div>
     </div>
+    
     <div class="eng-panel">
       <div class="eng-panel-t">Deal Sourcing &amp; Preliminary Diligence Engine</div>
       <div class="eng-panel-c">Python &#183; European M&amp;A &#183; Phase 1 Building</div>
