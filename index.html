@@ -364,15 +364,29 @@ footer{background:var(--ink2);padding:44px 68px;display:flex;align-items:center;
       <div class="eng-bar">
         <div class="eng-bar-l">Deal Sourcing &amp; Preliminary Diligence Engine &#8212; European M&amp;A</div>
         <div class="eng-acts">
-          <!-- Once deployed: remove class "disabled", add href to your Streamlit URL -->
           <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="eng-act active" id="btnFullscreen">&#10162; Full Screen</a>
           <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="eng-act active" id="btnLaunch">&#8599; Launch App</a>
         </div>
       </div>
-      <div class="eng-iframe-wrap">
-        <iframe src="https://aryanskothari-deal-sourcing.streamlit.app/?embed=true&embed_options=show_toolbar" allow="fullscreen" loading="eager" style="width:100%;height:820px;border:none;display:block"></iframe>
+      <div class="eng-launch-panel">
+        <div class="eng-lp-inner">
+          <div class="eng-lp-badge">&#9679; Live Application</div>
+          <div class="eng-lp-title">Deal Sourcing &amp;<br><em>Diligence Engine</em></div>
+          <div class="eng-lp-sub">A Python-based deal workflow replicating early-stage M&amp;A analyst work &#8212; from universe screening through FDD-style preliminary diligence review. Built on Euronext Paris / SBF 120 public data.</div>
+          <div class="eng-lp-modules">
+            <div class="eng-lp-mod"><span class="eng-lp-num">01</span><span>Universe Screener</span></div>
+            <div class="eng-lp-mod"><span class="eng-lp-num">02</span><span>Target Ranker</span></div>
+            <div class="eng-lp-mod"><span class="eng-lp-num">03</span><span>Financial Statements</span></div>
+            <div class="eng-lp-mod"><span class="eng-lp-num">04</span><span>Diligence View</span></div>
+            <div class="eng-lp-mod"><span class="eng-lp-num">05</span><span>Deal Signal Monitor</span></div>
+            <div class="eng-lp-mod"><span class="eng-lp-num">06</span><span>Shortlist &amp; Export</span></div>
+          </div>
+          <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="eng-lp-cta">
+            Launch Full Engine &#8599;
+          </a>
+          <div class="eng-lp-note">Opens in new tab &middot; No login required &middot; Built with Python + Streamlit</div>
+        </div>
       </div>
-      
     </div>
     <div class="eng-panel">
       <div class="eng-panel-t">Deal Sourcing &amp; Preliminary Diligence Engine</div>
