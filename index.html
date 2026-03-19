@@ -143,7 +143,7 @@ h1{font-family:var(--serif);font-size:clamp(48px,7vw,100px);font-weight:300;line
 .eng-act.active{color:var(--gold3);border-color:rgba(213,169,68,.35);pointer-events:auto;opacity:1}
 .eng-act.disabled{opacity:.3;pointer-events:none}
 .eng-act:hover{border-color:var(--gold3);color:var(--gold3)}
-.eng-iframe-wrap{width:100%;height:820px;background:rgba(0,0,0,.15);position:relative;overflow:hidden}
+.eng-iframe-wrap{width:100%;height:820px;background:rgba(0,0,0,.15);position:relative}
 .eng-iframe-wrap iframe{width:100%;height:100%;border:none;display:block;}
 .eng-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:52px 44px;text-align:center}
 .eng-ph-badge{font-family:var(--mono);font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold3);border:1px solid rgba(213,169,68,.25);padding:5px 14px;margin-bottom:28px;display:inline-block}
@@ -359,7 +359,7 @@ footer{background:var(--ink2);padding:44px 68px;display:flex;align-items:center;
       <p class="sec-sub-light">A Python-based deal sourcing and preliminary diligence tool &#8212; replicating the early-stage M&amp;A analyst workflow from target screening through FDD-style review. Built on European public market data.</p>
     </div>
   </div>
-  <div class="eng-wrap rv">
+  <div class="eng-wrap">
     <div class="eng-left">
       <div class="eng-bar">
         <div class="eng-bar-l">Deal Sourcing &amp; Preliminary Diligence Engine &#8212; European M&amp;A</div>
@@ -370,7 +370,7 @@ footer{background:var(--ink2);padding:44px 68px;display:flex;align-items:center;
         </div>
       </div>
       <div class="eng-iframe-wrap">
-        <iframe src="https://aryanskothari-deal-sourcing.streamlit.app/?embed=true&embed_options=show_toolbar" allow="fullscreen" style="width:100%;height:100%;border:none;display:block"></iframe>
+        <iframe src="https://aryanskothari-deal-sourcing.streamlit.app/?embed=true&embed_options=show_toolbar" allow="fullscreen" loading="eager" style="width:100%;height:820px;border:none;display:block"></iframe>
       </div>
       
     </div>
