@@ -338,8 +338,8 @@ footer{background:var(--ink2);padding:44px 68px;display:flex;align-items:center;
 /* ═══ ENGINE SCREENSHOT SLIDER ═══ */
 .eng-slides{position:relative;height:820px;background:#0A1628;overflow:hidden;display:flex;flex-direction:column}
 .eng-slides-track{flex:0 0 490px;position:relative;overflow:hidden}
-.eng-slide{position:absolute;inset:0;opacity:0!important;transition:opacity .6s ease;display:flex;flex-direction:column}
-.eng-slide.active{opacity:1!important;z-index:1}
+.eng-slide{position:absolute;inset:0;transition:opacity .6s ease;display:flex;flex-direction:column}
+.eng-slide.active{z-index:1}
 .eng-slide-inner{flex:1;padding:20px 24px;overflow:hidden}
 .eng-slide-fade{position:absolute;bottom:0;left:0;right:0;height:70px;background:linear-gradient(to bottom,transparent,#0A1628);pointer-events:none;z-index:2}
 .eng-slide-label{position:absolute;bottom:0;left:0;right:0;padding:10px 16px 14px;font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(213,169,68,.7);z-index:3}
