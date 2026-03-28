@@ -334,6 +334,58 @@ footer{background:var(--ink2);padding:44px 68px;display:flex;align-items:center;
 .elp-launch-btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#0A1628!important;background:#D5A944;padding:12px 24px;text-decoration:none;transition:background .2s,transform .2s;align-self:flex-start;margin-bottom:8px}
 .elp-launch-btn:hover{background:#F6F1E7;transform:translateY(-1px)}
 .elp-note{font-family:var(--mono);font-size:7px;letter-spacing:.1em;color:rgba(246,241,231,.18);text-transform:uppercase}
+
+/* ═══ ENGINE SCREENSHOT SLIDER ═══ */
+.eng-slides{position:relative;height:820px;background:#0A1628;overflow:hidden;display:flex;flex-direction:column}
+.eng-slides-track{flex:0 0 490px;position:relative;overflow:hidden}
+.eng-slide{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;display:flex;flex-direction:column}
+.eng-slide.active{opacity:1;z-index:1}
+.eng-slide-inner{flex:1;padding:20px 24px;overflow:hidden}
+.eng-slide-fade{position:absolute;bottom:0;left:0;right:0;height:70px;background:linear-gradient(to bottom,transparent,#0A1628);pointer-events:none;z-index:2}
+.eng-slide-label{position:absolute;bottom:0;left:0;right:0;padding:10px 16px 14px;font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(213,169,68,.7);z-index:3}
+.eng-dots{display:flex;gap:8px;justify-content:center;padding:10px 0 0;flex-shrink:0}
+.eng-dot{width:7px;height:7px;border-radius:50%;background:rgba(213,169,68,.2);cursor:pointer;transition:background .3s;border:none;padding:0}
+.eng-dot.active{background:var(--gold3)}
+.eng-cta-wrap{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:18px 28px 22px}
+.eng-cta-badge{font-family:var(--mono);font-size:7.5px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold3);display:inline-flex;align-items:center;gap:8px;margin-bottom:10px}
+.eng-cta-badge::before{content:"";width:6px;height:6px;background:var(--gold3);border-radius:50%;box-shadow:0 0 8px rgba(213,169,68,.6);animation:pulse 2s ease infinite;flex-shrink:0}
+.eng-cta-title{font-family:var(--serif);font-size:19px;font-weight:500;color:var(--paper);line-height:1.25;margin-bottom:6px}
+.eng-cta-title em{color:var(--gold3);font-style:italic}
+.eng-cta-sub{font-family:var(--sans);font-size:11.5px;color:rgba(246,241,231,.35);line-height:1.6}
+.eng-launch{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#0A1628;background:var(--gold3);padding:14px 36px;text-decoration:none;transition:all .2s;align-self:flex-start;margin-top:14px}
+.eng-launch:hover{background:var(--paper);transform:translateY(-2px)}
+.eng-launch-arrow{font-size:16px;transition:transform .2s}
+.eng-launch:hover .eng-launch-arrow{transform:translate(2px,-2px)}
+.eng-cta-note{font-family:var(--mono);font-size:7px;letter-spacing:.1em;color:rgba(246,241,231,.15);text-transform:uppercase;margin-top:8px}
+.eng-slide-header{font-family:"Cormorant Garamond",Georgia,serif;font-size:22px;font-style:italic;color:#F6F1E7;margin-bottom:14px}
+.eng-slide-header em{color:#D5A944}
+.eng-metric-row{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:12px}
+.eng-metric-cell{background:#EEE7D7;padding:9px 7px;text-align:center}
+.eng-metric-val{font-family:"Cormorant Garamond",serif;font-size:17px;color:#100E0C}
+.eng-metric-val.gold{color:#9B6F29}
+.eng-metric-lbl{font-family:monospace;font-size:5.5px;color:#A19890;text-transform:uppercase;letter-spacing:.08em;margin-top:1px}
+.eng-card-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px}
+.eng-card{background:#EEE7D7;padding:11px 10px}
+.eng-card.dark{background:#100E0C}
+.eng-card-lbl{font-family:monospace;font-size:6px;color:#A19890;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.eng-card.dark .eng-card-lbl{color:#D5A944;opacity:.7}
+.eng-card-val{font-family:"Cormorant Garamond",serif;font-size:20px;color:#100E0C}
+.eng-card.dark .eng-card-val{color:#F6F1E7;font-size:18px}
+.eng-card.green .eng-card-val{color:#1B4B2B}
+.eng-card-sub{font-family:monospace;font-size:7px;color:rgba(246,241,231,.3);margin-top:1px}
+.eng-table{width:100%;border-collapse:collapse}
+.eng-table th{font-family:monospace;font-size:6px;color:#A19890;text-transform:uppercase;padding:5px 8px;text-align:left;border-bottom:1px solid rgba(16,14,12,.1)}
+.eng-table td{font-family:monospace;font-size:8.5px;color:#100E0C;padding:4px 8px}
+.eng-table tr:nth-child(even) td{background:rgba(155,111,41,.04)}
+.eng-table td.gold{color:#9B6F29;font-weight:600}
+.eng-table td.green{color:#1B4B2B}
+.eng-table td.red{color:#8C1B1B}
+.eng-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.eng-bar-name{font-family:monospace;font-size:8px;color:#100E0C;min-width:76px}
+.eng-bar-track{flex:1;background:#EEE7D7;border:1px solid rgba(16,14,12,.08);height:13px}
+.eng-bar-fill{height:100%}
+.eng-bar-score{font-family:monospace;font-size:8.5px;min-width:28px;text-align:right}
+
 </style>
 </head>
 <body>
@@ -408,83 +460,111 @@ footer{background:var(--ink2);padding:44px 68px;display:flex;align-items:center;
           <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="eng-act active">&#8599; Launch App</a>
         </div>
       </div>
+      <div class="eng-slides">
+        <div class="eng-slides-track">
 
-      <div class="elp">
-
-        <!-- MOCK BROWSER PREVIEW -->
-        <div class="elp-preview" style="position:relative">
-          <div class="elp-chrome">
-            <div class="elp-dot" style="background:#eb5757"></div>
-            <div class="elp-dot" style="background:#f6b93b"></div>
-            <div class="elp-dot" style="background:#78e08f"></div>
-            <span class="elp-url">aryanskothari-deal-sourcing.streamlit.app</span>
-          </div>
-          <div style="padding:0 10px 10px">
-            <div class="elp-screen">
-              <div class="elp-s-header">
-                <span class="elp-s-h-title">Deal Sourcing &amp; Preliminary <em>Diligence Engine</em></span>
-                <span class="elp-s-h-badge">V1.0 · SBF 120</span>
+          <!-- SLIDE 1: HOME -->
+          <div class="eng-slide active" id="esl0">
+            <div class="eng-slide-inner" style="background:#1B3A2D">
+              <div style="font-family:var(--mono);font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:rgba(213,169,68,.6);margin-bottom:8px">&#9679; Phase 1 &middot; SBF 120</div>
+              <div class="eng-slide-header">Deal Sourcing &amp; Preliminary <em>Diligence Engine</em></div>
+              <div class="eng-metric-row">
+                <div class="eng-metric-cell"><div class="eng-metric-val">29</div><div class="eng-metric-lbl">Companies</div></div>
+                <div class="eng-metric-cell"><div class="eng-metric-val gold">58</div><div class="eng-metric-lbl">Avg Score</div></div>
+                <div class="eng-metric-cell"><div class="eng-metric-val">&#8364;17.8bn</div><div class="eng-metric-lbl">Med Cap</div></div>
+                <div class="eng-metric-cell"><div class="eng-metric-val">9.3&#215;</div><div class="eng-metric-lbl">EV/EBITDA</div></div>
+                <div class="eng-metric-cell"><div class="eng-metric-val">22%</div><div class="eng-metric-lbl">Margin</div></div>
               </div>
-              <div class="elp-s-nav">
-                <span class="on">Home</span><span>Screener</span><span>Ranker</span><span>Financials</span><span>Diligence</span><span>Signals</span>
-              </div>
-              <div class="elp-s-metrics">
-                <div class="elp-s-m"><div class="elp-s-mv">12</div><div class="elp-s-ml">Companies</div></div>
-                <div class="elp-s-m"><div class="elp-s-mv gold">96</div><div class="elp-s-ml">Top Score</div></div>
-                <div class="elp-s-m"><div class="elp-s-mv">€9.6bn</div><div class="elp-s-ml">Med. Cap</div></div>
-                <div class="elp-s-m"><div class="elp-s-mv">7.3×</div><div class="elp-s-ml">EV/EBITDA</div></div>
-              </div>
-              <div class="elp-s-chart">
-                <div class="elp-s-cl">Top 10 Targets by Acquisition Score</div>
-                <div class="elp-s-bars">
-                  <div class="elp-s-bar" style="height:42%"></div>
-                  <div class="elp-s-bar" style="height:47%"></div>
-                  <div class="elp-s-bar" style="height:52%"></div>
-                  <div class="elp-s-bar" style="height:55%"></div>
-                  <div class="elp-s-bar" style="height:60%"></div>
-                  <div class="elp-s-bar" style="height:63%"></div>
-                  <div class="elp-s-bar" style="height:67%"></div>
-                  <div class="elp-s-bar" style="height:70%"></div>
-                  <div class="elp-s-bar" style="height:74%"></div>
-                  <div class="elp-s-bar top" style="height:100%"></div>
+              <div style="background:#EEE7D7;padding:11px 13px">
+                <div style="font-family:monospace;font-size:6.5px;color:#A19890;text-transform:uppercase;letter-spacing:.1em;margin-bottom:9px">Top Acquisition Target &#8212; #1 Ranked</div>
+                <div class="eng-card-grid">
+                  <div class="eng-card dark"><div class="eng-card-lbl">#1 Target</div><div class="eng-card-val">Ipsen</div><div class="eng-card-sub">IPN.PA &middot; Pharma</div></div>
+                  <div class="eng-card"><div class="eng-card-lbl">Score</div><div class="eng-card-val gold">84</div></div>
+                  <div class="eng-card"><div class="eng-card-lbl">EV / EBITDA</div><div class="eng-card-val">6.4&#215;</div></div>
+                  <div class="eng-card green"><div class="eng-card-lbl">EBITDA Margin</div><div class="eng-card-val">34.0%</div></div>
                 </div>
               </div>
             </div>
+            <div class="eng-slide-fade"></div>
+            <div class="eng-slide-label">01 &middot; Home &mdash; Universe overview &amp; top targets</div>
           </div>
-          <div class="elp-fade"></div>
+
+          <!-- SLIDE 2: SCREENER -->
+          <div class="eng-slide" id="esl1">
+            <div class="eng-slide-inner" style="background:#1B3A2D">
+              <div style="font-family:var(--mono);font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:rgba(213,169,68,.6);margin-bottom:8px">&#9679; Phase 1 &middot; SBF 120</div>
+              <div class="eng-slide-header">Universe <em>Screener</em></div>
+              <div class="eng-metric-row">
+                <div class="eng-metric-cell"><div class="eng-metric-val">20/29</div><div class="eng-metric-lbl">Passing</div></div>
+                <div class="eng-metric-cell"><div class="eng-metric-val">&#8364;10.5bn</div><div class="eng-metric-lbl">Med Cap</div></div>
+                <div class="eng-metric-cell"><div class="eng-metric-val">7.5&#215;</div><div class="eng-metric-lbl">EV/EBITDA</div></div>
+                <div class="eng-metric-cell"><div class="eng-metric-val">18%</div><div class="eng-metric-lbl">Margin</div></div>
+                <div class="eng-metric-cell"><div class="eng-metric-val gold">60</div><div class="eng-metric-lbl">Avg Score</div></div>
+              </div>
+              <div style="background:#EEE7D7;padding:10px 12px">
+                <table class="eng-table">
+                  <thead><tr><th>Company</th><th>Mkt Cap</th><th>EV/EBITDA</th><th>Margin</th><th>Growth</th><th>Score</th></tr></thead>
+                  <tbody>
+                    <tr><td style="font-weight:600">Ipsen</td><td>&#8364;7.8bn</td><td>6.4&#215;</td><td class="green">34.0%</td><td class="green">+8.2%</td><td class="gold">84</td></tr>
+                    <tr><td>Vallourec</td><td>&#8364;1.8bn</td><td>2.9&#215;</td><td class="green">18.0%</td><td class="green">+6.2%</td><td class="gold">73</td></tr>
+                    <tr><td>bioM&#233;rieux</td><td>&#8364;9.8bn</td><td>10.6&#215;</td><td class="green">24.0%</td><td class="green">+5.4%</td><td class="gold">71</td></tr>
+                    <tr><td>Capgemini</td><td>&#8364;22.4bn</td><td>7.7&#215;</td><td>14.0%</td><td class="green">+5.2%</td><td class="gold">64</td></tr>
+                    <tr><td>Bouygues</td><td>&#8364;9.8bn</td><td>4.3&#215;</td><td>6.0%</td><td class="green">+3.4%</td><td>63</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="eng-slide-fade"></div>
+            <div class="eng-slide-label">02 &middot; Screener &mdash; Filter by sector, size &amp; multiples</div>
+          </div>
+
+          <!-- SLIDE 3: RANKER -->
+          <div class="eng-slide" id="esl2">
+            <div class="eng-slide-inner" style="background:#1B3A2D">
+              <div style="font-family:var(--mono);font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:rgba(213,169,68,.6);margin-bottom:8px">&#9679; Phase 1 &middot; SBF 120</div>
+              <div class="eng-slide-header">Acquisition Target <em>Ranker</em></div>
+              <div style="background:#EEE7D7;padding:12px 14px">
+                <div style="font-family:monospace;font-size:6.5px;color:#A19890;text-transform:uppercase;letter-spacing:.1em;margin-bottom:11px">Top 8 Acquisition Targets by Composite Score</div>
+                <div class="eng-bar-row"><span class="eng-bar-name">Ipsen</span><div class="eng-bar-track"><div class="eng-bar-fill" style="width:96%;background:#1B4B2B"></div></div><span class="eng-bar-score" style="color:#9B6F29">83.8</span></div>
+                <div class="eng-bar-row"><span class="eng-bar-name">Vallourec</span><div class="eng-bar-track"><div class="eng-bar-fill" style="width:83%;background:#4B4540"></div></div><span class="eng-bar-score" style="color:#4B4540">73.2</span></div>
+                <div class="eng-bar-row"><span class="eng-bar-name">bioM&#233;rieux</span><div class="eng-bar-track"><div class="eng-bar-fill" style="width:80%;background:#1B4B2B;opacity:.8"></div></div><span class="eng-bar-score" style="color:#4B4540">70.7</span></div>
+                <div class="eng-bar-row"><span class="eng-bar-name">Herm&#232;s</span><div class="eng-bar-track"><div class="eng-bar-fill" style="width:72%;background:#9B6F29;opacity:.85"></div></div><span class="eng-bar-score" style="color:#4B4540">63.9</span></div>
+                <div class="eng-bar-row"><span class="eng-bar-name">Vivendi</span><div class="eng-bar-track"><div class="eng-bar-fill" style="width:72%;background:#4B4540;opacity:.7"></div></div><span class="eng-bar-score" style="color:#4B4540">63.8</span></div>
+                <div class="eng-bar-row"><span class="eng-bar-name">Capgemini</span><div class="eng-bar-track"><div class="eng-bar-fill" style="width:72%;background:#4B4540;opacity:.6"></div></div><span class="eng-bar-score" style="color:#4B4540">63.6</span></div>
+                <div class="eng-bar-row"><span class="eng-bar-name">Legrand</span><div class="eng-bar-track"><div class="eng-bar-fill" style="width:71%;background:#2B2520"></div></div><span class="eng-bar-score" style="color:#4B4540">63.0</span></div>
+                <div class="eng-bar-row"><span class="eng-bar-name">Bouygues</span><div class="eng-bar-track"><div class="eng-bar-fill" style="width:71%;background:#2B2520;opacity:.8"></div></div><span class="eng-bar-score" style="color:#4B4540">63.0</span></div>
+              </div>
+            </div>
+            <div class="eng-slide-fade"></div>
+            <div class="eng-slide-label">03 &middot; Ranker &mdash; 8-pillar scoring, explicit weights, no black box</div>
+          </div>
+
         </div>
 
-        <!-- INFO + CTA -->
-        <div class="elp-info">
+        <!-- DOTS -->
+        <div class="eng-dots">
+          <button class="eng-dot active" onclick="engGoTo(0)"></button>
+          <button class="eng-dot" onclick="engGoTo(1)"></button>
+          <button class="eng-dot" onclick="engGoTo(2)"></button>
+        </div>
+
+        <!-- CTA -->
+        <div class="eng-cta-wrap">
           <div>
-            <div class="elp-live"><span class="elp-live-dot"></span>Live Application</div>
-            <div class="elp-title">Deal Sourcing &amp; Preliminary <em>Diligence Engine</em></div>
-            <div class="elp-sub">8-pillar acquisition scoring · FDD-style diligence · SBF 120 universe · Python + Streamlit</div>
-            <button class="elp-more-btn" onclick="
-              var m=document.getElementById('elpMods');
-              var open=m.classList.toggle('open');
-              this.querySelector('.arr').style.transform=open?'rotate(180deg)':'';
-              this.querySelector('.lbl').textContent=open?'View Less':'View More';
-            "><span class="lbl">View More</span><span class="arr">&#9660;</span></button>
-            <div class="elp-modules" id="elpMods">
-              <div class="elp-mod"><span class="elp-mod-n">01</span>Universe Screener</div>
-              <div class="elp-mod"><span class="elp-mod-n">02</span>Target Ranker</div>
-              <div class="elp-mod"><span class="elp-mod-n">03</span>Financial Statements</div>
-              <div class="elp-mod"><span class="elp-mod-n">04</span>Diligence View</div>
-              <div class="elp-mod"><span class="elp-mod-n">05</span>Deal Signal Monitor</div>
-              <div class="elp-mod"><span class="elp-mod-n">06</span>Shortlist &amp; Export</div>
-            </div>
-          </div>
-          <div>
-            <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="elp-launch-btn">
-              Launch Full Engine &#8599;
+            <div class="eng-cta-badge">Live Application</div>
+            <div class="eng-cta-title">Deal Sourcing &amp; Preliminary <em>Diligence Engine</em></div>
+            <div class="eng-cta-sub">9 modules &middot; 29 SBF 120 companies &middot; 8-pillar scoring &middot; Python + Streamlit</div>
+            <a href="https://aryanskothari-deal-sourcing.streamlit.app" target="_blank" class="eng-launch">
+              Launch Full Engine <span class="eng-launch-arrow">&#8599;</span>
             </a>
-            <div class="elp-note">Opens in new tab &middot; No login required &middot; Python + Streamlit</div>
+            <div class="eng-cta-note">Opens in new tab &middot; No login required &middot; Free to use</div>
           </div>
         </div>
 
       </div>
     </div>
+    
+    
     
     
     <div class="eng-panel">
@@ -635,6 +715,24 @@ document.querySelectorAll(".tl").forEach(function(el){io.observe(el);});
 (function(){var MKTS=[{region:"US Markets",idx:"S&P 500",val:"5,702",chg:"+0.48%",pts:"+27.3",up:true,path:"M0,28 C8,24 16,20 24,18 C32,16 38,20 46,18 C54,16 60,12 68,10 C76,8 82,12 90,10 C98,8 100,7"},{region:"Europe",idx:"Euro Stoxx 50",val:"5,128",chg:"-0.22%",pts:"-11.3",up:false,path:"M0,8 C8,10 16,12 24,14 C32,16 38,14 46,16 C54,18 60,20 68,22 C76,24 82,22 90,24 C98,27 100,28"},{region:"India",idx:"NIFTY 50",val:"22,461",chg:"+0.71%",pts:"+158",up:true,path:"M0,30 C8,26 16,22 24,18 C32,14 38,16 46,12 C54,8 60,10 68,6 C76,4 82,5 90,4 C98,3 100,2"},{region:"Commodities",idx:"Gold XAU/USD",val:"2,918",chg:"+0.33%",pts:"+9.6",up:true,path:"M0,22 C8,20 16,18 24,16 C32,14 38,16 46,14 C54,12 60,10 68,8 C76,6 82,9 90,8 C98,7 100,6"}];var grid=document.getElementById("mktGrid");if(!grid)return;var html="";for(var i=0;i<MKTS.length;i++){var m=MKTS[i],col=m.up?"#6fcf97":"#eb5757",id="g"+i,arrow=m.up?"&#9650;":"&#9660;";html+="<div style='background:var(--ink);padding:18px 16px;display:flex;flex-direction:column'><div style='font-family:var(--mono);font-size:7.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(246,241,231,.28);margin-bottom:2px'>"+m.region+"</div><div style='font-family:var(--mono);font-size:9px;color:rgba(246,241,231,.45);margin-bottom:8px'>"+m.idx+"</div><div style='font-family:var(--serif);font-size:26px;font-weight:500;color:var(--paper);line-height:1;margin-bottom:4px'>"+m.val+"</div><div style='font-family:var(--mono);font-size:9px;font-weight:500;color:"+col+"'>"+arrow+" "+m.chg+" ("+m.pts+")</div><div style='margin-top:10px;height:30px'><svg viewBox='0 0 100 30' preserveAspectRatio='none' style='width:100%;height:30px'><defs><linearGradient id='"+id+"' x1='0' y1='0' x2='0' y2='1'><stop offset='0%' stop-color='"+col+"' stop-opacity='.15'/><stop offset='100%' stop-color='"+col+"' stop-opacity='0'/></linearGradient></defs><path d='"+m.path+" L100,30 L0,30 Z' fill='url(#"+id+")'/><path d='"+m.path+"' fill='none' stroke='"+col+"' stroke-width='1.5' stroke-linecap='round'/></svg></div></div>";}grid.innerHTML=html;function tick(){var el=document.getElementById("mktClock");if(el)el.textContent=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit",timeZone:"Europe/Paris"})+" CET";}tick();setInterval(tick,1000);})();
 renderProjects();
 setTimeout(function(){var i=document.getElementById("intro");if(i){i.style.display="none";}document.body.style.overflow="";},3000);
+</script>
+
+<script>
+var _engCur=0,_engT;
+function engGoTo(n){
+  document.querySelectorAll('.eng-slide').forEach(function(s){s.classList.remove('active')});
+  document.querySelectorAll('.eng-dot').forEach(function(d){d.classList.remove('active')});
+  var sl=document.querySelectorAll('.eng-slide');
+  var dt=document.querySelectorAll('.eng-dot');
+  if(sl[n])sl[n].classList.add('active');
+  if(dt[n])dt[n].classList.add('active');
+  _engCur=n;
+  clearInterval(_engT);
+  _engT=setInterval(function(){engGoTo((_engCur+1)%3);},4500);
+}
+document.addEventListener('DOMContentLoaded',function(){
+  _engT=setInterval(function(){engGoTo((_engCur+1)%3);},4500);
+});
 </script>
 </body>
 </html>
