@@ -728,23 +728,7 @@ setTimeout(function(){var i=document.getElementById("intro");if(i){i.style.displ
 
 
 
-<script>
-(function(){
-  var cur=0, timer;
-  window.engGoTo=function(n){
-    var slides=document.querySelectorAll('.eng-slide');
-    var dots=document.querySelectorAll('.eng-dot');
-    slides.forEach(function(s){s.classList.remove('active');});
-    dots.forEach(function(d){d.classList.remove('active');});
-    if(slides[n]) slides[n].classList.add('active');
-    if(dots[n]) dots[n].classList.add('active');
-    cur=n;
-    clearInterval(timer);
-    timer=setInterval(function(){window.engGoTo((cur+1)%3);},4500);
-  };
-  document.addEventListener('DOMContentLoaded',function(){window.engGoTo(0);});
-})();
-</script>
+
 
 <script>
 (function(){
