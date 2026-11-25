@@ -202,7 +202,7 @@ export default async function handler(req, res) {
     try { return res.status(200).json(await quote(String(body.symbol || "").trim().slice(0, 30))); }
     catch (e) { return res.status(404).json({ error: e.message || "No price data found" }); }
   }
-  const prompt = String(body.prompt || "").slice(0, 6000);
+  const prompt = String(body.prompt || "").slice(0, 18000);
   const query = String(body.query || "").slice(0, 200);
   if (!prompt) return res.status(400).json({ error: "Missing prompt" });
 
