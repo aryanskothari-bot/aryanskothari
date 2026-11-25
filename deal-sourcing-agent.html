@@ -124,8 +124,9 @@ function note(t){$("msg").innerHTML=t?'<div class="notice">'+t+'</div>':''}
 function pipe(active,done){$("pipe").innerHTML=STAGES.map((s,i)=>'<div class="stage '+(i<done?'done':i===active?'run':'')+'"><b>'+s[0]+'</b><small>'+(i===active?'Working…':s[1])+'</small></div>').join('')}
 pipe(-1,0);
 function parse(t){const m=t.match(/\{[\s\S]*\}/);if(!m)throw new Error("The agent returned no structured answer. Run it again.");return JSON.parse(m[0])}
-// Set API_URL to your Cloudflare Worker (see worker.js) to run on your own site with live web data.
-const API_URL="";let QUERY="";
+// Live backend on Vercel (api/agent.js). On the Vercel site it is same-origin; from GitHub Pages it calls Vercel.
+const VERCEL_HOST="https://aryanskothari.vercel.app";
+const API_URL=/\.vercel\.app$/.test(location.hostname)?"/api/agent":(/github\.io$/.test(location.hostname)?VERCEL_HOST+"/api/agent":"");let QUERY="";
 async function ask(p){
   if(API_URL){const r=await fetch(API_URL,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({prompt:p,query:QUERY})});const j=await r.json();if(j.error)throw new Error(j.error);if(j.truncated)throw new Error("Answer was cut off. Try narrower constraints.");return parse(j.text)}
   const r=await SAMPLE(p,{cache:false,modelTier:"default"});if(r.truncated)throw new Error("Answer was cut off. Try narrower constraints.");return parse(r.text)}

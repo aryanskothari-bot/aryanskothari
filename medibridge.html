@@ -103,8 +103,9 @@ textarea{width:100%;min-height:150px;font:13px/1.5 Inter;border:1px solid var(--
 <div id="app"></div>
 <div class="drawer" id="dr"><div class="panel" id="pn"></div></div>
 <script>
-// Set API_URL to your Cloudflare Worker (see worker.js) to get LIVE web-searched data on your own site.
-const API_URL="";
+// Live backend on Vercel (api/agent.js). On the Vercel site it is same-origin; from GitHub Pages it calls Vercel.
+const VERCEL_HOST="https://aryanskothari.vercel.app";
+const API_URL=/\.vercel\.app$/.test(location.hostname)?"/api/agent":(/github\.io$/.test(location.hostname)?VERCEL_HOST+"/api/agent":"");
 let SAMPLE=null,SRC=[],ALL=[],SORT="rec",F={acc:false,eng:false,maxp:100,maxn:30},CTX={};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
