@@ -9,6 +9,7 @@
 
   const BASE = `For EACH department return: "rating":"green|amber|red","score":0-100 (higher = cleaner),"headline":"max 16 words","findings":["3 bullets, max 20 words each"],"red_flags":["0-2 items, max 16 words"],"requests":["4 specific data-room requests"],"risks":[{"risk":"max 8 words","likelihood":1-5,"impact":1-5}] (1-2 items).`;
   const RULES = `Use the live web results for facts; if a figure is not public, give an estimate and say "est.". Never invent lawsuits, fines or deals: if none are known, say so. Be specific to this company, not generic.`;
+  const facts = (prev) => { const sn = (prev.financial || {}).snapshot; return sn ? `The financial team has established these figures; stay consistent with them and do not contradict them: ${JSON.stringify(sn)}.` : ""; };
   const ctx = () => `Target: "${S.co}".${S.buyer ? ` Prospective buyer: "${S.buyer}".` : " Buyer: a financial sponsor (private equity)."}`;
 
   const CALLS = [
@@ -18,12 +19,12 @@ ${BASE}
 The financial department ALSO returns: "snapshot":{"currency":"EUR|USD|GBP…","fy":"latest fiscal year","revenue_m":number,"revenue_growth_pct":number,"ebitda_reported_m":number,"ebitda_margin_pct":number,"net_debt_m":number,"fcf_conversion_pct":number,"employees":"approx."},"qoe":[3-5 quality-of-earnings adjustments {"item":"max 6 words","amount_m":number (positive = add-back, negative = deduction),"type":"one-off|run-rate|pro forma|accounting"}],"nwc":"working-capital view, max 22 words".
 Return ONLY JSON: {"company":{"name":"","hq":"","sector":"","ownership":"","summary":"max 35 words"},"financial":{...},"tax":{...}}` },
     { keys: ["commercial", "operations", "esg"], q: (c) => `${c} market share competitors customers strategy growth`,
-      p: () => `You are the commercial, operational and ESG due-diligence teams. ${ctx()} ${RULES}
+      p: (prev) => `You are the commercial, operational and ESG due-diligence teams. ${ctx()} ${RULES} ${facts(prev)}
 ${BASE}
 The commercial department ALSO returns "market":{"size":"market size with unit","growth":"CAGR %","position":"rank/share, max 10 words","competitors":["4 names"]}.
 Return ONLY JSON: {"commercial":{...},"operations":{...},"esg":{...}}` },
     { keys: ["legal", "regulatory", "tech", "people"], q: (c) => `${c} litigation investigation regulator fine data breach CEO management`,
-      p: () => `You are the legal, regulatory & antitrust, IT & cyber, and HR & management due-diligence teams. ${ctx()} ${RULES} For regulatory, consider EU/UK merger control and foreign-investment screening for this buyer.
+      p: (prev) => `You are the legal, regulatory & antitrust, IT & cyber, and HR & management due-diligence teams. ${ctx()} ${RULES} ${facts(prev)} For regulatory, consider EU/UK merger control and foreign-investment screening for this buyer.
 ${BASE}
 Return ONLY JSON: {"legal":{...},"regulatory":{...},"tech":{...},"people":{...}}` },
     { keys: ["valuation", "integration"], q: (c) => `${c} valuation EV/EBITDA multiple acquisition comparable transactions`,
