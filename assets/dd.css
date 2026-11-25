@@ -235,3 +235,18 @@ tr.sel{background:#eeebff}
 .dept b{display:block;font-size:14.5px}
 .dept small{color:var(--ink-3);font-size:12.5px;line-height:1.45;display:block;margin-top:4px}
 .dept .no{position:absolute;right:14px;top:12px;font:500 11px var(--mono);color:var(--ink-3)}
+
+/* claim check */
+.claim{margin-bottom:16px;border:1px solid var(--rule-2);background:linear-gradient(135deg,#fff,#f6f3ff)}
+.cltxt{width:100%;border:1px solid var(--rule-2);border-radius:12px;padding:12px 14px;font:14px/1.5 var(--sans);color:var(--ink);background:#fff;resize:vertical}
+.cltxt:focus{outline:2px solid var(--cobalt);outline-offset:1px}
+.cl-sum{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+.cl-row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid #ecebf5;font-size:13.5px}
+.cl-row b{display:block;margin-bottom:4px}
+.cl-row p{margin:4px 0 0;color:var(--ink-2)}
+.cl-row .q{color:var(--cobalt);font-weight:500}
+.cl-row a{color:var(--ink-3);font-size:12px}
+@media(max-width:600px){.cl-row{grid-template-columns:minmax(0,1fr)}}
+.pm{border-top:4px solid var(--tomato)}
+.pm .story{font:400 19px/1.45 var(--display);color:var(--ink);margin:6px 0 10px}
+.kpitab td,.kpitab th{font-size:12.5px;padding:7px 6px}

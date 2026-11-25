@@ -19,7 +19,7 @@
   ];
   const HERO = {
     sourcing: { t: 'Find the right <em>buyer</em> for any European company.', l: "Type a company. Four agents read live sources, build the buyer or target universe, score each name on eight pillars and draft a first deal memo.", s: [["8", "counterparties"], ["8", "pillars scored"], ["4", "agents"]] },
-    company: { t: 'Twelve departments. <em>One verdict.</em>', l: "Financial, tax, commercial, operational, ESG, legal, regulatory, IT, HR, valuation and integration teams each review the target. The investment committee decides.", s: [["12", "departments"], ["60+", "data-room requests"], ["1", "IC verdict"]] },
+    company: { t: 'Twelve departments. <em>One verdict.</em>', l: "Check the seller's claims before you sign anything, then let twelve teams review the target. The investment committee decides, and writes the pre-mortem: how this deal could fail.", s: [["12", "departments"], ["60+", "data-room requests"], ["1", "IC verdict"]] },
     stock: { t: 'The next six months, <em>in probabilities.</em>', l: "Live prices, quant risk and 3,000 simulated paths, plus fundamentals, catalysts and bull, base and bear cases from the research desk.", s: [["3,000", "simulated paths"], ["126", "trading days"], ["3", "scenarios"]] },
   };
 

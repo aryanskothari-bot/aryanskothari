@@ -44,7 +44,7 @@ Return ONLY JSON: {"valuation":{...},"integration":{...}}` },
     if (busy) return;
     const co = $("cCo").value.trim(); if (!co) { $("cCo").focus(); toast("Type a target company first"); return; }
     busy = true; $("cRun").disabled = true; $("cMsg").innerHTML = ""; $("cLog").innerHTML = "";
-    S = { co, buyer: $("cBuyer").value.trim(), d: {}, sources: [], rag: {} };
+    S = { co, buyer: $("cBuyer").value.trim(), d: {}, sources: [], rag: {}, claims: window.__claims };
     $("cOut").innerHTML = '<div class="card pad"><div class="sk" style="height:120px"></div><div class="sk" style="height:300px;margin-top:14px"></div></div>';
     document.getElementById("c-app").scrollIntoView({ behavior: "smooth" });
     DD.pulse("company");
@@ -75,7 +75,7 @@ Return ONLY JSON: {"valuation":{...},"integration":{...}}` },
     try {
       const brief = Object.fromEntries(Object.entries(S.d).map(([k, v]) => [k, { rating: v.rating, score: v.score, headline: v.headline, red_flags: v.red_flags }]));
       const r = await ask(`You are the investment committee of a due-diligence firm. ${ctx()} Department results: ${JSON.stringify(brief)}. Valuation: ${JSON.stringify((S.d.valuation || {}).methods || [])}.
-Return ONLY JSON: {"score":0-100,"verdict":"Proceed|Proceed with conditions|Do not proceed","headline":"max 14 words","summary":"max 60 words","top_flags":["5 red flags ranked, most serious first, max 16 words"],"conditions":["4 conditions to proceed"],"spa":["5 SPA protections, e.g. specific indemnity, W&I insurance, locked box vs completion accounts, earn-out, MAC, escrow — tied to the flags"],"next_steps":["4 next steps"]}`);
+Return ONLY JSON: {"score":0-100,"verdict":"Proceed|Proceed with conditions|Do not proceed","headline":"max 14 words","summary":"max 60 words","top_flags":["5 red flags ranked, most serious first, max 16 words"],"conditions":["4 conditions to proceed"],"spa":["5 SPA protections, e.g. specific indemnity, W&I insurance, locked box vs completion accounts, earn-out, MAC, escrow — tied to the flags"],"next_steps":["4 next steps"],"premortem":{"story":"Imagine it is three years after closing and this deal has failed. In max 45 words, tell the most likely story of why.","causes":["3 root causes, max 14 words"],"early_warnings":[{"kpi":"metric to track monthly","threshold":"level that should trigger action"}] (3 items),"walk_away_if":["3 findings in confirmatory diligence that should kill the deal, max 16 words"]},"mgmt_questions":["6 sharp questions for the management meeting, tied to the red flags"]}`);
       S.ic = r.data; S.rag.ic = /do not/i.test(S.ic.verdict) ? "red" : /condition/i.test(S.ic.verdict) ? "amber" : "green";
       DD.logTo("cLog", `Investment committee: ${S.ic.verdict}`);
     } catch (e) { S.rag.ic = "n/a"; DD.logTo("cLog", "Investment committee: failed (" + e.message + ")"); DD.errTo("cMsg", "The investment committee step failed. Department results are below.", null); }
@@ -188,6 +188,8 @@ Return ONLY JSON: {"score":0-100,"verdict":"Proceed|Proceed with conditions|Do n
       if (rq.length) h += `<div class="card pad"><div class="bar"><div><p class="eyebrow">Data room</p><h3 style="font-size:20px;margin-top:4px">Request list (${rq.length})</h3></div><span class="sp"></span><button class="btn sm" id="rqCsv">Export CSV</button></div><div class="reqs tbl"><table><thead><tr><th>Team</th><th>Request</th><th>Priority</th></tr></thead><tbody>${rq.map((r) => `<tr><td style="white-space:nowrap">${esc(r[0])}</td><td>${esc(r[1])}</td><td><span class="tag ${r[2] === "High" ? "red" : "amber"}">${r[2]}</span></td></tr>`).join("")}</tbody></table></div></div>`;
       h += `</div>`;
     }
+    const pm = S.ic && S.ic.premortem;
+    if (pm) h += `<div class="two"><div class="card pad pm"><p class="eyebrow">Pre-mortem · it is ${new Date().getFullYear() + 3} and the deal failed</p><p class="story">"${esc(pm.story)}"</p><div class="k">Root causes</div>${L(pm.causes)}<div class="k">Walk away if confirmatory diligence finds</div>${L(pm.walk_away_if)}</div><div class="card pad"><p class="eyebrow">Early-warning dashboard · track monthly after closing</p><table class="kpitab"><thead><tr><th>KPI</th><th>Act if</th></tr></thead><tbody>${(pm.early_warnings || []).map((w) => `<tr><td>${esc(w.kpi)}</td><td>${esc(w.threshold)}</td></tr>`).join("")}</tbody></table><div class="k" style="margin-top:14px">Questions for the management meeting</div><ol style="margin:0;padding-left:20px;font-size:13.5px">${(S.ic.mgmt_questions || []).map((q) => `<li style="margin:5px 0">${esc(q)}</li>`).join("")}</ol></div></div>`;
     if (S.sources.length) h += `<div class="card pad" style="margin-top:16px"><p class="eyebrow">Sources read (${S.sources.length})</p><div class="srcs" style="columns:2 280px;column-gap:24px">${S.sources.slice(0, 20).map((s) => `<a href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer">${esc(String(s.title).slice(0, 80))}</a>`).join("")}</div></div>`;
     $("cOut").innerHTML = h;
   }
@@ -196,9 +198,33 @@ Return ONLY JSON: {"score":0-100,"verdict":"Proceed|Proceed with conditions|Do n
     const Lm = (a) => (a || []).map((i) => "- " + i).join("\n");
     let t = `# Due diligence: ${S.co}${S.buyer ? " (buyer: " + S.buyer + ")" : ""}\n\n`;
     if (S.ic) t += `## Verdict: ${S.ic.verdict} (score ${S.ic.score}/100)\n${S.ic.summary}\n\n### Top red flags\n${Lm(S.ic.top_flags)}\n\n### Conditions\n${Lm(S.ic.conditions)}\n\n### SPA protections\n${Lm(S.ic.spa)}\n\n### Next steps\n${Lm(S.ic.next_steps)}\n\n`;
+    if (S.ic && S.ic.premortem) { const pm = S.ic.premortem; t += `## Pre-mortem\n${pm.story}\n\nRoot causes:\n${Lm(pm.causes)}\n\nWalk away if:\n${Lm(pm.walk_away_if)}\n\nEarly warnings:\n${(pm.early_warnings || []).map((w) => "- " + w.kpi + ": act if " + w.threshold).join("\n")}\n\n### Management meeting questions\n${Lm(S.ic.mgmt_questions)}\n\n`; }
+    if (S.claims) t += `## Claim check\n${S.claims.map((c) => `- [${c.verdict}] ${c.claim}: ${c.evidence} Ask: ${c.ask}`).join("\n")}\n\n`;
     D.forEach((d) => { const v = S.d[d[0]]; if (v) t += `## ${d[1]}: ${String(v.rating || "").toUpperCase()} ${v.score}/100\n${v.headline}\n${Lm(v.findings)}\n${(v.red_flags || []).length ? "Red flags:\n" + Lm(v.red_flags) + "\n" : ""}\n`; });
     return t + `---\nDiligence Desk (aryanskothari.vercel.app). AI-generated from public sources, verify before use.\n`;
   }
+
+  /* ---------- claim check: verify seller claims against public evidence ---------- */
+  const EX = "Leading independent digital music company in Europe\nRevenue has grown more than 20% a year since 2020\nProfitable at adjusted EBITDA level every year\nNo single customer or platform above 10% of revenue";
+  $("clEx").onclick = () => { $("clTxt").value = EX; if (!$("cCo").value.trim()) $("cCo").value = "Believe"; };
+  const VC = { Supported: "green", "Partly supported": "amber", Contradicted: "red", Unverifiable: "" };
+  $("clRun").onclick = async () => {
+    const co = $("cCo").value.trim(), claims = $("clTxt").value.split("\n").map((x) => x.trim()).filter(Boolean).slice(0, 8);
+    if (!co) { $("cCo").focus(); toast("Type the company in the box above first"); return; }
+    if (!claims.length) { $("clTxt").focus(); toast("Paste at least one claim"); return; }
+    const b = $("clRun"); b.disabled = true; b.textContent = "Checking…";
+    $("clOut").innerHTML = '<div class="sk" style="height:140px;margin-top:14px"></div>';
+    try {
+      const r = await ask(`You are a forensic due-diligence analyst. A seller of "${co}" makes the claims below in its teaser/CIM. Check each claim against the live web results and what is publicly known. Be strict: "Supported" only with clear public evidence; "Contradicted" when public evidence says otherwise; "Partly supported" when the direction is right but the figure or scope is overstated; "Unverifiable" when there is no public evidence either way. Never invent evidence.
+Claims:\n${claims.map((c, i) => i + 1 + ". " + c).join("\n")}
+Return ONLY JSON: {"claims":[{"claim":"the claim","verdict":"Supported|Partly supported|Contradicted|Unverifiable","evidence":"what the public record shows, max 30 words","source":"title of the supporting web result or empty","ask":"the exact question or document to request from the seller, max 20 words"}],"overall":"one sentence: how much of the story holds up"}`, `${co} ${claims.slice(0, 2).join(" ")}`);
+      const out = (r.data.claims || []).map((c) => ({ ...c, verdict: VC[c.verdict] !== undefined ? c.verdict : "Unverifiable" }));
+      window.__claims = out; if (S) S.claims = out;
+      const n = (v) => out.filter((c) => c.verdict === v).length;
+      $("clOut").innerHTML = `<div class="cl-sum"><span class="tag green">${n("Supported")} supported</span><span class="tag amber">${n("Partly supported")} partly</span><span class="tag red">${n("Contradicted")} contradicted</span><span class="tag">${n("Unverifiable")} unverifiable</span></div><p style="margin:4px 0 6px;font-size:14px"><b>${esc(r.data.overall || "")}</b></p>` + out.map((c) => { const src = (r.sources || []).find((x) => c.source && x.title && x.title.slice(0, 25) === String(c.source).slice(0, 25)); return `<div class="cl-row"><span><span class="tag ${VC[c.verdict]}">${esc(c.verdict)}</span></span><div><b>${esc(c.claim)}</b><p>${esc(c.evidence)}</p><p class="q">Ask the seller: ${esc(c.ask)}</p>${src && safeUrl(src.url) ? `<a href="${esc(safeUrl(src.url))}" target="_blank" rel="noopener noreferrer">↗ ${esc(src.title.slice(0, 70))}</a>` : ""}</div></div>`; }).join("") + `<p class="note">Public sources only. A claim marked unverifiable is not false: it means you must get proof from the data room.</p>`;
+    } catch (e) { $("clOut").innerHTML = `<div class="err" role="alert"><span>${esc(e.message || "Claim check failed")}</span></div>`; }
+    b.disabled = false; b.textContent = "Check claims →";
+  };
 
   $("cOut").addEventListener("click", (e) => {
     const id = e.target.id;
