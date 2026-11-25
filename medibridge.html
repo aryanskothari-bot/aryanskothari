@@ -97,6 +97,8 @@
 .pkg .price{font:700 28px var(--sans);letter-spacing:-.02em;line-height:1.1}
 .pkg .est{font-size:11.5px;color:var(--ink-3)}
 .pkg .tcl{font-size:12.5px;color:var(--ink-2);margin-top:6px;border-top:1px dashed var(--rule);padding-top:6px}.pkg .tcl b{color:var(--ink)}.up{color:#14946a}.dn{color:#c2412a}
+.biz{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.biz h3{margin:0 0 10px}.biz .btn{margin-top:12px}@media(max-width:760px){.biz{grid-template-columns:minmax(0,1fr)}}
+.calc{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:end}.calc-out{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:6px}.calc-out div{background:var(--bg,#faf6f1);border-radius:14px;padding:12px 14px}.calc-out b{display:block;font:700 22px var(--sans)}.calc-out small{color:var(--ink-3);font-size:12px}@media(max-width:900px){.calc{grid-template-columns:repeat(2,minmax(0,1fr))}.calc-out{grid-template-columns:minmax(0,1fr)}}
 .tcbar{display:flex;height:14px;border-radius:8px;overflow:hidden;margin:8px 0}.tcbar i{display:block;height:100%}
 .pkg .acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.pkg .acts .btn{white-space:nowrap}
 .cmpx{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--ink-2);cursor:pointer}
@@ -149,7 +151,7 @@ body{background:radial-gradient(1100px 600px at 90% -10%,#cfeeea 0,transparent 6
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#top"><i style="background:linear-gradient(135deg,#0e8a8c,#ff6b4a)">✚</i>MediBridge</a>
-    <nav aria-label="Sections"><a href="#treatments">Treatments</a><a href="#destinations">Destinations</a><a href="#how">How it works</a><a href="#opinion">Second opinion</a><a href="#faq">FAQ</a></nav>
+    <nav aria-label="Sections"><a href="#treatments">Treatments</a><a href="#destinations">Destinations</a><a href="#how">How it works</a><a href="#opinion">Second opinion</a><a href="#clinics">For clinics</a><a href="#employers">For employers</a><a href="#faq">FAQ</a></nav>
     <span class="sp"></span>
     <label class="sr" for="cur">Currency</label>
     <select id="cur" class="cur"><option>USD</option><option>EUR</option><option>GBP</option><option>AUD</option><option>INR</option></select>
@@ -247,6 +249,31 @@ body{background:radial-gradient(1100px 600px at 90% -10%,#cfeeea 0,transparent 6
   </div>
 </section>
 
+<section class="sec" id="clinics" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><div><p class="eyebrow">For clinics</p><h2>Ranking you <em>cannot buy.</em></h2></div><p>MediBridge never sells placement. Clinics pay only for qualified enquiries, and the order of results never changes with payment. That is why patients trust it.</p></div>
+    <div class="biz">
+      <div class="card pad"><h3>To be listed as a partner</h3><ul class="check"><li>International accreditation (JCI, ISO 9001 or national equivalent) you can show</li><li>Written, itemised quotes within 48 hours</li><li>Your complication and revision rates for the procedures you list, updated yearly</li><li>A named surgeon per patient, with registration number</li><li>The MediBridge handover pack completed at discharge</li><li>A written complication and refund policy</li></ul></div>
+      <div class="card pad"><h3>What partners get</h3><ul class="check"><li>Patients who arrive informed: they know the true cost and have a written plan</li><li>A "verified outcomes" badge when you publish real complication rates</li><li>About €40 to €120 per qualified enquiry, no subscription, no placement fees</li><li>Patient-reported results at 3 and 12 months, shared with you first</li></ul><a class="btn primary" href="mailto:aryanskothari@gmail.com?subject=MediBridge%20clinic%20partnership&body=Clinic%20name%3A%0ACity%20and%20country%3A%0AAccreditation%3A%0AProcedures%3A%0AContact%3A">Apply to become a partner</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="employers" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><div><p class="eyebrow">For employers and insurers</p><h2>Same care, lower <em>true cost.</em></h2></div><p>Self-insured employers pay for planned surgery either way. Routing willing employees to verified clinics abroad, with a share of the saving paid to them, cuts claims without cutting quality. Try your numbers.</p></div>
+    <div class="card pad calc">
+      <label class="field"><span>Planned procedures a year</span><input type="number" id="eN" value="40" min="1"></label>
+      <label class="field"><span>Average cost at home (USD)</span><input type="number" id="eH" value="18000" min="0" step="500"></label>
+      <label class="field"><span>Average true cost abroad (USD)</span><input type="number" id="eA" value="11000" min="0" step="500"></label>
+      <label class="field"><span>Share of employees who opt in</span><input type="number" id="eP" value="25" min="0" max="100"> </label>
+      <label class="field"><span>Bonus to each employee who travels (USD)</span><input type="number" id="eB" value="1500" min="0" step="100"></label>
+      <div class="calc-out" id="eOut" aria-live="polite"></div>
+    </div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:8px">True cost abroad already includes travel, expected complication cost and time off. Illustrative calculator; real programmes need legal, tax and insurance review. <a href="mailto:aryanskothari@gmail.com?subject=MediBridge%20for%20employers">Talk to us about a pilot</a>.</p>
+  </div>
+</section>
+
 <section class="sec" id="pricing" style="padding-top:0">
   <div class="wrap">
     <div class="sec-head"><div><p class="eyebrow">How we price</p><h2>Honest <em>estimates.</em></h2></div></div>
@@ -273,7 +300,7 @@ body{background:radial-gradient(1100px 600px at 90% -10%,#cfeeea 0,transparent 6
 </section>
 </main>
 
-<footer class="foot"><div class="wrap"><span>© <span id="yr"></span> MediBridge · a project by Aryan Kothari</span><span>Planning tool, not medical advice. Prices are estimates.</span><a href="index.html">Back to portfolio →</a></div></footer>
+<footer class="foot"><div class="wrap"><span>© <span id="yr"></span> MediBridge · a project by Aryan Kothari</span><span>Planning tool, not medical advice. Prices are estimates.</span><a href="legal.html">Terms, privacy and disclaimers</a><a href="index.html">Back to portfolio →</a></div></footer>
 
 <div class="cmpbar" id="cmpbar" hidden><span id="cmpTxt"></span><button class="btn sm" id="cmpGo">Compare</button><button class="btn sm" id="cmpClr" style="background:transparent;border-color:rgba(255,255,255,.3)">Clear</button></div>
 <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle"><div class="scrim" data-close></div><div class="panel"><div class="panel-head"><b id="dTitle"></b><button class="x" data-close aria-label="Close">×</button></div><div id="dBody" style="padding:22px"></div></div></div>
@@ -297,7 +324,7 @@ $("dests").innerHTML=DEST.slice(0,12).map(d=>`<button class="card dest rv" data-
 App.reveal();
 $("tiles").onclick=e=>{const b=e.target.closest("[data-t]");if(!b)return;$("proc").value=b.dataset.t;if(!$("from").value)$("from").focus();else search()};
 $("dests").onclick=e=>{const b=e.target.closest("[data-d]");if(!b)return;$("to").value=b.dataset.d;scrollTo({top:0,behavior:"smooth"});($("proc").value&&$("from").value)?search():$("proc").focus()};
-$("cur").onchange=()=>{CUR=$("cur").value;store.set("mb_cur",CUR);if(ALL.length)draw()};
+$("cur").onchange=()=>{CUR=$("cur").value;store.set("mb_cur",CUR);if(ALL.length)draw();empCalc()};
 document.querySelectorAll(".stabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".stabs button").forEach(x=>x.setAttribute("aria-selected",x===b));if(b.dataset.tab==="op"){$("opinion").scrollIntoView({behavior:"smooth"});setTimeout(()=>{b.setAttribute("aria-selected","false");document.querySelector('[data-tab="trip"]').setAttribute("aria-selected","true")},900)}});
 
 /* ---------- globe animation ---------- */
@@ -386,7 +413,7 @@ const isSaved=p=>SAVED.some(s=>s.id===p.id&&s.title===p.title);
 function toggleSave(p){if(isSaved(p))SAVED=SAVED.filter(s=>!(s.id===p.id&&s.title===p.title));else SAVED.push({...p,proc:CTX.proc,from:CTX.from});store.set("mb_saved",SAVED);savedN();toast(isSaved(p)?"Saved":"Removed from saved")}
 function savedN(){$("savedN").hidden=!SAVED.length;$("savedN").textContent=SAVED.length}savedN();
 $("savedBtn").onclick=()=>openDrawer("Saved packages",SAVED.length?SAVED.map((p,i)=>`<div class="card" style="display:grid;grid-template-columns:110px 1fr auto;gap:12px;align-items:center;padding:10px;margin-bottom:10px"><div class="d-art" style="height:80px">${Places.art(p.country,p.city)}</div><div><b>${esc(p.title)}</b><div style="font-size:13px;color:var(--ink-3)">${esc(p.proc)} · from ${esc(p.from)}</div><b>${m(p.price)}</b></div><button class="btn sm" data-unsave="${i}">Remove</button></div>`).join(""):'<p style="color:var(--ink-2)">Nothing saved yet. Tap ♥ on a package to keep it here.</p>');
-$("dBody").addEventListener("click",e=>{const u=e.target.closest("[data-unsave]");if(u){SAVED.splice(+u.dataset.unsave,1);store.set("mb_saved",SAVED);savedN();$("savedBtn").click();if(ALL.length)draw()}const c=e.target.closest("[data-copy]");if(c)copy($("enq").value,"Enquiry copied");if(e.target.closest("[data-copyh]"))copy($("hand").value,"Handover pack copied");if(e.target.closest("[data-dlh]"))download("handover-pack.txt",$("hand").value,"text/plain")});
+$("dBody").addEventListener("click",e=>{const u=e.target.closest("[data-unsave]");if(u){SAVED.splice(+u.dataset.unsave,1);store.set("mb_saved",SAVED);savedN();$("savedBtn").click();if(ALL.length)draw()}const c=e.target.closest("[data-copy]");if(c)copy($("enq").value,"Enquiry copied");if(e.target.closest("[data-copyh]"))copy($("hand").value,"Handover pack copied");if(e.target.closest("[data-copye]"))copy($("eul").value,"Letter copied");if(e.target.closest("[data-dlh]"))download("handover-pack.txt",$("hand").value,"text/plain")});
 
 function openDeal(p){if(!p)return;const tot=(p.breakdown||[]).reduce((a,b)=>a+(+b.usd||0),0)||p.price;
   const enq=`Hello,\n\nI am interested in ${CTX.proc} at your hospital in ${p.city}, ${p.country}.\nI would travel from ${CTX.from} (${CTX.tv}).\n\nCould you please send a written, itemised quote covering the surgeon's fee, hospital stay, implants or consumables, follow-up care and your complication policy?\nPlease also confirm your accreditation, the surgeon's experience with this procedure, and how aftercare is arranged once I am home.\n\nThank you,\n[Your name]`;
@@ -399,8 +426,28 @@ function openDeal(p){if(!p)return;const tot=(p.breakdown||[]).reduce((a,b)=>a+(+
   <div class="d-sec"><h4>Visa</h4><p style="margin:0">${esc(p.visa)}</p></div>
   <div class="d-sec"><h4>Things to weigh</h4><ul class="check">${(p.risks||[]).map(r=>`<li>${esc(r)}</li>`).join("")}</ul></div>
   <div class="d-sec"><h4>Aftercare: handover pack for your home doctor</h4><p style="margin:0 0 8px;font-size:13px;color:var(--ink-2)">${esc(p.aftercare||"Arrange follow-up with your own doctor before you travel.")} Ask the clinic to fill this in before you fly home, then give it to your doctor.</p><textarea class="enq" id="hand" style="min-height:190px">${esc(handover(p))}</textarea><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="btn" data-copyh>Copy handover pack</button><button class="btn" data-dlh>Download .txt</button></div></div>
+  ${(()=>{const t=tc(p),fair=Math.round(t.risk*1.35/10)*10;return `<div class="d-sec"><h4>Complication cover: what a fair price looks like</h4><p style="margin:0;font-size:13.5px">Expected complication cost for this trip is <b>${m(t.risk)}</b>. A fair travel-surgery complication policy would cost about <b>${m(fair)}</b> (expected cost plus a 35% insurer margin). Quotes far above that are poor value; check that the policy covers revision surgery and travel back.</p></div>`})()}
+  ${EU.includes(String(p.country).toLowerCase())?`<div class="d-sec"><h4>Living in the EU? Claim part of it back</h4><p style="margin:0 0 8px;font-size:13px;color:var(--ink-2)">Under the EU cross-border healthcare directive, your own insurer may reimburse this treatment up to what it would pay at home. Planned hospital care often needs prior authorisation, so send this before you book.</p><textarea class="enq" id="eul" style="min-height:170px">${esc(euLetter(p))}</textarea><div style="display:flex;gap:8px;margin-top:8px"><button class="btn" data-copye>Copy letter</button></div></div>`:""}
   <div class="d-sec"><h4>Your enquiry letter</h4><textarea class="enq" id="enq">${esc(enq)}</textarea><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="btn primary" data-copy>Copy enquiry</button><button class="btn" onclick="toggleSave(ALL.find(x=>x.id==='${esc(p.id)}'));draw()">♥ Save package</button></div></div>`)}
 
+function empCalc(){const v=id=>Math.max(0,+$(id).value||0);const n=v("eN"),h=v("eH"),a=v("eA"),p=Math.min(100,v("eP"))/100,b=v("eB");const trips=n*p,gross=trips*(h-a),net=gross-trips*b;$("eOut").innerHTML=`<div><small>Employees who travel</small><b>${Math.round(trips)}</b><small>of ${n} procedures a year</small></div><div><small>Saving before bonuses</small><b>${m(gross)}</b><small>${m(h-a)} per procedure</small></div><div><small>Net saving to the employer</small><b class="${net>=0?"up":"dn"}">${m(net)}</b><small>after paying ${m(b)} to each traveller</small></div>`}
+["eN","eH","eA","eP","eB"].forEach(id=>$(id).addEventListener("input",empCalc));empCalc();
+const EU=["austria","belgium","bulgaria","croatia","cyprus","czech republic","czechia","denmark","estonia","finland","france","germany","greece","hungary","ireland","italy","latvia","lithuania","luxembourg","malta","netherlands","poland","portugal","romania","slovakia","slovenia","spain","sweden","iceland","liechtenstein","norway"];
+function euLetter(p){return `To: [your national health insurer, e.g. CPAM / NHS / Krankenkasse]
+Re: Request for reimbursement of planned cross-border healthcare (Directive 2011/24/EU)
+
+Insured person: [name, date of birth, insurance number]
+
+I am planning ${CTX.proc}${CTX.scope?" ("+CTX.scope+")":""} with ${p.hospital_type} in ${p.city}, ${p.country}.
+${"I ask you to confirm:"}
+1. Whether prior authorisation is required for this treatment, and if so please treat this letter as my request.
+2. The amount you would reimburse, at the rate this treatment would cost in my home system.
+3. The documents you need after treatment (itemised invoice, medical report, translations).
+
+Attached: referral or prescription from my doctor, the clinic's itemised quote.
+
+Thank you,
+[name, address, date]`}
 function handover(p){return `CLINICAL HANDOVER: TREATMENT ABROAD
 Patient: [name, date of birth]
 Treatment: ${CTX.proc}${CTX.scope?" ("+CTX.scope+")":""}

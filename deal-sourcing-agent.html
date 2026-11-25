@@ -16,7 +16,7 @@
 <header class="top dark">
   <div class="wrap">
     <a class="brand" href="#top"><i class="logo">⬡</i>Diligence Desk</a>
-    <nav aria-label="Sections"><a href="#sourcing" data-go="sourcing">Deal sourcing</a><a href="#company" data-go="company">Company DD</a><a href="#stock" data-go="stock">Stock DD</a><a href="#firm">The firm</a></nav>
+    <nav aria-label="Sections"><a href="#sourcing" data-go="sourcing">Deal sourcing</a><a href="#company" data-go="company">Company DD</a><a href="#stock" data-go="stock">Stock DD</a><a href="#firm">The firm</a><a href="#plans">Plans</a></nav>
     <span class="sp"></span>
     <span class="status" data-status>Live web data</span>
     <a class="back" href="index.html">← Aryan's portfolio</a>
@@ -130,11 +130,11 @@
   <div class="wrap" id="c-app">
     <div class="sec-head"><div><p class="eyebrow"><b>Desk 02</b> · Company due diligence</p><h2>Twelve departments, <em>one verdict.</em></h2></div><p>Each department of the firm reviews the target in turn, flags red issues, and writes its data-room requests. The investment committee then gives a verdict and the protections to ask for in the SPA.</p></div>
     <div class="card pad claim" id="claimCard">
-      <div class="bar"><div><p class="eyebrow"><b>Before you sign an LOI</b> · Claim check</p><h3 style="font-size:22px;margin-top:4px">Is the seller's story true?</h3></div><span class="sp"></span><button class="btn sm" id="clEx" type="button">Load example</button></div>
+      <div class="bar"><div><p class="eyebrow"><b>Before you sign an LOI</b> · Claim check</p><h3 style="font-size:22px;margin-top:4px">Is the seller's story true?</h3></div><span class="sp"></span><label class="btn sm" for="clPdf" style="cursor:pointer">Upload CIM / teaser (PDF)</label><input type="file" id="clPdf" accept="application/pdf" hidden><button class="btn sm" id="clEx" type="button">Load example</button></div>
       <p style="margin:0 0 10px;color:var(--ink-2);font-size:14px">Paste claims from a teaser, CIM or pitch deck, one per line. Each claim is checked against public evidence and marked supported, contradicted or unverifiable, with the question to put to the seller.</p>
       <label class="sr" for="clTxt">Claims to check</label>
       <textarea id="clTxt" class="cltxt" rows="5" placeholder="e.g. Market leader in digital music distribution in Europe&#10;Revenue grew 25% a year since 2021&#10;No customer above 5% of revenue"></textarea>
-      <div class="bar" style="margin:10px 0 0"><span class="note" style="margin:0">Uses the company in the box above.</span><span class="sp"></span><button class="btn ink" id="clRun" type="button">Check claims →</button></div>
+      <div class="bar" style="margin:10px 0 0"><span class="note" style="margin:0" id="clNote">Uses the company in the box above. PDFs are read in your browser and never stored.</span><span class="sp"></span><button class="btn sm" id="clScore" type="button" hidden>Download scorecard</button><button class="btn ink" id="clRun" type="button">Check claims →</button></div>
       <div id="clOut"></div>
     </div>
     <div class="board" id="cBoard"></div>
@@ -142,6 +142,10 @@
     <div id="cMsg"></div>
     <div id="cOut" style="margin-top:16px">
       <div class="card empty"><h3>Which company are we diligencing?</h3><p>Type a target above. Optionally add the buyer, so synergies and integration are written for that deal.</p></div>
+    </div>
+    <div class="card pad" id="pipeCard" style="margin-top:16px">
+      <div class="bar"><div><p class="eyebrow"><b>Deal pipeline</b> · saved on this device</p><h3 style="font-size:22px;margin-top:4px">My deals and post-closing monitoring</h3></div><span class="sp"></span><button class="btn sm" id="pipeCsv" type="button">Export CSV</button></div>
+      <div id="pipeList"></div>
     </div>
   </div>
 </section>
@@ -167,6 +171,19 @@
   </div>
 </section>
 
+<section class="sec" id="plans" style="padding-top:8px">
+  <div class="wrap">
+    <div class="sec-head"><div><p class="eyebrow">Plans</p><h2>Diligence for deals <em>too small for McKinsey.</em></h2></div><p>Free while in beta. Paid plans open in 2027; join now and keep the founding price for life.</p></div>
+    <div class="plans">
+      <div class="plan"><p class="eyebrow">Free</p><div class="pp">€0</div><ul><li>3 full runs a month</li><li>Claim Check, 12 departments, stock desk</li><li>Markdown and CSV export</li></ul></div>
+      <div class="plan"><p class="eyebrow">Per deal</p><div class="pp">€49<small> / company</small></div><ul><li>Claim Check from your CIM PDF</li><li>Full IC memo and pre-mortem</li><li>Scorecard to share with partners</li></ul></div>
+      <div class="plan hot"><p class="eyebrow">Searcher</p><div class="pp">€149<small> / month</small></div><ul><li>Unlimited runs</li><li>Deal pipeline and monitoring</li><li>Priority models and search</li></ul></div>
+      <div class="plan"><p class="eyebrow">Adviser white-label</p><div class="pp">€790<small> / month</small></div><ul><li>Your logo on every pack</li><li>Seller-side pre-verified scorecards</li><li>5 seats, client-ready exports</li></ul></div>
+    </div>
+    <div class="cta"><div><b>Founding members</b><p>Search funders, independent sponsors and boutique advisers: get early access and the founding price.</p></div><a class="btn gold" id="joinBtn" href="mailto:aryanskothari@gmail.com?subject=Diligence%20Desk%20early%20access">Request early access</a></div>
+  </div>
+</section>
+
 <section class="sec" id="faq" style="padding-top:8px">
   <div class="wrap" style="max-width:900px">
     <div class="sec-head"><div><p class="eyebrow">FAQ</p><h2>Good to <em>know.</em></h2></div></div>
@@ -181,7 +198,7 @@
 </section>
 </main>
 
-<footer class="foot"><div class="wrap"><span>© <span id="yr"></span> Aryan Kothari · Diligence Desk</span><span>AI-generated first screen from public sources. Not investment advice.</span><a href="index.html">Back to portfolio →</a></div></footer>
+<footer class="foot"><div class="wrap"><span>© <span id="yr"></span> Aryan Kothari · Diligence Desk</span><span>AI-generated first screen from public sources. Not investment advice.</span><a href="legal.html">Terms, privacy and disclaimers</a><a href="index.html">Back to portfolio →</a></div></footer>
 
 <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle"><div class="scrim" data-close></div><div class="panel"><div class="panel-head"><b id="dTitle">Compare</b><button class="x" data-close aria-label="Close">×</button></div><div id="dBody" style="padding:22px"></div></div></div>
 
@@ -190,6 +207,7 @@
 <script src="assets/dd-sourcing.js"></script>
 <script src="assets/dd-company.js"></script>
 <script src="assets/dd-stock.js"></script>
+<script src="assets/dd-business.js"></script>
 <script type="module" src="assets/dd-3d.js"></script>
 </body>
 </html>
