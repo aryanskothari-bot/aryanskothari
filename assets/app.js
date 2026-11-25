@@ -38,6 +38,15 @@
     }
   }
 
+  // quote(symbol) -> { symbol, name, currency, price, pts:[[ms, close, vol]], bench:{symbol, pts} }
+  async function quote(symbol) {
+    if (!API_URL) throw new Error("Live market data is only available on the hosted site.");
+    const r = await fetch(API_URL, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ mode: "quote", symbol }) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || j.error) throw new Error(j.error || "Market data is unavailable right now.");
+    return j;
+  }
+
   const store = {
     get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
@@ -78,7 +87,7 @@
     root.querySelectorAll(".rv:not(.in)").forEach((e) => io.observe(e));
   }
 
-  window.App = { ask, esc, safeUrl, store, toast, download, copy, fmtMoney, RATES, SYM, reveal, live: !!API_URL };
+  window.App = { ask, quote, esc, safeUrl, store, toast, download, copy, fmtMoney, RATES, SYM, reveal, live: !!API_URL };
   document.addEventListener("DOMContentLoaded", () => {
     reveal();
     document.querySelectorAll("[data-status]").forEach((el) => {
