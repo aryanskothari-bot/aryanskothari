@@ -22,8 +22,8 @@ function cors(res, origin) {
 
 // ---------- web search: free providers tried in order until one returns results ----------
 // 1) Tavily (free 1,000/month, key)  2) Firecrawl keyless (free, no key)  3) LangSearch (free, key optional)  4) Wikipedia (free, no key)
-const FIRECRAWL_KEY = process.env.FIRECRAWL_API_KEY || process.env.FIRECRAWL;
-const LANGSEARCH_KEY = process.env.LANGSEARCH_API_KEY || process.env.LANGSEARCH;
+const FIRECRAWL_KEY = process.env.FIRECRAWL_API_KEY || process.env.FIRECRAWL || process.env.Firecrawl || process.env.firecrawl;
+const LANGSEARCH_KEY = process.env.LANGSEARCH_API_KEY || process.env.LANGSEARCH || process.env.LangSearch || process.env.langsearch;
 const cut = (t) => String(t || "").replace(/\s+/g, " ").slice(0, 380);
 async function timed(p, ms = 9000) { return Promise.race([p, new Promise((_, r) => setTimeout(() => r(new Error("timeout")), ms))]); }
 
@@ -34,21 +34,25 @@ async function tavily(query) {
     headers: { "content-type": "application/json", Authorization: "Bearer " + TAVILY_KEY },
     body: JSON.stringify({ query, max_results: 5, search_depth: "basic" }),
   });
+  if (r.status === 429 || r.status === 432 || r.status === 433) throw Object.assign(new Error("quota"), { quota: true });
   if (!r.ok) return [];
   const d = await r.json();
   return (d.results || []).map((x) => ({ title: x.title, url: x.url, snippet: cut(x.content) }));
 }
-async function firecrawl(query) {
+async function firecrawlWith(query, key) {
   const r = await fetch("https://api.firecrawl.dev/v2/search", {
     method: "POST",
-    headers: { "content-type": "application/json", ...(FIRECRAWL_KEY ? { Authorization: "Bearer " + FIRECRAWL_KEY } : {}) },
+    headers: { "content-type": "application/json", ...(key ? { Authorization: "Bearer " + key } : {}) },
     body: JSON.stringify({ query, limit: 5 }),
   });
+  if (r.status === 402 || r.status === 429) throw Object.assign(new Error("quota"), { quota: true });
   if (!r.ok) return [];
   const d = await r.json();
   const list = (d.data && (d.data.web || d.data.news)) || (Array.isArray(d.data) ? d.data : []);
   return list.map((x) => ({ title: x.title, url: x.url, snippet: cut(x.description || x.snippet || x.markdown) })).filter((x) => x.url);
 }
+const firecrawl = (q) => (FIRECRAWL_KEY ? firecrawlWith(q, FIRECRAWL_KEY) : []);
+const firecrawlFree = (q) => firecrawlWith(q, null);
 async function langsearch(query) {
   if (!LANGSEARCH_KEY) return [];
   const r = await fetch("https://api.langsearch.com/v1/web-search", {
@@ -56,6 +60,7 @@ async function langsearch(query) {
     headers: { "content-type": "application/json", Authorization: "Bearer " + LANGSEARCH_KEY },
     body: JSON.stringify({ query, count: 5, freshness: "noLimit" }),
   });
+  if (r.status === 429) throw Object.assign(new Error("quota"), { quota: true });
   if (!r.ok) return [];
   const d = await r.json();
   return ((d.data && d.data.webPages && d.data.webPages.value) || []).map((x) => ({ title: x.name, url: x.url, snippet: cut(x.snippet || x.text) }));
@@ -67,43 +72,18 @@ async function wikipedia(query) {
   const d = await r.json();
   return ((d.query && d.query.search) || []).map((x) => ({ title: x.title + " (Wikipedia)", url: "https://en.wikipedia.org/wiki/" + encodeURIComponent(x.title.replace(/ /g, "_")), snippet: cut(x.snippet.replace(/<[^>]+>/g, "")) }));
 }
-const ENGINES = [["Tavily", tavily], ["Firecrawl", firecrawl], ["LangSearch", langsearch], ["Wikipedia", wikipedia]];
+// Order = best free quality first. An engine that hits its free quota is skipped for 6 hours, then retried.
+const ENGINES = [["Firecrawl", firecrawl], ["Tavily", tavily], ["LangSearch", langsearch], ["Firecrawl keyless", firecrawlFree], ["Wikipedia", wikipedia]];
+const resting = new Map();
 async function search(query, only) {
   if (!query) return { sources: [], engine: "" };
   for (const [name, fn] of ENGINES) {
     if (only && only !== name) continue;
-    try { const res = await timed(fn(query)); if (res && res.length) return { sources: res, engine: name }; } catch (e) {}
+    if (!only && (resting.get(name) || 0) > Date.now()) continue;
+    try { const res = await timed(fn(query)); if (res && res.length) return { sources: res, engine: name }; }
+    catch (e) { if (e.quota) resting.set(name, Date.now() + 6 * 3600 * 1000); }
   }
   return { sources: [], engine: "" };
-}
-
-async function groqOne(prompt, model) {
-  const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: { "content-type": "application/json", Authorization: "Bearer " + GROQ_KEY },
-    body: JSON.stringify({
-      model, temperature: 0.3, max_tokens: 8000,
-      ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: "You reply with ONE valid JSON object only. No markdown fences, no commentary." },
-        { role: "user", content: prompt },
-      ],
-    }),
-  });
-  const d = await r.json();
-  if (!r.ok) { const e = new Error((d.error && d.error.message) || "Model error"); e.status = r.status; throw e; }
-  const c = d.choices && d.choices[0];
-  return { text: (c && c.message && c.message.content) || "", truncated: !!c && c.finish_reason === "length" };
-}
-
-async function groq(prompt) {
-  let last;
-  for (const m of [MODEL, ...FALLBACKS]) {
-    try { return await groqOne(prompt, m); }
-    catch (e) { last = e; if (e.status !== 429 && e.status !== 503 && e.status !== 400) throw e; }
-  }
-  throw last;
 }
 
 // ---------- market data (free, no key): Yahoo Finance chart API, Stooq as fallback ----------
