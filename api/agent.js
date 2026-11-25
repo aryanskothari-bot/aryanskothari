@@ -9,7 +9,7 @@ const FALLBACKS = ["llama-3.3-70b-versatile", "qwen/qwen3-32b"];
 const GROQ_KEY = process.env.GROQ_API_KEY || process.env.GROQ;
 const TAVILY_KEY = process.env.TAVILY_API_KEY || process.env.TAVILY || process.env.travily;
 const ALLOWED = [/^https:\/\/aryanskothari-bot\.github\.io$/, /^https:\/\/[a-z0-9-]+\.vercel\.app$/, /^http:\/\/localhost(:\d+)?$/];
-const CACHE_MS = 12 * 3600 * 1000;
+const CACHE_MS = 72 * 3600 * 1000; // repeat searches within 3 days cost nothing
 const cache = new Map();
 const hits = new Map();
 
@@ -72,8 +72,9 @@ async function wikipedia(query) {
   const d = await r.json();
   return ((d.query && d.query.search) || []).map((x) => ({ title: x.title + " (Wikipedia)", url: "https://en.wikipedia.org/wiki/" + encodeURIComponent(x.title.replace(/ /g, "_")), snippet: cut(x.snippet.replace(/<[^>]+>/g, "")) }));
 }
-// Order = best free quality first. An engine that hits its free quota is skipped for 6 hours, then retried.
-const ENGINES = [["Firecrawl", firecrawl], ["Tavily", tavily], ["LangSearch", langsearch], ["Firecrawl keyless", firecrawlFree], ["Wikipedia", wikipedia]];
+// Order = save credits: daily free allowances that reset every day go first (they are lost if unused);
+// monthly credit accounts are kept as backup. An engine that hits its quota is skipped for 6 hours, then retried.
+const ENGINES = [["Firecrawl keyless", firecrawlFree], ["LangSearch", langsearch], ["Firecrawl", firecrawl], ["Tavily", tavily], ["Wikipedia", wikipedia]];
 const resting = new Map();
 async function search(query, only) {
   if (!query) return { sources: [], engine: "" };
