@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediBridge - Compare treatment trips</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#0a6cff;--navy:#0b1f44;--bg:#f2f5fa;--card:#fff;--ink:#14213d;--mute:#667085;--line:#e3e8f0;--orange:#ff6b00;--green:#0a9d63;--r:12px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,system-ui,sans-serif}
+nav{background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:22px;padding:12px 24px;position:sticky;top:0;z-index:5}
+.logo{font-weight:800;font-size:20px;color:var(--blue);letter-spacing:-.02em}.logo b{color:var(--orange)}
+nav a{color:var(--ink);text-decoration:none;font-weight:500;cursor:pointer}
+nav .sp{flex:1}
+.hero{background:linear-gradient(180deg,#0a3a8f,#0a6cff);padding:34px 24px 74px;color:#fff;text-align:center}
+.hero h1{margin:0;font-size:34px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:6px 0 0;opacity:.9}
+.search{max-width:1080px;margin:-46px auto 0;background:#fff;border-radius:16px;box-shadow:0 12px 36px #0b1f4426;padding:8px 8px 12px;position:relative}
+.tabs{display:flex;gap:4px;padding:6px 10px 0}
+.tabs button{border:0;background:none;padding:10px 14px;font:600 14px Inter;color:var(--mute);cursor:pointer;border-bottom:3px solid transparent}
+.tabs button.on{color:var(--blue);border-color:var(--blue)}
+.fields{display:grid;grid-template-columns:2fr 1.2fr 1.2fr 1fr 1fr auto;gap:8px;padding:8px 10px}
+@media(max-width:900px){.fields{grid-template-columns:1fr 1fr}}
+.f{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.f:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px #0a6cff22}
+.f span{display:block;font-size:11px;color:var(--mute);font-weight:600}
+.f input,.f select{border:0;outline:0;width:100%;font:600 15px Inter;color:var(--ink);background:none;padding:2px 0}
+.sbtn{border:0;border-radius:10px;background:var(--orange);color:#fff;font:700 16px Inter;padding:0 28px;cursor:pointer;min-height:54px}
+.sbtn:disabled{opacity:.6}
+.trust{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:14px 0;color:var(--mute);font-size:13px}
+.trust b{color:var(--ink)}
+.pop{max-width:1080px;margin:18px auto;padding:0 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pop button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;font:500 13px Inter;cursor:pointer}
+.pop button:hover{border-color:var(--blue);color:var(--blue)}
+.layout{max-width:1180px;margin:20px auto 60px;padding:0 12px;display:grid;grid-template-columns:260px minmax(0,1fr);gap:18px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+.side{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;align-self:start;position:sticky;top:64px}
+@media(max-width:900px){.side{position:static}}
+.side h4{margin:14px 0 6px;font-size:13px}.side h4:first-child{margin-top:0}
+.side label{display:flex;gap:8px;align-items:center;margin:5px 0;font-size:13px;cursor:pointer}
+.side input[type=range]{width:100%;accent-color:var(--blue)}
+.sort{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.sort button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 14px;font:600 13px Inter;cursor:pointer}
+.sort button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.sort .cnt{margin-left:auto;color:var(--mute)}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);display:grid;grid-template-columns:200px minmax(0,1fr) 190px;margin-bottom:12px;overflow:hidden;transition:box-shadow .15s}
+.card:hover{box-shadow:0 8px 24px #0b1f4418}
+@media(max-width:760px){.card{grid-template-columns:1fr}}
+.img{min-height:170px;position:relative;display:flex;align-items:flex-end;padding:10px;color:#fff;font-weight:700}
+.img em{font-style:normal;font-size:12px;background:#0007;padding:3px 8px;border-radius:6px}
+.mid{padding:14px 16px}
+.mid h3{margin:0;font-size:17px;font-weight:700}
+.loc{color:var(--mute);font-size:13px;margin:2px 0 8px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.tag{font-size:11px;font-weight:600;border-radius:6px;padding:3px 8px;background:#eaf2ff;color:var(--blue)}
+.tag.g{background:#e3f6ee;color:var(--green)}.tag.o{background:#fff0e5;color:var(--orange)}
+.inc{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px;margin-top:8px;font-size:13px}
+.inc div::before{content:"✓ ";color:var(--green);font-weight:700}
+.rate{display:inline-flex;align-items:center;gap:6px;margin-top:8px}
+.rate b{background:var(--blue);color:#fff;border-radius:6px 6px 6px 0;padding:2px 7px;font-size:13px}
+.buy{border-left:1px dashed var(--line);padding:14px;display:flex;flex-direction:column;justify-content:space-between;text-align:right}
+@media(max-width:760px){.buy{border-left:0;border-top:1px dashed var(--line);text-align:left}}
+.save{display:inline-block;background:var(--orange);color:#fff;font-weight:700;font-size:12px;padding:3px 8px;border-radius:6px}
+.was{text-decoration:line-through;color:var(--mute);font-size:13px}
+.price{font-size:26px;font-weight:800;color:var(--ink);letter-spacing:-.02em}
+.price small{font-size:12px;color:var(--mute);font-weight:500;display:block}
+.btn{border:0;background:var(--blue);color:#fff;border-radius:10px;padding:11px;font:700 14px Inter;cursor:pointer;width:100%}
+.warn{background:#fff7e6;border:1px solid #ffd99a;border-radius:10px;padding:10px 14px;font-size:13px;margin:0 auto 12px;max-width:1180px}
+.err{background:#fde8e8;border-color:#f3b1b1}
+.sk{height:170px;border-radius:12px;background:linear-gradient(90deg,#e8edf5,#f6f8fc,#e8edf5);background-size:200% 100%;animation:sh 1.2s infinite;margin-bottom:12px}
+@keyframes sh{to{background-position:-200% 0}}
+.drawer{position:fixed;inset:0;background:#0b1f4488;display:none;z-index:20;justify-content:flex-end}
+.drawer.on{display:flex}
+.panel{background:#fff;width:min(560px,100%);height:100%;overflow:auto;padding:22px}
+.panel h2{margin:0 0 4px}
+.x{float:right;border:0;background:#eef2f8;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer}
+.day{display:grid;grid-template-columns:70px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.day b{color:var(--blue)}
+table{width:100%;border-collapse:collapse}td{padding:6px 0;border-bottom:1px solid #eef1f6}td:last-child{text-align:right;font-weight:600}
+.k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);font-weight:700;margin:16px 0 6px}
+textarea{width:100%;min-height:150px;font:13px/1.5 Inter;border:1px solid var(--line);border-radius:10px;padding:10px}
+.empty{text-align:center;padding:60px 20px;color:var(--mute)}
+.livebadge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px}
+</style>
+</head>
+<body>
+<nav><div class="logo">Medi<b>Bridge</b></div><a>Treatment trips</a><a>Online second opinion</a><a>Visa and stay</a><div class="sp"></div><span class="livebadge" id="mode" style="background:#fff0e5;color:var(--orange)">Demo estimates</span></nav>
+<div class="hero"><h1>Treatment abroad, priced like a trip.</h1><p>Compare all-in packages for surgery, travel and recovery. One search, one price.</p></div>
+<div class="search">
+  <div class="tabs"><button class="on">Treatment + trip</button><button disabled title="Coming next">Second opinion</button></div>
+  <div class="fields">
+    <div class="f"><span>Treatment</span><input id="proc" placeholder="Knee replacement, dental implants, IVF…" list="pl"><datalist id="pl"><option>Knee replacement</option><option>Hip replacement</option><option>Dental implants</option><option>IVF</option><option>Cataract surgery</option><option>Heart bypass</option><option>Spine surgery</option><option>Hair transplant</option><option>Bariatric surgery</option></datalist></div>
+    <div class="f"><span>Flying from</span><input id="from" placeholder="Sydney, New York, Paris"></div>
+    <div class="f"><span>Going to</span><select id="to"><option>Anywhere (best deals)</option><option>India</option><option>Thailand</option><option>Turkey</option><option>Malaysia</option><option>Mexico</option><option>South Korea</option><option>Spain</option><option>Poland</option></select></div>
+    <div class="f"><span>Travel month</span><input id="mon" type="month"></div>
+    <div class="f"><span>Travellers</span><select id="tv"><option>1 patient</option><option>1 patient + 1</option><option>1 patient + 2</option></select></div>
+    <button class="sbtn" id="go">Search</button>
+  </div>
+</div>
+<div class="trust"><span><b>Compare</b> all-in packages</span><span><b>Transparent</b> cost breakdown</span><span><b>Accreditation</b> checklist on every deal</span><span><b>One enquiry</b> to the hospital</span></div>
+<div class="pop" id="pop"><span style="color:var(--mute)">Popular:</span></div>
+<div id="app"></div>
+<div class="drawer" id="dr"><div class="panel" id="pn"></div></div>
+<script>
+// Set API_URL to your Cloudflare Worker (see worker.js) to get LIVE web-searched data on your own site.
+const API_URL="";
+let SAMPLE=null,SRC=[],ALL=[],SORT="rec",F={acc:false,eng:false,maxp:100,maxn:30},CTX={};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+if(API_URL){$("mode").textContent="Live web data";$("mode").style.cssText="background:#e3f6ee;color:#0a9d63"}
+else if(window.claude&&claude.use)claude.use("sample").then(s=>SAMPLE=s).catch(()=>{});
+async function ask(p,query){
+  let text,tr=false;
+  if(API_URL){const r=await fetch(API_URL,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({prompt:p,query:query||""})});const j=await r.json();if(j.error)throw new Error(j.error);text=j.text;tr=j.truncated;SRC=j.sources||[]}
+  else{if(!SAMPLE)throw new Error("Live agent unavailable in this view.");const r=await SAMPLE(p,{cache:false,modelTier:"default"});text=r.text;tr=r.truncated}
+  const m=text.match(/\{[\s\S]*\}/);if(tr||!m)throw new Error("Results were incomplete. Search again.");return JSON.parse(m[0]);
+}
+const POP=[["Knee replacement","Sydney"],["Dental implants","New York"],["IVF","Paris"],["Cataract surgery","London"],["Heart bypass","Toronto"]];
+$("pop").innerHTML+=POP.map(p=>'<button data-p="'+p[0]+'" data-f="'+p[1]+'">'+p[0]+' from '+p[1]+'</button>').join('');
+$("pop").onclick=e=>{const b=e.target.closest("button");if(!b)return;$("proc").value=b.dataset.p;$("from").value=b.dataset.f;search()};
+$("go").onclick=search;
+$("app").innerHTML='<div class="empty"><h2 style="color:var(--ink)">Where will your treatment take you?</h2>Search a treatment and your home city to see packages side by side.</div>';
+const GRAD=["linear-gradient(135deg,#0a6cff,#00c2ff)","linear-gradient(135deg,#ff6b00,#ffb347)","linear-gradient(135deg,#0a9d63,#5ee0a0)","linear-gradient(135deg,#7a3cff,#c58bff)","linear-gradient(135deg,#0b1f44,#335c99)"];
+function skel(){$("app").innerHTML='<div class="layout"><div></div><div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></div>'}
+async function search(){
+  const proc=$("proc").value.trim(),from=$("from").value.trim();
+  if(!proc||!from){$("app").innerHTML='<div class="warn err" style="margin-top:14px">Enter a treatment and where you are flying from.</div>';return}
+  CTX={proc,from,to:$("to").value,mon:$("mon").value,tv:$("tv").value};$("go").disabled=true;skel();
+  try{
+    const r=await ask(`You power a medical-travel marketplace like a flight/hotel booking site. Treatment: ${proc}. Patient flies from: ${from}. Destination filter: ${CTX.to}. Travel month: ${CTX.mon||"flexible"}. Travellers: ${CTX.tv}. ${API_URL?"Use web search to check current typical prices and hospital accreditation, and prefer recent sources.":"Use general knowledge; all prices are estimates."}
+Create 8 package listings across different destinations (or all in the chosen country, varied cities and hospital tiers). Do NOT invent named hospitals unless you are confident they are real and internationally accredited; otherwise name the hospital TYPE (e.g. "JCI-accredited multi-specialty hospital"). All prices in USD, rounded, total package price including surgery, flights from ${from}, hotel nights and local transfers for the travellers. Also give the typical price in the patient's home country.
+Return ONLY JSON: {"home_price":number,"home_note":"max 12 words","packages":[{"id":"p1","title":"max 8 words","country":"","city":"","hospital_type":"","price":number,"nights":number,"flight_hours":number,"rating":number 7.0-9.6,"reviews_note":"max 8 words about what to check, not a fake review count","english":true/false,"accredited":true/false,"accreditation":"what to verify","included":["6 short items"],"highlights":["2 short"],"breakdown":[{"item":"Procedure","usd":0},{"item":"Flights","usd":0},{"item":"Hotel","usd":0},{"item":"Companion","usd":0},{"item":"Transfers and meals","usd":0},{"item":"Follow-up and contingency","usd":0}],"itinerary":[{"day":"Day 1","plan":""}] (5-7 key days),"visa":"max 16 words","risks":["2"]}]}`,proc+" cost price package hospital "+(CTX.to.startsWith("Anywhere")?"India Thailand Turkey Mexico":CTX.to)+" medical tourism vs "+from);
+    ALL=r.packages.map((p,i)=>({...p,g:GRAD[i%5],home:r.home_price}));CTX.homeNote=r.home_note;CTX.home=r.home_price;
+    F={acc:false,eng:false,maxp:Math.max(...ALL.map(p=>p.price)),maxn:Math.max(...ALL.map(p=>p.nights))};draw();
+  }catch(e){$("app").innerHTML='<div class="warn err" style="margin-top:14px">'+esc(e.message||"Search failed.")+'</div>'}
+  $("go").disabled=false;
+}
+function list(){let a=ALL.filter(p=>p.price<=F.maxp&&p.nights<=F.maxn&&(!F.acc||p.accredited)&&(!F.eng||p.english));
+  if(SORT==="price")a.sort((x,y)=>x.price-y.price);else if(SORT==="short")a.sort((x,y)=>x.nights-y.nights);else a.sort((x,y)=>y.rating-x.rating);return a}
+function draw(){
+  const mxp=Math.max(...ALL.map(p=>p.price)),mxn=Math.max(...ALL.map(p=>p.nights));const a=list();
+  let h='<div class="layout"><aside class="side"><h4>Max total price</h4><input type="range" id="fp" min="500" max="'+mxp+'" step="100" value="'+F.maxp+'"><div id="fpv" style="font-size:13px;color:var(--mute)">up to $'+Math.round(F.maxp).toLocaleString()+'</div><h4>Max days away</h4><input type="range" id="fn" min="3" max="'+mxn+'" value="'+F.maxn+'"><div id="fnv" style="font-size:13px;color:var(--mute)">up to '+F.maxn+' nights</div><h4>Quality</h4><label><input type="checkbox" id="fa" '+(F.acc?'checked':'')+'> Internationally accredited</label><label><input type="checkbox" id="fe" '+(F.eng?'checked':'')+'> English-speaking team</label><div style="margin-top:14px;font-size:12px;color:var(--mute)">'+(SRC.length?'<b style="color:var(--ink)">Live sources</b><br>'+SRC.slice(0,4).map(s=>/^https:\/\//.test(s.url)?'<a href="'+esc(s.url)+'" target="_blank" rel="noopener" style="color:var(--blue)">'+esc(String(s.title).slice(0,40))+'</a>':'').join('<br>')+'<br><br>':'')+(CTX.home?'Home price benchmark: <b style="color:var(--ink)">$'+Math.round(CTX.home).toLocaleString()+'</b><br>'+esc(CTX.homeNote):'')+'</div></aside><div><div class="warn">Estimates, not quotes. Verify accreditation and get a written quote from the hospital before paying anything. Not medical advice.</div><div class="sort">'+[["rec","Recommended"],["price","Lowest price"],["short","Shortest trip"]].map(s=>'<button data-s="'+s[0]+'" class="'+(SORT===s[0]?'on':'')+'">'+s[1]+'</button>').join('')+'<span class="cnt">'+a.length+' packages · '+esc(CTX.proc)+' from '+esc(CTX.from)+'</span></div>';
+  if(!a.length)h+='<div class="empty">No packages match these filters.</div>';
+  a.forEach(p=>{const sv=p.home&&p.home>p.price?Math.round((1-p.price/p.home)*100):0;h+='<div class="card"><div class="img" style="background:'+p.g+'"><em>'+esc(p.city)+', '+esc(p.country)+'</em></div><div class="mid"><h3>'+esc(p.title)+'</h3><div class="loc">'+esc(p.hospital_type)+' · '+Math.round(p.flight_hours)+' h flight</div><div class="tags">'+(p.accredited?'<span class="tag g">Accredited</span>':'<span class="tag o">Check accreditation</span>')+(p.english?'<span class="tag">English</span>':'')+'<span class="tag">'+Math.round(p.nights)+' nights</span></div><div class="inc">'+(p.included||[]).slice(0,6).map(i=>'<div>'+esc(i)+'</div>').join('')+'</div><div class="rate"><b>'+Number(p.rating).toFixed(1)+'</b><span style="color:var(--mute);font-size:12px">'+esc(p.reviews_note)+'</span></div></div><div class="buy"><div>'+(sv?'<span class="save">Save ~'+sv+'%</span>':'')+'</div><div>'+(p.home?'<div class="was">$'+Math.round(p.home).toLocaleString()+' at home</div>':'')+'<div class="price">$'+Math.round(p.price).toLocaleString()+'<small>all-in, est.</small></div></div><button class="btn" data-id="'+esc(p.id)+'">View deal</button></div></div>'});
+  $("app").innerHTML=h+'</div></div>';
+}
+$("app").onclick=e=>{const s=e.target.closest("[data-s]");if(s){SORT=s.dataset.s;draw();return}const b=e.target.closest(".btn[data-id]");if(b)open(b.dataset.id)};
+$("app").oninput=e=>{if(e.target.id==="fp"){F.maxp=+e.target.value;$("fpv").textContent="up to $"+F.maxp.toLocaleString()}if(e.target.id==="fn"){F.maxn=+e.target.value;$("fnv").textContent="up to "+F.maxn+" nights"}};
+$("app").onchange=e=>{if(["fp","fn"].includes(e.target.id))draw();if(e.target.id==="fa"){F.acc=e.target.checked;draw()}if(e.target.id==="fe"){F.eng=e.target.checked;draw()}};
+function open(id){const p=ALL.find(x=>x.id===id);if(!p)return;
+  const L=a=>'<ul style="margin:4px 0;padding-left:18px">'+(a||[]).map(i=>'<li>'+esc(i)+'</li>').join('')+'</ul>';
+  const enq="Hello,\n\nI am enquiring about "+CTX.proc+" in "+p.city+", "+p.country+" ("+p.title+").\nI would travel from "+CTX.from+(CTX.mon?" in "+CTX.mon:"")+" ("+CTX.tv+").\n\nPlease send a written, itemised quote covering the procedure, implants or consumables, hospital stay, surgeon's fee, follow-up care and any complication policy. Please also confirm your accreditation, the surgeon's qualifications and years of experience with this procedure, and how aftercare is handled once I am home.\n\nThank you.";
+  $("pn").innerHTML='<button class="x" id="cl">×</button><h2>'+esc(p.title)+'</h2><div class="loc">'+esc(p.city)+', '+esc(p.country)+' · '+esc(p.hospital_type)+'</div><div class="k">Cost breakdown (estimate)</div><table>'+(p.breakdown||[]).map(c=>'<tr><td>'+esc(c.item)+'</td><td>$'+Math.round(c.usd).toLocaleString()+'</td></tr>').join('')+'<tr><td><b>Total</b></td><td><b>$'+Math.round(p.price).toLocaleString()+'</b></td></tr></table><div class="k">Itinerary</div>'+(p.itinerary||[]).map(d=>'<div class="day"><b>'+esc(d.day)+'</b><span>'+esc(d.plan)+'</span></div>').join('')+'<div class="k">Verify before you pay</div><p style="margin:4px 0">'+esc(p.accreditation)+'</p><div class="k">Visa</div><p style="margin:4px 0">'+esc(p.visa)+'</p><div class="k">Risks to weigh</div>'+L(p.risks)+'<div class="k">Enquiry to the hospital (copy and send)</div><textarea id="eq" readonly>'+esc(enq)+'</textarea><button class="btn" id="cp" style="margin-top:8px">Copy enquiry</button><p style="color:var(--mute);font-size:12px">Booking and payment are not live yet. This sends nothing; it prepares your enquiry.</p>';
+  $("dr").classList.add("on");
+  $("cl").onclick=()=>$("dr").classList.remove("on");
+  $("cp").onclick=async()=>{try{await navigator.clipboard.writeText($("eq").value);$("cp").textContent="Copied"}catch(x){$("eq").select();$("cp").textContent="Press Ctrl+C"}};
+}
+$("dr").onclick=e=>{if(e.target.id==="dr")$("dr").classList.remove("on")};
+</script>
+</body>
+</html>

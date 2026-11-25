@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deal Sourcing Agent - European M&A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f6f2ea;--card:#fffdf8;--ink:#14213d;--mute:#5d6577;--line:#e0d8c8;--amber:#c8791f;--teal:#1f6f6b;--red:#b3402f;--r:12px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;margin:0;letter-spacing:-.01em}
+.mono{font-family:'JetBrains Mono',monospace}
+header{padding:28px 32px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+header h1{font-size:30px}
+header p{margin:4px 0 0;color:var(--mute);max-width:640px}
+.badge{font-size:12px;border:1px solid var(--line);background:var(--card);padding:6px 10px;border-radius:99px;color:var(--mute)}
+.wrap{display:grid;grid-template-columns:320px minmax(0,1fr);gap:24px;padding:24px 32px 64px;max-width:1400px;margin:0 auto}
+@media(max-width:900px){.wrap{grid-template-columns:1fr;padding:16px}header{padding:20px 16px}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.side{position:sticky;top:16px;align-self:start;display:flex;flex-direction:column;gap:14px}
+@media(max-width:900px){.side{position:static}}
+label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:12px 0 5px;font-weight:600}
+input[type=text],select,textarea{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+textarea{min-height:64px;resize:vertical}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{flex:1;border:0;background:#fff;padding:9px 6px;font:inherit;font-size:13px;cursor:pointer;color:var(--mute)}
+.seg button.on{background:var(--ink);color:#fff}
+.go{width:100%;margin-top:16px;padding:12px;border:0;border-radius:8px;background:var(--amber);color:#fff;font:600 15px Inter;cursor:pointer}
+.go:disabled{opacity:.5;cursor:wait}
+.ghost{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font:inherit;font-size:13px;cursor:pointer}
+.w{display:grid;grid-template-columns:1fr 38px;gap:8px;align-items:center;font-size:13px;margin:6px 0}
+.w input{grid-column:1/-1;width:100%;accent-color:var(--amber)}
+.w span:last-child{text-align:right;color:var(--mute)}
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+@media(max-width:600px){.pipe{grid-template-columns:1fr 1fr}}
+.stage{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px;font-size:13px}
+.stage b{display:block;font-family:Fraunces,serif;font-size:15px}
+.stage small{color:var(--mute)}
+.stage.run{border-color:var(--amber);box-shadow:0 0 0 3px #c8791f22}
+.stage.done{border-color:var(--teal)}
+.stage.done small::before{content:"✓ ";color:var(--teal)}
+.notice{background:#fbf0dc;border:1px solid #ecd6a8;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:18px}
+.err{background:#f9e4df;border-color:#e6b4aa}
+.profile h2{font-size:26px}
+.profile .meta{color:var(--mute);margin:4px 0 10px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{font-size:12px;padding:3px 9px;border-radius:99px;background:#efe8d8}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-weight:600;text-align:left;color:var(--mute);font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:8px 6px;border-bottom:1px solid var(--line)}
+td{padding:9px 6px;border-bottom:1px solid #efe8d8;vertical-align:middle}
+tr.row{cursor:pointer}tr.row:hover{background:#f6efe0}tr.sel{background:#f1e6cf}
+.sc{display:inline-block;width:34px;text-align:center;border-radius:5px;padding:2px 0;font-size:12px;font-variant-numeric:tabular-nums}
+.tot{font-weight:600;font-size:15px;font-variant-numeric:tabular-nums}
+.bar{height:6px;background:#eadfca;border-radius:9px;overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%;background:var(--teal)}
+.scroll{overflow-x:auto}
+.detail{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.detail{grid-template-columns:1fr}}
+.detail h3{font-size:19px;margin-bottom:6px}
+.k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);font-weight:600;margin-top:12px}
+.memo h2{font-size:24px;margin-bottom:4px}
+.memo h3{font-size:17px;margin:18px 0 6px}
+.memo ul{margin:6px 0;padding-left:20px}
+.row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.empty{padding:60px 20px;text-align:center;color:var(--mute)}
+.empty h2{color:var(--ink);margin-bottom:8px}
+.ex{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Deal Sourcing Agent</h1>
+    <p>Name any European company. Four agents profile it, source counterparties, score them on eight weighted pillars and draft the deal memo.</p>
+  </div>
+  <span class="badge">Pan-European coverage · model knowledge, not a live data feed</span>
+</header>
+<div class="wrap">
+  <aside class="side">
+    <div class="panel">
+      <div class="seg" id="mode">
+        <button class="on" data-m="buyers">Find buyers</button>
+        <button data-m="targets">Find targets</button>
+      </div>
+      <label id="lbl">Target company</label>
+      <input type="text" id="co" placeholder="e.g. Ipsen, Believe, Doctolib, a Dutch mid-cap">
+      <label>Country or region (optional)</label>
+      <input type="text" id="ctry" placeholder="e.g. France, DACH, Nordics">
+      <label>Constraints (optional)</label>
+      <textarea id="notes" placeholder="EV range, exclude PE, cross-border only, ESG screen..."></textarea>
+      <button class="go" id="run">Run the agents</button>
+    </div>
+    <div class="panel">
+      <b style="font-family:Fraunces,serif;font-size:17px">Pillar weights</b>
+      <div style="color:var(--mute);font-size:12px;margin-top:2px">Drag to re-rank instantly.</div>
+      <div id="weights"></div>
+      <div class="row2"><button class="ghost" data-p="strategic">Strategic buyer</button><button class="ghost" data-p="pe">PE buyout</button><button class="ghost" data-p="flat">Reset</button></div>
+    </div>
+  </aside>
+  <main>
+    <div class="pipe" id="pipe"></div>
+    <div id="msg"></div>
+    <div id="out">
+      <div class="panel empty">
+        <h2>Who are we sourcing for?</h2>
+        <p>Pick a mode, enter a company, and run the agents. Try one of these.</p>
+        <div class="ex" id="ex"></div>
+      </div>
+    </div>
+  </main>
+</div>
+<script>
+const PILLARS=[["strategic","Strategic fit"],["capacity","Financial capacity"],["accretion","Value accretion"],["synergy","Synergy potential"],["regulatory","Regulatory ease"],["cultural","Cultural / geo fit"],["precedent","Deal precedent"],["timing","Timing / catalysts"]];
+const PRESETS={strategic:[22,10,12,18,12,10,8,8],pe:[10,24,16,6,8,6,14,16],flat:[12.5,12.5,12.5,12.5,12.5,12.5,12.5,12.5]};
+const STAGES=[["Profile agent","Reads the company"],["Sourcing agent","Builds the universe"],["Scoring agent","Scores 8 pillars"],["Memo agent","Drafts the memo"]];
+let SAMPLE=null,mode="buyers",W=PRESETS.flat.slice(),state={profile:null,cands:[],sel:0,memo:null};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+if(window.claude&&claude.use){claude.use("sample").then(s=>{SAMPLE=s;if(!s)noteErr("Live agents are unavailable in this view. Open the page from your claude.ai artifacts.")}).catch(()=>{})}
+function noteErr(t){$("msg").innerHTML='<div class="notice err">'+esc(t)+'</div>'}
+function note(t){$("msg").innerHTML=t?'<div class="notice">'+t+'</div>':''}
+function pipe(active,done){$("pipe").innerHTML=STAGES.map((s,i)=>'<div class="stage '+(i<done?'done':i===active?'run':'')+'"><b>'+s[0]+'</b><small>'+(i===active?'Working…':s[1])+'</small></div>').join('')}
+pipe(-1,0);
+function parse(t){const m=t.match(/\{[\s\S]*\}/);if(!m)throw new Error("The agent returned no structured answer. Run it again.");return JSON.parse(m[0])}
+// Set API_URL to your Cloudflare Worker (see worker.js) to run on your own site with live web data.
+const API_URL="";let QUERY="";
+async function ask(p){
+  if(API_URL){const r=await fetch(API_URL,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({prompt:p,query:QUERY})});const j=await r.json();if(j.error)throw new Error(j.error);if(j.truncated)throw new Error("Answer was cut off. Try narrower constraints.");return parse(j.text)}
+  const r=await SAMPLE(p,{cache:false,modelTier:"default"});if(r.truncated)throw new Error("Answer was cut off. Try narrower constraints.");return parse(r.text)}
+$("mode").onclick=e=>{const b=e.target.closest("button");if(!b)return;mode=b.dataset.m;[...$("mode").children].forEach(x=>x.classList.toggle("on",x===b));$("lbl").textContent=mode==="buyers"?"Target company":"Acquirer"};
+function drawW(){$("weights").innerHTML=PILLARS.map((p,i)=>'<div class="w"><span>'+p[1]+'</span><span>'+Math.round(W[i])+'</span><input type="range" min="0" max="40" value="'+W[i]+'" data-i="'+i+'"></div>').join('')}
+$("weights").oninput=e=>{if(e.target.dataset.i==null)return;W[+e.target.dataset.i]=+e.target.value;e.target.previousElementSibling.textContent=e.target.value;render()};
+document.querySelector('[data-p="flat"]').parentNode.onclick=e=>{const p=e.target.dataset.p;if(!p)return;W=PRESETS[p].slice();drawW();render()};
+drawW();
+const EX=[["Ipsen","buyers"],["Believe","buyers"],["Siemens Healthineers","targets"],["Spotify","buyers"]];
+$("ex").innerHTML=EX.map(x=>'<button class="ghost" data-c="'+x[0]+'" data-m="'+x[1]+'">'+x[0]+' · '+(x[1]==="buyers"?'find buyers':'find targets')+'</button>').join('');
+$("ex").onclick=e=>{const b=e.target.closest("button");if(!b)return;$("co").value=b.dataset.c;[...$("mode").children].find(x=>x.dataset.m===b.dataset.m).click();run()};
+function total(c){const s=W.reduce((a,b)=>a+b,0)||1;return PILLARS.reduce((a,p,i)=>a+W[i]*(c.scores?c.scores[p[0]]||0:0),0)/s}
+function heat(v){const a=Math.max(0,Math.min(100,v))/100;return 'background:rgba(31,111,107,'+(0.08+a*0.62).toFixed(2)+');color:'+(a>.55?'#fff':'var(--ink)')}
+async function run(){
+  if(!SAMPLE&&!API_URL){noteErr("Live agents are unavailable in this view.");return}
+  const co=$("co").value.trim();if(!co){noteErr("Enter a company name first.");return}
+  const ctry=$("ctry").value.trim(),notes=$("notes").value.trim();
+  $("run").disabled=true;state={profile:null,cands:[],sel:0,memo:null};$("out").innerHTML="";note("");
+  const buyers=mode==="buyers";
+  QUERY=co+" "+ctry+" company "+(buyers?"potential acquirers acquisition M&A":"acquisitions deals strategy")+" Europe";
+  try{
+    pipe(0,0);
+    const pr=await ask(`You are a senior European M&A analyst. Subject company: "${co}" ${ctry?"(country/region: "+ctry+")":""}. Use only facts you are confident about. If you do not recognise the company, say so and set confidence to "low" and keep claims generic.
+Return ONLY JSON: {"profile":{"name":"","hq":"","sector":"","subsector":"","size":"approx revenue or EV range, with 'approx.'","ownership":"listed|PE-backed|family|state|unknown","summary":"max 40 words","facts":["3 short verified-looking facts, or 'not verified'"],"confidence":"high|medium|low"}}`);
+    state.profile=pr.profile;draw();
+    pipe(1,1);
+    const so=await ask(`European M&A sourcing agent. Mode: ${buyers?"find the 8 most plausible BUYERS for":"find the 8 most plausible ACQUISITION TARGETS for the acquirer"} "${co}". Profile: ${JSON.stringify(state.profile)}. Constraints: ${notes||"none"}. Cover Europe broadly, mix strategics and financial sponsors where relevant. Do not invent past deals: if none known write "none known".
+Return ONLY JSON: {"candidates":[{"name":"","type":"strategic|PE|infra|sovereign|family","hq":"","rationale":"max 28 words","precedent":"max 20 words","capacity":"EV capacity range"}]} with exactly 8 items.`);
+    state.cands=so.candidates;draw();
+    pipe(2,2);
+    const sc=await ask(`European M&A scoring agent. Score each candidate on eight pillars from 0 to 100 (regulatory: higher = easier antitrust/FDI clearance). Subject: ${co}. Mode: ${buyers?"buyer for subject":"target for acquirer subject"}. Candidates: ${JSON.stringify(state.cands.map(c=>({name:c.name,type:c.type,rationale:c.rationale,capacity:c.capacity})))}.
+Return ONLY JSON: {"scored":[{"name":"","scores":{"strategic":0,"capacity":0,"accretion":0,"synergy":0,"regulatory":0,"cultural":0,"precedent":0,"timing":0},"thesis":"max 25 words","risk":"max 20 words"}]}. Be discriminating: spread scores, do not cluster.`);
+    state.cands.forEach(c=>{const s=sc.scored.find(x=>x.name===c.name)||sc.scored[state.cands.indexOf(c)];if(s){c.scores=s.scores;c.thesis=s.thesis;c.risk=s.risk}});
+    pipe(-1,3);draw();
+  }catch(e){noteErr((e&&e.message)||"Something went wrong. Run it again.");pipe(-1,state.cands.length?2:0)}
+  $("run").disabled=false;
+}
+$("run").onclick=run;
+function draw(){render()}
+function render(){
+  const o=$("out");if(!state.profile){return}
+  const p=state.profile;let h='<div class="panel profile"><h2>'+esc(p.name)+'</h2><div class="meta">'+esc(p.hq)+' · '+esc(p.sector)+' / '+esc(p.subsector)+' · '+esc(p.ownership)+' · '+esc(p.size)+'</div><div>'+esc(p.summary)+'</div><div class="chips">'+(p.facts||[]).map(f=>'<span class="chip">'+esc(f)+'</span>').join('')+'<span class="chip" style="background:'+(p.confidence==='high'?'#d5ebe0':p.confidence==='low'?'#f3d6cf':'#f4e6c2')+'">confidence: '+esc(p.confidence)+'</span></div></div>';
+  const cs=state.cands.slice();
+  if(cs.length){
+    const scored=cs.every(c=>c.scores);
+    if(scored)cs.sort((a,b)=>total(b)-total(a));
+    h+='<div class="panel" style="margin-top:16px"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap"><h3 style="font-size:20px">'+(mode==="buyers"?"Buyer universe":"Target universe")+'</h3><span style="color:var(--mute);font-size:12px">'+(scored?"ranked live by your weights · click a row":"scoring in progress…")+'</span></div><div class="scroll"><table><thead><tr><th>#</th><th>Counterparty</th><th>Type</th>'+(scored?PILLARS.map(p=>'<th title="'+p[1]+'">'+p[1].split(' ')[0]+'</th>').join('')+'<th>Score</th>':'<th>Rationale</th>')+'</tr></thead><tbody>';
+    cs.forEach((c,i)=>{const k=state.cands.indexOf(c);h+='<tr class="row '+(k===state.sel?'sel':'')+'" data-k="'+k+'"><td class="mono">'+(i+1)+'</td><td><b>'+esc(c.name)+'</b><div style="color:var(--mute);font-size:12px">'+esc(c.hq)+'</div></td><td>'+esc(c.type)+'</td>'+(scored?PILLARS.map(p=>'<td><span class="sc" style="'+heat(c.scores[p[0]])+'">'+Math.round(c.scores[p[0]])+'</span></td>').join('')+'<td><div class="tot">'+total(c).toFixed(0)+'</div><div class="bar"><i style="width:'+total(c)+'%"></i></div></td>':'<td>'+esc(c.rationale)+'</td>')+'</tr>'});
+    h+='</tbody></table></div></div>';
+    const c=state.cands[state.sel];
+    if(c&&c.scores){h+='<div class="detail"><div class="panel"><h3>'+esc(c.name)+'</h3><div class="k">Thesis</div>'+esc(c.thesis)+'<div class="k">Why it fits</div>'+esc(c.rationale)+'<div class="k">Precedent</div>'+esc(c.precedent)+'<div class="k">Capacity</div>'+esc(c.capacity)+'<div class="k">Main risk</div>'+esc(c.risk)+'<div class="row2"><button class="ghost" id="mk" style="background:var(--ink);color:#fff">Draft deal memo for '+esc(c.name)+'</button></div></div><div class="panel">'+radar(c)+'</div></div>'}
+  }
+  if(state.memo)h+=memoHtml(state.memo);
+  o.innerHTML=h;
+}
+function radar(c){const n=PILLARS.length,R=90,cx=130,cy=120;const pt=(i,v)=>{const a=-Math.PI/2+i*2*Math.PI/n,r=R*v/100;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]};
+  let g='';[25,50,75,100].forEach(l=>{g+='<polygon fill="none" stroke="#e0d8c8" points="'+PILLARS.map((_,i)=>pt(i,l).join(',')).join(' ')+'"/>'});
+  PILLARS.forEach((p,i)=>{const[x,y]=pt(i,118);g+='<text x="'+x+'" y="'+y+'" font-size="9.5" text-anchor="middle" fill="#5d6577">'+p[1].split(' ')[0]+'</text>'});
+  g+='<polygon fill="rgba(200,121,31,.25)" stroke="#c8791f" stroke-width="2" points="'+PILLARS.map((p,i)=>pt(i,c.scores[p[0]]||0).join(',')).join(' ')+'"/>';
+  return '<svg viewBox="0 0 260 240" width="100%" role="img" aria-label="Pillar profile">'+g+'</svg>'}
+$("out").onclick=e=>{const r=e.target.closest("tr.row");if(r){state.sel=+r.dataset.k;render();return}if(e.target.id==="mk")memo();if(e.target.id==="cp")copyMemo();if(e.target.id==="dl")dlMemo()};
+async function memo(){
+  const c=state.cands[state.sel];const b=$("mk");b.disabled=true;b.textContent="Memo agent working…";pipe(3,3);
+  try{
+    const m=await ask(`You are the memo agent of a European M&A team. Write a concise preliminary deal memo. ${mode==="buyers"?"Buyer: "+c.name+". Target: "+state.profile.name:"Acquirer: "+state.profile.name+". Target: "+c.name}. Profile: ${JSON.stringify(state.profile)}. Counterparty notes: ${JSON.stringify({rationale:c.rationale,precedent:c.precedent,capacity:c.capacity,risk:c.risk,scores:c.scores})}. Label every figure as an estimate. Do not invent facts.
+Return ONLY JSON: {"headline":"","situation":"max 50 words","rationale":["3-4 bullets"],"valuation":"how to frame valuation, methods and a rough multiple range, flagged as indicative","synergies":["3 bullets with type"],"risks":["4 bullets incl. antitrust/FDI/ESG"],"structure":"max 40 words","diligence":["5 priority diligence questions"],"next_steps":["4 bullets"]}`);
+    state.memo={c:c.name,m};pipe(-1,4);render();
+    $("out").lastElementChild.scrollIntoView({behavior:"smooth",block:"start"});
+  }catch(e){noteErr((e&&e.message)||"Memo failed. Try again.");b.disabled=false;b.textContent="Draft deal memo for "+c.name}
+}
+function memoHtml(x){const m=x.m,L=a=>'<ul>'+(a||[]).map(i=>'<li>'+esc(i)+'</li>').join('')+'</ul>';
+  return '<div class="panel memo" style="margin-top:16px"><div class="k" style="margin:0">Preliminary memo · '+esc(x.c)+'</div><h2>'+esc(m.headline)+'</h2><h3>Situation</h3><p>'+esc(m.situation)+'</p><h3>Rationale</h3>'+L(m.rationale)+'<h3>Valuation view</h3><p>'+esc(m.valuation)+'</p><h3>Synergies</h3>'+L(m.synergies)+'<h3>Risks</h3>'+L(m.risks)+'<h3>Structure</h3><p>'+esc(m.structure)+'</p><h3>Diligence priorities</h3>'+L(m.diligence)+'<h3>Next steps</h3>'+L(m.next_steps)+'<div class="row2"><button class="ghost" id="cp">Copy memo</button><button class="ghost" id="dl">Download .md</button></div><p style="color:var(--mute);font-size:12px;margin-top:12px">AI-generated from model knowledge. Verify every figure against filings and a market data provider before use.</p></div>'}
+function memoText(){const x=state.memo,m=x.m,L=a=>(a||[]).map(i=>'- '+i).join('\n');return '# '+m.headline+'\nCounterparty: '+x.c+'\n\n## Situation\n'+m.situation+'\n\n## Rationale\n'+L(m.rationale)+'\n\n## Valuation view\n'+m.valuation+'\n\n## Synergies\n'+L(m.synergies)+'\n\n## Risks\n'+L(m.risks)+'\n\n## Structure\n'+m.structure+'\n\n## Diligence priorities\n'+L(m.diligence)+'\n\n## Next steps\n'+L(m.next_steps)+'\n'}
+async function copyMemo(){try{await navigator.clipboard.writeText(memoText());$("cp").textContent="Copied"}catch(e){$("cp").textContent="Select text to copy"}}
+async function dlMemo(){try{const d=await claude.use("downloads");if(!d)throw 0;await d.save({filename:"deal-memo.md",data:memoText()})}catch(e){$("dl").textContent="Use Copy instead"}}
+</script>
+</body>
+</html>
