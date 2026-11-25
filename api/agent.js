@@ -87,6 +87,36 @@ async function search(query, only) {
   return { sources: [], engine: "" };
 }
 
+async function groqOne(prompt, model) {
+  const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: { "content-type": "application/json", Authorization: "Bearer " + GROQ_KEY },
+    body: JSON.stringify({
+      model, temperature: 0.3, max_tokens: 8000,
+      ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: "You reply with ONE valid JSON object only. No markdown fences, no commentary." },
+        { role: "user", content: prompt },
+      ],
+    }),
+  });
+  const d = await r.json();
+  if (!r.ok) { const e = new Error((d.error && d.error.message) || "Model error"); e.status = r.status; throw e; }
+  const c = d.choices && d.choices[0];
+  return { text: (c && c.message && c.message.content) || "", truncated: !!c && c.finish_reason === "length" };
+}
+
+async function groq(prompt) {
+  let last;
+  for (const m of [MODEL, ...FALLBACKS]) {
+    try { return await groqOne(prompt, m); }
+    catch (e) { last = e; if (e.status !== 429 && e.status !== 503 && e.status !== 400) throw e; }
+  }
+  throw last;
+}
+
+
 // ---------- market data (free, no key): Yahoo Finance chart API, Stooq as fallback ----------
 const UA = { "user-agent": "Mozilla/5.0 (compatible; DiligenceDesk/1.0)", accept: "application/json,text/csv,*/*" };
 function bench(sym) {
