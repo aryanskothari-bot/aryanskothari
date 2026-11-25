@@ -3,6 +3,9 @@
 // Set GROQ_API_KEY and TAVILY_API_KEY in Vercel > Project > Settings > Environment Variables.
 
 const MODEL = "openai/gpt-oss-120b";
+// Accept the variable names as saved in Vercel.
+const GROQ_KEY = process.env.GROQ_API_KEY || process.env.GROQ;
+const TAVILY_KEY = process.env.TAVILY_API_KEY || process.env.TAVILY || process.env.travily;
 const ALLOWED = [/^https:\/\/aryanskothari-bot\.github\.io$/, /^https:\/\/[a-z0-9-]+\.vercel\.app$/, /^http:\/\/localhost(:\d+)?$/];
 const CACHE_MS = 12 * 3600 * 1000;
 const cache = new Map();
@@ -16,10 +19,10 @@ function cors(res, origin) {
 }
 
 async function tavily(query) {
-  if (!process.env.TAVILY_API_KEY || !query) return [];
+  if (!TAVILY_KEY || !query) return [];
   const r = await fetch("https://api.tavily.com/search", {
     method: "POST",
-    headers: { "content-type": "application/json", Authorization: "Bearer " + process.env.TAVILY_API_KEY },
+    headers: { "content-type": "application/json", Authorization: "Bearer " + TAVILY_KEY },
     body: JSON.stringify({ query, max_results: 5, search_depth: "basic" }),
   });
   if (!r.ok) return [];
@@ -30,7 +33,7 @@ async function tavily(query) {
 async function groq(prompt) {
   const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
-    headers: { "content-type": "application/json", Authorization: "Bearer " + process.env.GROQ_API_KEY },
+    headers: { "content-type": "application/json", Authorization: "Bearer " + GROQ_KEY },
     body: JSON.stringify({
       model: MODEL, temperature: 0.3, max_tokens: 3500,
       response_format: { type: "json_object" },
@@ -52,7 +55,7 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
   if (origin && !ALLOWED.some((r) => r.test(origin))) return res.status(403).json({ error: "Forbidden" });
-  if (!process.env.GROQ_API_KEY) return res.status(500).json({ error: "The AI key is not set up yet." });
+  if (!GROQ_KEY) return res.status(500).json({ error: "The AI key is not set up yet." });
 
   const ip = (req.headers["x-forwarded-for"] || "x").split(",")[0];
   const now = Date.now();
