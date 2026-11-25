@@ -61,6 +61,68 @@ async function groq(prompt) {
   throw last;
 }
 
+// ---------- market data (free, no key): Yahoo Finance chart API, Stooq as fallback ----------
+const UA = { "user-agent": "Mozilla/5.0 (compatible; DiligenceDesk/1.0)", accept: "application/json,text/csv,*/*" };
+function bench(sym) {
+  const s = sym.toUpperCase();
+  if (s.endsWith(".PA")) return "^FCHI"; if (s.endsWith(".DE") || s.endsWith(".F")) return "^GDAXI";
+  if (s.endsWith(".L")) return "^FTSE"; if (s.endsWith(".NS") || s.endsWith(".BO")) return "^NSEI";
+  if (s.endsWith(".AS")) return "^AEX"; if (s.endsWith(".MI")) return "FTSEMIB.MI"; if (s.endsWith(".MC")) return "^IBEX";
+  if (s.endsWith(".SW")) return "^SSMI"; if (s.endsWith(".T")) return "^N225"; if (s.endsWith(".HK")) return "^HSI";
+  return "^GSPC";
+}
+async function yahooSearch(q) {
+  const r = await fetch("https://query1.finance.yahoo.com/v1/finance/search?quotesCount=6&newsCount=0&q=" + encodeURIComponent(q), { headers: UA });
+  if (!r.ok) return null;
+  const d = await r.json();
+  const hit = (d.quotes || []).find((x) => x.quoteType === "EQUITY") || (d.quotes || [])[0];
+  return hit ? { symbol: hit.symbol, name: hit.longname || hit.shortname || hit.symbol, exchange: hit.exchDisp || hit.exchange || "" } : null;
+}
+async function yahooChart(sym) {
+  for (const host of ["query1", "query2"]) {
+    const r = await fetch(`https://${host}.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?range=2y&interval=1d&includePrePost=false`, { headers: UA });
+    if (!r.ok) continue;
+    const d = await r.json();
+    const x = d.chart && d.chart.result && d.chart.result[0];
+    if (!x || !x.timestamp) continue;
+    const c = (x.indicators.adjclose && x.indicators.adjclose[0].adjclose) || x.indicators.quote[0].close;
+    const v = x.indicators.quote[0].volume || [];
+    const pts = x.timestamp.map((t, i) => [t * 1000, c[i], v[i] || 0]).filter((p) => p[1] != null);
+    const m = x.meta || {};
+    return { pts, currency: m.currency || "", name: m.longName || m.shortName || sym, exchange: m.fullExchangeName || m.exchangeName || "", price: m.regularMarketPrice || pts[pts.length - 1][1], high52: m.fiftyTwoWeekHigh, low52: m.fiftyTwoWeekLow, src: "Yahoo Finance" };
+  }
+  return null;
+}
+async function stooq(sym) {
+  let s = sym.toLowerCase();
+  if (!s.includes(".") && !s.startsWith("^")) s += ".us";
+  const r = await fetch("https://stooq.com/q/d/l/?i=d&s=" + encodeURIComponent(s), { headers: UA });
+  if (!r.ok) return null;
+  const rows = (await r.text()).trim().split("\n").slice(1).map((l) => l.split(","));
+  const pts = rows.filter((r) => r.length >= 5 && !isNaN(+r[4])).map((r) => [Date.parse(r[0]), +r[4], +(r[5] || 0)]).slice(-505);
+  if (pts.length < 60) return null;
+  return { pts, currency: "", name: sym.toUpperCase(), exchange: "", price: pts[pts.length - 1][1], src: "Stooq" };
+}
+async function series(sym) { return (await yahooChart(sym).catch(() => null)) || (await stooq(sym).catch(() => null)); }
+async function quote(input) {
+  if (!input) throw new Error("Type a ticker or company name");
+  const ck = "q:" + input.toUpperCase();
+  const hit = cache.get(ck);
+  if (hit && Date.now() - hit.t < 3600 * 1000) return hit.v;
+  let sym = input.toUpperCase(), name = "", exch = "";
+  let main = /^[\^A-Z0-9.\-=]{1,15}$/.test(sym) ? await series(sym) : null;
+  if (!main) {
+    const s = await yahooSearch(input).catch(() => null);
+    if (s) { sym = s.symbol; name = s.name; exch = s.exchange; main = await series(sym); }
+  }
+  if (!main) throw new Error("No price data found for " + input + ". Try the exact ticker, e.g. AAPL, MC.PA, SAP.DE, RELIANCE.NS");
+  const b = bench(sym);
+  const bm = await series(b).catch(() => null);
+  const v = { symbol: sym, name: name || main.name, exchange: exch || main.exchange, currency: main.currency, price: main.price, high52: main.high52, low52: main.low52, source: main.src, pts: main.pts, bench: { symbol: b, pts: bm ? bm.pts : [] } };
+  cache.set(ck, { t: Date.now(), v });
+  return v;
+}
+
 export default async function handler(req, res) {
   const origin = req.headers.origin || "";
   cors(res, origin);
@@ -72,10 +134,14 @@ export default async function handler(req, res) {
   const ip = (req.headers["x-forwarded-for"] || "x").split(",")[0];
   const now = Date.now();
   const recent = (hits.get(ip) || []).filter((t) => now - t < 60000);
-  if (recent.length >= 6) return res.status(429).json({ error: "Too many requests. Wait a minute." });
+  if (recent.length >= 24) return res.status(429).json({ error: "Too many requests. Wait a minute." });
   recent.push(now); hits.set(ip, recent);
 
   const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
+  if (body.mode === "quote") {
+    try { return res.status(200).json(await quote(String(body.symbol || "").trim().slice(0, 30))); }
+    catch (e) { return res.status(404).json({ error: e.message || "No price data found" }); }
+  }
   const prompt = String(body.prompt || "").slice(0, 6000);
   const query = String(body.query || "").slice(0, 200);
   if (!prompt) return res.status(400).json({ error: "Missing prompt" });
