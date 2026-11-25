@@ -1,5 +1,5 @@
 // Vercel serverless function: free live-data backend for the Deal Sourcing Agent and MediBridge.
-// Web search: Tavily (free 1,000 searches/month). Model: Groq (free tier).
+// Web search: Tavily, then Firecrawl keyless, LangSearch and Wikipedia as free fallbacks. Model: Groq (free tier).
 // Set GROQ_API_KEY and TAVILY_API_KEY in Vercel > Project > Settings > Environment Variables.
 
 const MODEL = "openai/gpt-oss-120b";
@@ -20,8 +20,15 @@ function cors(res, origin) {
   res.setHeader("Vary", "Origin");
 }
 
+// ---------- web search: free providers tried in order until one returns results ----------
+// 1) Tavily (free 1,000/month, key)  2) Firecrawl keyless (free, no key)  3) LangSearch (free, key optional)  4) Wikipedia (free, no key)
+const FIRECRAWL_KEY = process.env.FIRECRAWL_API_KEY || process.env.FIRECRAWL;
+const LANGSEARCH_KEY = process.env.LANGSEARCH_API_KEY || process.env.LANGSEARCH;
+const cut = (t) => String(t || "").replace(/\s+/g, " ").slice(0, 380);
+async function timed(p, ms = 9000) { return Promise.race([p, new Promise((_, r) => setTimeout(() => r(new Error("timeout")), ms))]); }
+
 async function tavily(query) {
-  if (!TAVILY_KEY || !query) return [];
+  if (!TAVILY_KEY) return [];
   const r = await fetch("https://api.tavily.com/search", {
     method: "POST",
     headers: { "content-type": "application/json", Authorization: "Bearer " + TAVILY_KEY },
@@ -29,7 +36,45 @@ async function tavily(query) {
   });
   if (!r.ok) return [];
   const d = await r.json();
-  return (d.results || []).map((x) => ({ title: x.title, url: x.url, snippet: String(x.content || "").slice(0, 380) }));
+  return (d.results || []).map((x) => ({ title: x.title, url: x.url, snippet: cut(x.content) }));
+}
+async function firecrawl(query) {
+  const r = await fetch("https://api.firecrawl.dev/v2/search", {
+    method: "POST",
+    headers: { "content-type": "application/json", ...(FIRECRAWL_KEY ? { Authorization: "Bearer " + FIRECRAWL_KEY } : {}) },
+    body: JSON.stringify({ query, limit: 5 }),
+  });
+  if (!r.ok) return [];
+  const d = await r.json();
+  const list = (d.data && (d.data.web || d.data.news)) || (Array.isArray(d.data) ? d.data : []);
+  return list.map((x) => ({ title: x.title, url: x.url, snippet: cut(x.description || x.snippet || x.markdown) })).filter((x) => x.url);
+}
+async function langsearch(query) {
+  if (!LANGSEARCH_KEY) return [];
+  const r = await fetch("https://api.langsearch.com/v1/web-search", {
+    method: "POST",
+    headers: { "content-type": "application/json", Authorization: "Bearer " + LANGSEARCH_KEY },
+    body: JSON.stringify({ query, count: 5, freshness: "noLimit" }),
+  });
+  if (!r.ok) return [];
+  const d = await r.json();
+  return ((d.data && d.data.webPages && d.data.webPages.value) || []).map((x) => ({ title: x.name, url: x.url, snippet: cut(x.snippet || x.text) }));
+}
+async function wikipedia(query) {
+  const q = query.split(" ").slice(0, 4).join(" ");
+  const r = await fetch("https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srlimit=4&srsearch=" + encodeURIComponent(q), { headers: { "user-agent": "DiligenceDesk/1.0 (aryanskothari.vercel.app)" } });
+  if (!r.ok) return [];
+  const d = await r.json();
+  return ((d.query && d.query.search) || []).map((x) => ({ title: x.title + " (Wikipedia)", url: "https://en.wikipedia.org/wiki/" + encodeURIComponent(x.title.replace(/ /g, "_")), snippet: cut(x.snippet.replace(/<[^>]+>/g, "")) }));
+}
+const ENGINES = [["Tavily", tavily], ["Firecrawl", firecrawl], ["LangSearch", langsearch], ["Wikipedia", wikipedia]];
+async function search(query, only) {
+  if (!query) return { sources: [], engine: "" };
+  for (const [name, fn] of ENGINES) {
+    if (only && only !== name) continue;
+    try { const res = await timed(fn(query)); if (res && res.length) return { sources: res, engine: name }; } catch (e) {}
+  }
+  return { sources: [], engine: "" };
 }
 
 async function groqOne(prompt, model) {
@@ -138,6 +183,10 @@ export default async function handler(req, res) {
   recent.push(now); hits.set(ip, recent);
 
   const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
+  if (body.mode === "search") {
+    const r = await search(String(body.query || "").slice(0, 200), body.engine);
+    return res.status(200).json(r);
+  }
   if (body.mode === "quote") {
     try { return res.status(200).json(await quote(String(body.symbol || "").trim().slice(0, 30))); }
     catch (e) { return res.status(404).json({ error: e.message || "No price data found" }); }
@@ -151,7 +200,7 @@ export default async function handler(req, res) {
   if (hit && now - hit.t < CACHE_MS) return res.status(200).json({ ...hit.v, cached: true });
 
   try {
-    const sources = await tavily(query);
+    const { sources, engine } = await search(query, body.engine);
     let full = prompt;
     if (sources.length) {
       full += "\n\nLIVE WEB RESULTS (use them for current facts and prices; trust them over memory; do not invent facts they do not support):\n" +
@@ -159,7 +208,7 @@ export default async function handler(req, res) {
     }
     let out = await groq(full);
     if (!/\{[\s\S]*\}/.test(out.text) || out.truncated) out = await groq(full);
-    const v = { text: out.text, truncated: out.truncated, sources: sources.map((s) => ({ title: s.title, url: s.url })) };
+    const v = { text: out.text, truncated: out.truncated, engine, sources: sources.map((s) => ({ title: s.title, url: s.url })) };
     if (!out.truncated) cache.set(key, { t: now, v });
     return res.status(200).json(v);
   } catch (e) {
