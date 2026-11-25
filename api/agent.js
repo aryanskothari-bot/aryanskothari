@@ -3,6 +3,8 @@
 // Set GROQ_API_KEY and TAVILY_API_KEY in Vercel > Project > Settings > Environment Variables.
 
 const MODEL = "openai/gpt-oss-120b";
+// Backup models on separate free-tier quotas, used when the main one is rate-limited.
+const FALLBACKS = ["llama-3.3-70b-versatile", "qwen/qwen3-32b"];
 // Accept the variable names as saved in Vercel.
 const GROQ_KEY = process.env.GROQ_API_KEY || process.env.GROQ;
 const TAVILY_KEY = process.env.TAVILY_API_KEY || process.env.TAVILY || process.env.travily;
@@ -30,12 +32,12 @@ async function tavily(query) {
   return (d.results || []).map((x) => ({ title: x.title, url: x.url, snippet: String(x.content || "").slice(0, 380) }));
 }
 
-async function groq(prompt) {
+async function groqOne(prompt, model) {
   const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: { "content-type": "application/json", Authorization: "Bearer " + GROQ_KEY },
     body: JSON.stringify({
-      model: MODEL, temperature: 0.3, max_tokens: 3500,
+      model, temperature: 0.3, max_tokens: 3500,
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: "You reply with ONE valid JSON object only. No markdown fences, no commentary." },
@@ -47,6 +49,15 @@ async function groq(prompt) {
   if (!r.ok) { const e = new Error((d.error && d.error.message) || "Model error"); e.status = r.status; throw e; }
   const c = d.choices && d.choices[0];
   return { text: (c && c.message && c.message.content) || "", truncated: !!c && c.finish_reason === "length" };
+}
+
+async function groq(prompt) {
+  let last;
+  for (const m of [MODEL, ...FALLBACKS]) {
+    try { return await groqOne(prompt, m); }
+    catch (e) { last = e; if (e.status !== 429 && e.status !== 503 && e.status !== 400) throw e; }
+  }
+  throw last;
 }
 
 export default async function handler(req, res) {
