@@ -96,6 +96,8 @@
 .pkg .was{text-decoration:line-through;color:var(--ink-3);font-size:13px}
 .pkg .price{font:700 28px var(--sans);letter-spacing:-.02em;line-height:1.1}
 .pkg .est{font-size:11.5px;color:var(--ink-3)}
+.pkg .tcl{font-size:12.5px;color:var(--ink-2);margin-top:6px;border-top:1px dashed var(--rule);padding-top:6px}.pkg .tcl b{color:var(--ink)}.up{color:#14946a}.dn{color:#c2412a}
+.tcbar{display:flex;height:14px;border-radius:8px;overflow:hidden;margin:8px 0}.tcbar i{display:block;height:100%}
 .pkg .acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.pkg .acts .btn{white-space:nowrap}
 .cmpx{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--ink-2);cursor:pointer}
 .cmpx input{accent-color:var(--tomato)}
@@ -173,7 +175,7 @@ body{background:radial-gradient(1100px 600px at 90% -10%,#cfeeea 0,transparent 6
           <button class="btn" id="go" type="submit">Search →</button>
         </form>
       </div>
-      <div class="trust"><span>All-in prices</span><span>Accreditation checklist</span><span>Live web prices</span><span>Free enquiry letter</span></div>
+      <div class="trust"><span>All-in prices</span><span>Accreditation checklist</span><span>Live web prices</span><span>True cost incl. complication risk</span><span>Home-doctor handover pack</span></div>
     </div>
     <figure class="globe" aria-hidden="true">
       <canvas id="globe"></canvas>
@@ -192,11 +194,12 @@ body{background:radial-gradient(1100px 600px at 90% -10%,#cfeeea 0,transparent 6
         <h3>Quality</h3>
         <label class="cbx"><input type="checkbox" id="fa"> Internationally accredited</label>
         <label class="cbx"><input type="checkbox" id="fe"> English-speaking team</label>
+        <h3 style="margin-top:16px">Value of a day off work</h3><input type="range" id="dv" min="0" max="600" step="10" value="150"><div class="val" id="dvv"></div><p style="font-size:11.5px;color:var(--ink-3);margin:4px 0 0">Used for the true cost: price + expected complication cost + days away.</p>
         <div id="bench" style="margin-top:16px;font-size:13px;color:var(--ink-2)"></div>
         <div id="srcs"></div>
       </aside>
       <div>
-        <div class="sortbar"><button class="chip" data-s="rec" aria-pressed="true">Recommended</button><button class="chip" data-s="price" aria-pressed="false">Lowest price</button><button class="chip" data-s="short" aria-pressed="false">Shortest trip</button><span class="sp"></span><span class="cnt" id="cnt"></span></div>
+        <div class="sortbar"><button class="chip" data-s="rec" aria-pressed="true">Recommended</button><button class="chip" data-s="true" aria-pressed="false">Lowest true cost</button><button class="chip" data-s="price" aria-pressed="false">Lowest price</button><button class="chip" data-s="short" aria-pressed="false">Shortest trip</button><span class="sp"></span><span class="cnt" id="cnt"></span></div>
         <div id="list"></div>
       </div>
     </div>
@@ -263,6 +266,7 @@ body{background:radial-gradient(1100px 600px at 90% -10%,#cfeeea 0,transparent 6
       <details><summary>How accurate are the prices?</summary><p>They are estimates built from live web prices and typical costs. Use them to compare options, then ask the hospital for a written, itemised quote.</p></details>
       <details><summary>How long should I stay after surgery?</summary><p>Each package shows a typical stay. Your surgeon decides when it is safe to fly; longer stays are usual after joint, spine and heart procedures.</p></details>
       <details><summary>Do I need a medical visa?</summary><p>Some countries offer a medical visa or e-visa. Each package lists a visa note; always check the embassy website for your nationality.</p></details>
+      <details><summary>What is the "true cost"?</summary><p>The cheapest price is not always the cheapest trip. True cost adds the expected cost of a complication (the typical complication rate for that procedure and hospital tier, times what it costs to fix privately at home) and the value of the days you spend away from work. Set your own value per day in the filters.</p></details>
       <details><summary>Does MediBridge book or take payment?</summary><p>No. MediBridge helps you compare and prepares your enquiry. You deal directly with the hospital.</p></details>
     </div>
   </div>
@@ -277,7 +281,7 @@ body{background:radial-gradient(1100px 600px at 90% -10%,#cfeeea 0,transparent 6
 <script src="assets/app.js"></script>
 <script src="assets/places.js"></script>
 <script>
-const {ask,esc,safeUrl,store,toast,copy,fmtMoney}=App;
+const {ask,esc,safeUrl,store,toast,copy,download,fmtMoney}=App;
 const $=id=>document.getElementById(id);
 $("yr").textContent=new Date().getFullYear();
 let CUR=store.get("mb_cur","USD");$("cur").value=CUR;
@@ -310,7 +314,7 @@ document.querySelectorAll(".stabs button").forEach(b=>b.onclick=()=>{document.qu
   function f(t){
     t=t||0;x.clearRect(0,0,w,h);const cx=w/2,cy=h/2,r=Math.min(w,h)*.4,rot=still?-80:-80+t*.006;
     const g=x.createRadialGradient(cx-r*.3,cy-r*.3,r*.1,cx,cy,r);g.addColorStop(0,"#ffffff");g.addColorStop(1,"#d6f0ec");x.fillStyle=g;x.beginPath();x.arc(cx,cy,r,0,7);x.fill();
-    x.strokeStyle="rgba(14,138,140,.12)";x.lineWidth=1;
+    x.strokeStyle="rgba(38,67,214,.12)";x.lineWidth=1;
     for(let lat=-60;lat<=60;lat+=30){x.beginPath();let s=false;for(let lon=-180;lon<=180;lon+=6){const p=proj(lat,lon,rot,cx,cy,r);if(p.z>0){s?x.lineTo(p.x,p.y):x.moveTo(p.x,p.y);s=true}else s=false}x.stroke()}
     for(let lon=-180;lon<180;lon+=30){x.beginPath();let s=false;for(let lat=-90;lat<=90;lat+=6){const p=proj(lat,lon,rot,cx,cy,r);if(p.z>0){s?x.lineTo(p.x,p.y):x.moveTo(p.x,p.y);s=true}else s=false}x.stroke()}
     R.forEach((pair,i)=>{const a=P[pair[0]],b=P[pair[1]];x.beginPath();let s=false;for(let k=0;k<=40;k++){const q=slerp(a,b,k/40),p=proj(q[0],q[1],rot,cx,cy,r*q[2]);if(p.z>0){s?x.lineTo(p.x,p.y):x.moveTo(p.x,p.y);s=true}else s=false}x.strokeStyle="rgba(255,90,54,.55)";x.lineWidth=1.6;x.stroke();
@@ -333,9 +337,10 @@ async function search(){
     const r=await ask(`You power a medical-travel marketplace like a flight/hotel booking site. Treatment: ${proc}. Patient flies from: ${from}. Destination filter: ${CTX.to}. Travellers: ${CTX.tv}. Use the live web results for current typical prices and accreditation.
 Create 6 package listings across different destinations (or varied cities and hospital tiers in the chosen country). Do NOT invent named hospitals unless you are confident they are real and internationally accredited; otherwise give the hospital TYPE. All prices in USD, rounded, all-in for the travellers: surgery, flights from ${from}, hotel nights and local transfers. Also give home_price: the typical PRIVATE price in the patient's home country for EXACTLY THE SAME treatment scope as the packages (same number of implants, same procedure type), excluding travel. Make sure package procedure costs and home_price describe the same scope.
 Use these exact country names where relevant: India, Thailand, Turkey, Mexico, Malaysia, South Korea, Spain, Hungary, Poland, Germany, UAE, Singapore, Costa Rica, Colombia, Brazil.
-Return ONLY JSON: {"home_price":number,"scope":"the exact treatment scope priced, max 8 words, e.g. full-arch All-on-4, one jaw","home_note":"max 10 words","packages":[{"id":"p1","title":"max 7 words","country":"","city":"","hospital_type":"","price":number,"nights":number,"flight_hours":number,"rating":number 7.0-9.6,"rating_note":"max 6 words, what to check","english":true,"accredited":true,"accreditation":"what to verify, max 18 words","included":["5 items, max 3 words each"],"breakdown":[{"item":"Procedure","usd":0},{"item":"Flights","usd":0},{"item":"Hotel","usd":0},{"item":"Companion","usd":0},{"item":"Transfers and meals","usd":0},{"item":"Follow-up and buffer","usd":0}],"itinerary":[{"day":"Day 1","plan":"max 12 words"}] (4 key days),"visa":"max 14 words","risks":["2 short"]}]}`,
+Also estimate the real-world risk: complication_pct = typical complication or revision rate for this procedure at that hospital tier (%), and fix_cost_home = typical private cost in the patient's home country to treat one such complication; recovery_days = days off work needed in total (including travel days for packages).
+Return ONLY JSON: {"home_price":number,"home_complication_pct":number,"home_recovery_days":number,"fix_cost_home":number,"scope":"the exact treatment scope priced, max 8 words, e.g. full-arch All-on-4, one jaw","home_note":"max 10 words","packages":[{"id":"p1","title":"max 7 words","country":"","city":"","hospital_type":"","price":number,"nights":number,"flight_hours":number,"rating":number 7.0-9.6,"rating_note":"max 6 words, what to check","english":true,"accredited":true,"accreditation":"what to verify, max 18 words","included":["5 items, max 3 words each"],"breakdown":[{"item":"Procedure","usd":0},{"item":"Flights","usd":0},{"item":"Hotel","usd":0},{"item":"Companion","usd":0},{"item":"Transfers and meals","usd":0},{"item":"Follow-up and buffer","usd":0}],"itinerary":[{"day":"Day 1","plan":"max 12 words"}] (4 key days),"visa":"max 14 words","risks":["2 short"],"complication_pct":number,"recovery_days":number,"aftercare":"how follow-up works once home, max 16 words"}]}`,
     `${proc} cost package hospital ${CTX.to.startsWith("Anywhere")?"India Thailand Turkey Mexico":CTX.to} medical tourism from ${from}`);
-    ALL=(r.data.packages||[]).map((p,i)=>({...p,id:p.id||"p"+i,home:r.data.home_price}));SRC=r.sources||[];CTX.home=r.data.home_price;CTX.homeNote=r.data.home_note;CTX.scope=r.data.scope||"";
+    ALL=(r.data.packages||[]).map((p,i)=>({...p,id:p.id||"p"+i,home:r.data.home_price}));SRC=r.sources||[];CTX.home=r.data.home_price;CTX.homeNote=r.data.home_note;CTX.scope=r.data.scope||"";CTX.fix=+r.data.fix_cost_home||0;CTX.homePct=+r.data.home_complication_pct||0;CTX.homeDays=+r.data.home_recovery_days||0;
     if(!ALL.length)throw new Error("No packages came back. Try another treatment or city.");
     F={maxp:Math.max(...ALL.map(p=>p.price)),maxn:Math.max(...ALL.map(p=>p.nights)),acc:false,eng:false};setupFilters();draw();
   }catch(e){$("list").innerHTML=`<div class="err" role="alert"><span>${esc(e.message||"Search failed.")}</span><button class="btn sm" id="retry">Try again</button></div>`;$("cnt").textContent="";$("retry").onclick=search}
@@ -349,17 +354,22 @@ function setupFilters(){
 }
 $("fp").oninput=()=>{F.maxp=+$("fp").value;draw()};$("fn").oninput=()=>{F.maxn=+$("fn").value;draw()};
 $("fa").onchange=()=>{F.acc=$("fa").checked;draw()};$("fe").onchange=()=>{F.eng=$("fe").checked;draw()};
+$("dv").value=store.get("mb_dv",150);$("dv").oninput=()=>{store.set("mb_dv",+$("dv").value);draw()};
 document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{SORT=b.dataset.s;document.querySelectorAll("[data-s]").forEach(x=>x.setAttribute("aria-pressed",x===b));draw()});
-function list(){let a=ALL.filter(p=>p.price<=F.maxp&&p.nights<=F.maxn&&(!F.acc||p.accredited)&&(!F.eng||p.english));if(SORT==="price")a.sort((x,y)=>x.price-y.price);else if(SORT==="short")a.sort((x,y)=>x.nights-y.nights);else a.sort((x,y)=>y.rating-x.rating);return a}
+/* True cost = price + expected complication cost (rate x cost to fix at home) + value of days off work */
+function dayVal(){return +($("dv")?$("dv").value:150)}
+function tc(p){const risk=(+p.complication_pct||0)/100*(CTX.fix||0),days=(+p.recovery_days||p.nights||0)*dayVal();return{risk,days,total:p.price+risk+days}}
+function homeTC(){if(!CTX.home)return null;const risk=(CTX.homePct||0)/100*(CTX.fix||0),days=(CTX.homeDays||0)*dayVal();return{risk,days,total:CTX.home+risk+days}}
+function list(){let a=ALL.filter(p=>p.price<=F.maxp&&p.nights<=F.maxn&&(!F.acc||p.accredited)&&(!F.eng||p.english));if(SORT==="price")a.sort((x,y)=>x.price-y.price);else if(SORT==="true")a.sort((x,y)=>tc(x).total-tc(y).total);else if(SORT==="short")a.sort((x,y)=>x.nights-y.nights);else a.sort((x,y)=>y.rating-x.rating);return a}
 function draw(){
-  $("fpv").textContent="up to "+m(F.maxp);$("fnv").textContent="up to "+F.maxn+" nights";
+  $("dvv").textContent=m(dayVal())+" per day";$("fpv").textContent="up to "+m(F.maxp);$("fnv").textContent="up to "+F.maxn+" nights";
   const a=list();$("cnt").textContent=`${a.length} packages · ${CTX.proc}${CTX.scope?" ("+CTX.scope+")":""} from ${CTX.from}`;
   if(!a.length){$("list").innerHTML='<div class="card pad" style="text-align:center;color:var(--ink-2)">No packages match these filters. Try widening price or nights.</div>';return}
   $("list").innerHTML=a.map(p=>{const sv=p.home>p.price?Math.round((1-p.price/p.home)*100):0,saved=SAVED.some(s=>s.id===p.id&&s.title===p.title);
   return `<article class="card pkg"><div class="art">${Places.art(p.country,p.city)}<span class="city">${esc(p.city)}, ${esc(p.country)}</span><button class="heart" data-save="${esc(p.id)}" aria-pressed="${saved}" aria-label="Save package">♥</button></div>
   <div class="mid"><h3>${esc(p.title)}</h3><div class="sub">${esc(p.hospital_type)} · ${Math.round(p.flight_hours)} h flight</div><div class="tags">${p.accredited?'<span class="tag green">Accredited</span>':'<span class="tag amber">Check accreditation</span>'}${p.english?'<span class="tag blue">English-speaking</span>':""}<span class="tag">${Math.round(p.nights)} nights</span><span class="tag">★ ${Number(p.rating).toFixed(1)}</span></div>
   <div class="inc">${(p.included||[]).slice(0,6).map(i=>`<div>${esc(i)}</div>`).join("")}</div></div>
-  <div class="buy">${sv?`<span class="save">Save ~${sv}%</span>`:(p.home&&p.price>p.home?`<span class="tag amber">Costs more than home</span>`:"<span></span>")}<div>${p.home?`<div class="was">${m(p.home)} at home</div>`:""}<div class="price">${m(p.price)}</div><div class="est">all-in estimate</div></div>
+  <div class="buy">${sv?`<span class="save">Save ~${sv}%</span>`:(p.home&&p.price>p.home?`<span class="tag amber">Costs more than home</span>`:"<span></span>")}<div>${p.home?`<div class="was">${m(p.home)} at home</div>`:""}<div class="price">${m(p.price)}</div><div class="est">all-in estimate</div><div class="tcl" title="Price + expected complication cost + value of days off work">True cost <b>${m(tc(p).total)}</b>${(()=>{const h=homeTC();if(!h)return"";const d=Math.round((1-tc(p).total/h.total)*100);return d>0?` <span class="up">(${d}% below home)</span>`:` <span class="dn">(${-d}% above home)</span>`})()}</div></div>
   <div class="acts"><label class="cmpx"><input type="checkbox" data-cmp="${esc(p.id)}" ${CMP.has(p.id)?"checked":""}> Compare</label><button class="btn primary sm" data-open="${esc(p.id)}">View deal</button></div></div></article>`}).join("");
 }
 $("list").addEventListener("click",e=>{
@@ -370,25 +380,52 @@ $("list").addEventListener("change",e=>{const id=e.target.dataset.cmp;if(id==nul
 function cmpbar(){$("cmpbar").hidden=CMP.size<1;$("cmpTxt").textContent=CMP.size+" selected";$("cmpGo").disabled=CMP.size<2}
 $("cmpClr").onclick=()=>{CMP.clear();cmpbar();draw()};
 $("cmpGo").onclick=()=>{const ps=[...CMP].map(id=>ALL.find(p=>p.id===id));
-  const rows=[["Destination",p=>`<b>${esc(p.city)}, ${esc(p.country)}</b>`],["All-in price",p=>`<b style="font-size:18px">${m(p.price)}</b>`],["Saving",p=>p.home>p.price?Math.round((1-p.price/p.home)*100)+"%":"–"],["Nights",p=>Math.round(p.nights)],["Flight",p=>Math.round(p.flight_hours)+" h"],["Hospital",p=>esc(p.hospital_type)],["Accredited",p=>p.accredited?"Yes":"Check"],["English",p=>p.english?"Yes":"Limited"],["Visa",p=>esc(p.visa)]];
+  const rows=[["Destination",p=>`<b>${esc(p.city)}, ${esc(p.country)}</b>`],["All-in price",p=>`<b style="font-size:18px">${m(p.price)}</b>`],["True cost",p=>`<b>${m(tc(p).total)}</b>`],["Complication risk",p=>(+p.complication_pct||0).toFixed(1)+"%"],["Saving",p=>p.home>p.price?Math.round((1-p.price/p.home)*100)+"%":"–"],["Nights",p=>Math.round(p.nights)],["Flight",p=>Math.round(p.flight_hours)+" h"],["Hospital",p=>esc(p.hospital_type)],["Accredited",p=>p.accredited?"Yes":"Check"],["English",p=>p.english?"Yes":"Limited"],["Visa",p=>esc(p.visa)]];
   openDrawer("Compare "+ps.length+" packages",`<div class="cmpgrid" style="--n:${ps.length}"><div class="r" style="border:0"><span></span>${ps.map(p=>`<div class="d-art" style="height:90px">${Places.art(p.country,p.city)}</div>`).join("")}</div>${rows.map(r=>`<div class="r"><span>${r[0]}</span>${ps.map(p=>`<div>${r[1](p)}</div>`).join("")}</div>`).join("")}</div>`)};
 const isSaved=p=>SAVED.some(s=>s.id===p.id&&s.title===p.title);
 function toggleSave(p){if(isSaved(p))SAVED=SAVED.filter(s=>!(s.id===p.id&&s.title===p.title));else SAVED.push({...p,proc:CTX.proc,from:CTX.from});store.set("mb_saved",SAVED);savedN();toast(isSaved(p)?"Saved":"Removed from saved")}
 function savedN(){$("savedN").hidden=!SAVED.length;$("savedN").textContent=SAVED.length}savedN();
 $("savedBtn").onclick=()=>openDrawer("Saved packages",SAVED.length?SAVED.map((p,i)=>`<div class="card" style="display:grid;grid-template-columns:110px 1fr auto;gap:12px;align-items:center;padding:10px;margin-bottom:10px"><div class="d-art" style="height:80px">${Places.art(p.country,p.city)}</div><div><b>${esc(p.title)}</b><div style="font-size:13px;color:var(--ink-3)">${esc(p.proc)} · from ${esc(p.from)}</div><b>${m(p.price)}</b></div><button class="btn sm" data-unsave="${i}">Remove</button></div>`).join(""):'<p style="color:var(--ink-2)">Nothing saved yet. Tap ♥ on a package to keep it here.</p>');
-$("dBody").addEventListener("click",e=>{const u=e.target.closest("[data-unsave]");if(u){SAVED.splice(+u.dataset.unsave,1);store.set("mb_saved",SAVED);savedN();$("savedBtn").click();if(ALL.length)draw()}const c=e.target.closest("[data-copy]");if(c)copy($("enq").value,"Enquiry copied")});
+$("dBody").addEventListener("click",e=>{const u=e.target.closest("[data-unsave]");if(u){SAVED.splice(+u.dataset.unsave,1);store.set("mb_saved",SAVED);savedN();$("savedBtn").click();if(ALL.length)draw()}const c=e.target.closest("[data-copy]");if(c)copy($("enq").value,"Enquiry copied");if(e.target.closest("[data-copyh]"))copy($("hand").value,"Handover pack copied");if(e.target.closest("[data-dlh]"))download("handover-pack.txt",$("hand").value,"text/plain")});
 
 function openDeal(p){if(!p)return;const tot=(p.breakdown||[]).reduce((a,b)=>a+(+b.usd||0),0)||p.price;
   const enq=`Hello,\n\nI am interested in ${CTX.proc} at your hospital in ${p.city}, ${p.country}.\nI would travel from ${CTX.from} (${CTX.tv}).\n\nCould you please send a written, itemised quote covering the surgeon's fee, hospital stay, implants or consumables, follow-up care and your complication policy?\nPlease also confirm your accreditation, the surgeon's experience with this procedure, and how aftercare is arranged once I am home.\n\nThank you,\n[Your name]`;
   openDrawer(p.title,`<div class="d-art">${Places.art(p.country,p.city)}</div>
   <div style="display:flex;justify-content:space-between;gap:12px;align-items:end;margin-top:14px;flex-wrap:wrap"><div><b style="font-size:18px">${esc(p.city)}, ${esc(p.country)}</b><div style="color:var(--ink-3);font-size:13px">${esc(p.hospital_type)} · ${Math.round(p.flight_hours)} h flight · ${Math.round(p.nights)} nights</div></div><div style="text-align:right"><div style="font:700 26px var(--sans)">${m(p.price)}</div><div class="est" style="font-size:12px;color:var(--ink-3)">all-in estimate</div></div></div>
   <div class="d-sec"><h4>Cost breakdown</h4><div class="bd">${(p.breakdown||[]).map(b=>`<div class="bd-row"><span>${esc(b.item)}</span><div class="b"><i style="width:${Math.min(100,(+b.usd||0)/tot*100)}%"></i></div><span>${m(b.usd)}</span></div>`).join("")}</div></div>
+  ${(()=>{const t=tc(p),h=homeTC();const W=t.total||1;return `<div class="d-sec"><h4>True cost: ${m(t.total)}</h4><div class="tcbar"><i style="width:${p.price/W*100}%;background:#2643d6"></i><i style="width:${t.risk/W*100}%;background:#ff5a36"></i><i style="width:${t.days/W*100}%;background:#ffc93c"></i></div><div style="font-size:13px;color:var(--ink-2)">Package ${m(p.price)} · expected complication cost ${m(t.risk)} (${(+p.complication_pct||0).toFixed(1)}% × ${m(CTX.fix)} to fix at home) · ${Math.round(+p.recovery_days||p.nights)} days off at ${m(dayVal())}/day</div>${h?`<p style="margin:8px 0 0;font-size:13px">Same treatment at home: true cost <b>${m(h.total)}</b> (${m(CTX.home)} + ${m(h.risk)} risk + ${Math.round(CTX.homeDays)} days off).</p>`:""}</div>`})()}
   <div class="d-sec"><h4>Your trip</h4><div class="tl">${(p.itinerary||[]).map(d=>`<div><b>${esc(d.day)}</b>${esc(d.plan)}</div>`).join("")}</div></div>
   <div class="d-sec"><h4>Check before you pay</h4><ul class="check"><li>${esc(p.accreditation)}</li><li>Ask for the surgeon's qualifications and number of procedures per year.</li><li>Get a written, itemised quote and the complication policy.</li><li>Arrange follow-up with your own doctor at home.</li></ul></div>
   <div class="d-sec"><h4>Visa</h4><p style="margin:0">${esc(p.visa)}</p></div>
   <div class="d-sec"><h4>Things to weigh</h4><ul class="check">${(p.risks||[]).map(r=>`<li>${esc(r)}</li>`).join("")}</ul></div>
+  <div class="d-sec"><h4>Aftercare: handover pack for your home doctor</h4><p style="margin:0 0 8px;font-size:13px;color:var(--ink-2)">${esc(p.aftercare||"Arrange follow-up with your own doctor before you travel.")} Ask the clinic to fill this in before you fly home, then give it to your doctor.</p><textarea class="enq" id="hand" style="min-height:190px">${esc(handover(p))}</textarea><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="btn" data-copyh>Copy handover pack</button><button class="btn" data-dlh>Download .txt</button></div></div>
   <div class="d-sec"><h4>Your enquiry letter</h4><textarea class="enq" id="enq">${esc(enq)}</textarea><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="btn primary" data-copy>Copy enquiry</button><button class="btn" onclick="toggleSave(ALL.find(x=>x.id==='${esc(p.id)}'));draw()">♥ Save package</button></div></div>`)}
 
+function handover(p){return `CLINICAL HANDOVER: TREATMENT ABROAD
+Patient: [name, date of birth]
+Treatment: ${CTX.proc}${CTX.scope?" ("+CTX.scope+")":""}
+Where: ${p.hospital_type}, ${p.city}, ${p.country}
+Treating surgeon: [name, registration number, email]
+Date of procedure: [ ]   Date of discharge: [ ]
+
+Procedure details: [exact procedure, approach, anaesthesia]
+Implants / devices used: [brand, model, lot numbers]
+Complications during stay: [none / details]
+
+Medication on discharge: [drug, dose, duration]
+Allergies noted: [ ]
+
+Follow-up plan:
+- Wound / site check at home on day: [ ]
+- Stitches or dressings removal: [ ]
+- Imaging or tests needed: [ ]
+- Remote follow-up with surgeon: [video call dates]
+
+Warning signs needing urgent care: fever over 38°C, spreading redness, increasing pain or swelling, discharge, breathing difficulty, calf pain.
+
+Records attached: [operation note, discharge summary, imaging, lab results] (ask for English copies)
+
+Prepared with MediBridge. To be completed and signed by the treating clinic.`}
 function openDrawer(t,html){$("dTitle").textContent=t;$("dBody").innerHTML=html;$("drawer").classList.add("on");document.querySelector("#drawer .x").focus()}
 document.querySelectorAll("[data-close]").forEach(el=>el.onclick=()=>$("drawer").classList.remove("on"));
 addEventListener("keydown",e=>{if(e.key==="Escape")$("drawer").classList.remove("on")});

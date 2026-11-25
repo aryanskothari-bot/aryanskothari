@@ -129,6 +129,14 @@
 <section class="desk" id="d-company" data-desk="company" hidden>
   <div class="wrap" id="c-app">
     <div class="sec-head"><div><p class="eyebrow"><b>Desk 02</b> · Company due diligence</p><h2>Twelve departments, <em>one verdict.</em></h2></div><p>Each department of the firm reviews the target in turn, flags red issues, and writes its data-room requests. The investment committee then gives a verdict and the protections to ask for in the SPA.</p></div>
+    <div class="card pad claim" id="claimCard">
+      <div class="bar"><div><p class="eyebrow"><b>Before you sign an LOI</b> · Claim check</p><h3 style="font-size:22px;margin-top:4px">Is the seller's story true?</h3></div><span class="sp"></span><button class="btn sm" id="clEx" type="button">Load example</button></div>
+      <p style="margin:0 0 10px;color:var(--ink-2);font-size:14px">Paste claims from a teaser, CIM or pitch deck, one per line. Each claim is checked against public evidence and marked supported, contradicted or unverifiable, with the question to put to the seller.</p>
+      <label class="sr" for="clTxt">Claims to check</label>
+      <textarea id="clTxt" class="cltxt" rows="5" placeholder="e.g. Market leader in digital music distribution in Europe&#10;Revenue grew 25% a year since 2021&#10;No customer above 5% of revenue"></textarea>
+      <div class="bar" style="margin:10px 0 0"><span class="note" style="margin:0">Uses the company in the box above.</span><span class="sp"></span><button class="btn ink" id="clRun" type="button">Check claims →</button></div>
+      <div id="clOut"></div>
+    </div>
     <div class="board" id="cBoard"></div>
     <div class="log" id="cLog" hidden></div>
     <div id="cMsg"></div>
