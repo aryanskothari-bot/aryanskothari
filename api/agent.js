@@ -37,7 +37,8 @@ async function groqOne(prompt, model) {
     method: "POST",
     headers: { "content-type": "application/json", Authorization: "Bearer " + GROQ_KEY },
     body: JSON.stringify({
-      model, temperature: 0.3, max_tokens: 3500,
+      model, temperature: 0.3, max_tokens: 8000,
+      ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: "You reply with ONE valid JSON object only. No markdown fences, no commentary." },
