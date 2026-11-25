@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Deal Sourcing Agent · Find buyers and targets across Europe</title>
 <meta name="description" content="Name any European company. Four AI agents read live sources, find likely buyers or targets, score them on eight pillars and draft a deal memo.">
-<meta name="theme-color" content="#f6f4ef">
+<meta name="theme-color" content="#eef0f8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%232643d6'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffc93c'/%3E%3Ccircle cx='8' cy='9' r='2.5' fill='%23fff'/%3E%3Ccircle cx='24' cy='10' r='2.5' fill='%23fff'/%3E%3Ccircle cx='23' cy='24' r='2.5' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -53,11 +53,11 @@
 .stage b{display:block;font-size:14px}
 .stage small{color:var(--ink-3);font-size:12px}
 .stage .dot{position:absolute;top:14px;right:14px;width:10px;height:10px;border-radius:50%;background:var(--rule-2)}
-.stage.run{border-color:var(--cobalt);box-shadow:0 0 0 4px rgba(38,67,214,.1)}
+.stage.run{border-color:var(--cobalt);box-shadow:0 0 0 4px rgba(59,47,201,.1)}
 .stage.run .dot{background:var(--cobalt);animation:pulse 1.2s infinite}
 .stage.done .dot{background:var(--mint)}
 .stage.run::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:40%;background:var(--cobalt);animation:bar 1.4s var(--ease) infinite}
-@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(38,67,214,.15)}}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(59,47,201,.15)}}
 @keyframes bar{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
 @media(max-width:700px){.pipe{grid-template-columns:1fr 1fr}}
 .log{margin-top:12px;font:12.5px/1.7 var(--mono);color:var(--ink-2);max-height:150px;overflow:auto;background:#fff;border:1px solid var(--rule);border-radius:14px;padding:12px 14px}
@@ -86,13 +86,13 @@ th{text-align:left;font:500 10.5px var(--mono);letter-spacing:.08em;text-transfo
 td{padding:11px 8px;border-bottom:1px solid #eeebe3;vertical-align:middle}
 tr.row{cursor:pointer;transition:background .15s}
 tr.row:hover{background:#faf8f3}
-tr.sel{background:#f1f3ff}
+tr.sel{background:#ecebff}
 .sc{display:inline-block;min-width:32px;text-align:center;border-radius:7px;padding:3px 0;font:600 12px var(--sans)}
 .tot{font:600 16px var(--sans)}
 .meter{height:6px;border-radius:9px;background:#ece9e1;overflow:hidden;width:70px;margin-top:4px}
 .meter i{display:block;height:100%;background:linear-gradient(90deg,var(--cobalt),var(--lilac))}
 .star{border:0;background:transparent;font-size:18px;cursor:pointer;color:var(--rule-2);padding:4px}
-.star[aria-pressed="true"]{color:#e0a800}
+.star[aria-pressed="true"]{color:#b8860b}
 .cb{width:17px;height:17px;accent-color:var(--cobalt)}
 
 /* detail */
@@ -111,12 +111,16 @@ tr.sel{background:#f1f3ff}
 .cmp-row{display:grid;grid-template-columns:110px repeat(var(--n),minmax(0,1fr));gap:10px;align-items:center;font-size:13px}
 .cmp-row .b{height:10px;border-radius:9px;background:#ece9e1;overflow:hidden}
 .cmp-row .b i{display:block;height:100%}
+:root{--bg:#eef0f8;--cobalt:#3b2fc9;--cobalt-2:#2a1f9e;--tomato:#c8962e;--sun:#d4a017;--lilac:#a78bfa;--rule:#dcdfeb;--rule-2:#c3c8db}
+body{background:radial-gradient(1100px 600px at 90% -10%,#d9d6ff 0,transparent 60%),radial-gradient(800px 500px at -10% 30%,#f3e6c4 0,transparent 55%),var(--bg)}
+.top{background:rgba(238,240,248,.8)}
+.hero h1 em,h1 em{color:#3b2fc9}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#top"><i style="background:linear-gradient(135deg,#2643d6,#7a63e8)">◆</i>Deal Sourcing Agent</a>
+    <a class="brand" href="#top"><i style="background:linear-gradient(135deg,#3b2fc9,#8b5cf6)">◆</i>Deal Sourcing Agent</a>
     <nav aria-label="Sections"><a href="#how">How it works</a><a href="#app">Workspace</a><a href="#faq">FAQ</a></nav>
     <span class="sp"></span>
     <span class="status" data-status>Live web data</span>
@@ -161,8 +165,8 @@ tr.sel{background:#f1f3ff}
     <div class="steps">
       <div class="card step rv"><div class="n" style="background:var(--cobalt)">1</div><h3>Profile</h3><p>Reads the company: sector, size, ownership and what makes it attractive.</p></div>
       <div class="card step rv"><div class="n" style="background:var(--tomato)">2</div><h3>Source</h3><p>Builds a universe of 8 strategic and financial counterparties across Europe.</p></div>
-      <div class="card step rv"><div class="n" style="background:#e0a800">3</div><h3>Score</h3><p>Rates each on 8 pillars. Drag the weights to re-rank instantly.</p></div>
-      <div class="card step rv"><div class="n" style="background:#7a63e8">4</div><h3>Memo</h3><p>Drafts a preliminary deal memo with valuation framing, risks and diligence questions.</p></div>
+      <div class="card step rv"><div class="n" style="background:#b8860b">3</div><h3>Score</h3><p>Rates each on 8 pillars. Drag the weights to re-rank instantly.</p></div>
+      <div class="card step rv"><div class="n" style="background:#8b5cf6">4</div><h3>Memo</h3><p>Drafts a preliminary deal memo with valuation framing, risks and diligence questions.</p></div>
     </div>
   </div>
 </section>
@@ -247,13 +251,13 @@ let mode="buyers",W=PRESETS.flat.slice(),S=null,busy=false,picked=new Set(),shor
     scan=(t||0)/2400%1;
     const pts=nodes.map(n=>{const a=n.a+(still?0:(t||0)*n.s);return{...n,x:cx+Math.cos(a)*R*n.r,y:cy+Math.sin(a)*R*n.r*.9}});
     pts.forEach((p,i)=>{const lit=Math.abs(((Math.atan2(p.y-cy,p.x-cx)/(Math.PI*2)+1)%1)-scan)<.06;
-      x.strokeStyle=lit?"rgba(38,67,214,.55)":"rgba(22,33,58,.08)";x.lineWidth=lit?2:1;x.beginPath();x.moveTo(cx,cy);x.lineTo(p.x,p.y);x.stroke();
-      x.fillStyle=p.t==="pe"?"#ffc93c":"#2643d6";x.beginPath();x.arc(p.x,p.y,lit?8:5.5,0,7);x.fill();
-      if(lit){x.strokeStyle=p.t==="pe"?"rgba(255,201,60,.4)":"rgba(38,67,214,.3)";x.lineWidth=6;x.beginPath();x.arc(p.x,p.y,13,0,7);x.stroke()}});
+      x.strokeStyle=lit?"rgba(59,47,201,.55)":"rgba(22,33,58,.08)";x.lineWidth=lit?2:1;x.beginPath();x.moveTo(cx,cy);x.lineTo(p.x,p.y);x.stroke();
+      x.fillStyle=p.t==="pe"?"#d4a017":"#3b2fc9";x.beginPath();x.arc(p.x,p.y,lit?8:5.5,0,7);x.fill();
+      if(lit){x.strokeStyle=p.t==="pe"?"rgba(255,201,60,.4)":"rgba(59,47,201,.3)";x.lineWidth=6;x.beginPath();x.arc(p.x,p.y,13,0,7);x.stroke()}});
     // radar sweep
     const g=x.createConicGradient?x.createConicGradient(scan*Math.PI*2-Math.PI*.25,cx,cy):null;
-    if(g){g.addColorStop(0,"rgba(38,67,214,0)");g.addColorStop(.12,"rgba(38,67,214,.10)");g.addColorStop(.125,"rgba(38,67,214,0)");x.fillStyle=g;x.beginPath();x.arc(cx,cy,R*.48,0,7);x.fill()}
-    x.fillStyle="#ff5a36";x.beginPath();x.arc(cx,cy,14,0,7);x.fill();x.strokeStyle="#fff";x.lineWidth=3;x.stroke();
+    if(g){g.addColorStop(0,"rgba(59,47,201,0)");g.addColorStop(.12,"rgba(59,47,201,.10)");g.addColorStop(.125,"rgba(59,47,201,0)");x.fillStyle=g;x.beginPath();x.arc(cx,cy,R*.48,0,7);x.fill()}
+    x.fillStyle="#c8962e";x.beginPath();x.arc(cx,cy,14,0,7);x.fill();x.strokeStyle="#fff";x.lineWidth=3;x.stroke();
     if(!still&&vis)requestAnimationFrame(f);
   }
   requestAnimationFrame(f);
@@ -308,7 +312,7 @@ Return ONLY JSON: {"scored":[{"name":"","scores":{"strategic":0,"capacity":0,"ac
 
 /* ---------- render ---------- */
 const total=c=>{const s=W.reduce((a,b)=>a+b,0)||1;return PILLARS.reduce((a,p,i)=>a+W[i]*((c.scores||{})[p[0]]||0),0)/s};
-const heat=v=>`background:rgba(38,67,214,${(.08+Math.max(0,Math.min(100,v))/100*.62).toFixed(2)});color:${v>58?"#fff":"var(--ink)"}`;
+const heat=v=>`background:rgba(59,47,201,${(.08+Math.max(0,Math.min(100,v))/100*.62).toFixed(2)});color:${v>58?"#fff":"var(--ink)"}`;
 function render(){
   if(!S||!S.profile)return;const p=S.profile;
   let h=`<div class="card pad rv in"><div class="profile"><div><p class="eyebrow">${S.mode==="buyers"?"Target":"Acquirer"} profile</p><h2>${esc(p.name)}</h2><p style="margin:6px 0 0;color:var(--ink-2)">${esc(p.summary)}</p></div><span class="tag ${p.confidence==="high"?"green":p.confidence==="low"?"red":"amber"}">Confidence: ${esc(p.confidence)}</span></div>
@@ -334,7 +338,7 @@ function render(){
 function radar(c){const n=8,R=82,cx=120,cy=108,pt=(i,v)=>{const a=-Math.PI/2+i*2*Math.PI/n,r=R*v/100;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]};
   let g="";[25,50,75,100].forEach(l=>g+=`<polygon fill="none" stroke="#e2ded4" points="${PILLARS.map((_,i)=>pt(i,l).join(",")).join(" ")}"/>`);
   PILLARS.forEach((p,i)=>{const[x,y]=pt(i,122);g+=`<text x="${x}" y="${y}" font-size="9" text-anchor="middle" fill="#6b7385" font-family="Inter">${p[1].split(" ")[0]}</text>`});
-  g+=`<polygon fill="rgba(38,67,214,.18)" stroke="#2643d6" stroke-width="2" points="${PILLARS.map((p,i)=>pt(i,c.scores[p[0]]||0).join(",")).join(" ")}"/>`;
+  g+=`<polygon fill="rgba(59,47,201,.18)" stroke="#3b2fc9" stroke-width="2" points="${PILLARS.map((p,i)=>pt(i,c.scores[p[0]]||0).join(",")).join(" ")}"/>`;
   return `<svg viewBox="0 0 240 220" width="100%" role="img" aria-label="Pillar profile of ${esc(c.name)}">${g}</svg>`}
 function memoHtml(x){const m=x.m,L=a=>"<ul>"+(a||[]).map(i=>`<li>${esc(i)}</li>`).join("")+"</ul>";
   return `<div class="card pad memo" style="margin-top:16px" id="memo"><div class="bar"><p class="eyebrow">Preliminary memo · ${esc(x.c)}</p><span class="sp"></span><button class="btn sm" id="cp">Copy</button><button class="btn sm" id="dl">Download .md</button></div><h2>${esc(m.headline)}</h2>
@@ -362,7 +366,7 @@ Return ONLY JSON: {"headline":"","situation":"max 50 words","rationale":["3-4 bu
   }catch(e){pipe(-1,3);err(e.message||"The memo failed.",false);b.disabled=false;b.textContent="Draft deal memo →"}
 }
 function compare(){
-  const cs=[...picked].map(k=>S.cands[k]),cols=["#2643d6","#ff5a36","#e0a800"];
+  const cs=[...picked].map(k=>S.cands[k]),cols=["#3b2fc9","#c8962e","#b8860b"];
   $("dTitle").textContent="Compare "+cs.length+" counterparties";
   $("dBody").innerHTML=`<div class="cmp" style="--n:${cs.length}"><div class="cmp-row"><span></span>${cs.map((c,i)=>`<b style="color:${cols[i]}">${esc(c.name)}</b>`).join("")}</div>
   ${PILLARS.map(p=>`<div class="cmp-row"><span>${p[1]}</span>${cs.map((c,i)=>`<div><div class="b"><i style="width:${c.scores[p[0]]}%;background:${cols[i]}"></i></div><small class="mono">${Math.round(c.scores[p[0]])}</small></div>`).join("")}</div>`).join("")}
