@@ -3,125 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Deal Sourcing Agent · Find buyers and targets across Europe</title>
-<meta name="description" content="Name any European company. Four AI agents read live sources, find likely buyers or targets, score them on eight pillars and draft a deal memo.">
-<meta name="theme-color" content="#eef0f8">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%232643d6'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23ffc93c'/%3E%3Ccircle cx='8' cy='9' r='2.5' fill='%23fff'/%3E%3Ccircle cx='24' cy='10' r='2.5' fill='%23fff'/%3E%3Ccircle cx='23' cy='24' r='2.5' fill='%23fff'/%3E%3C/svg%3E">
+<title>Diligence Desk · Deal sourcing, company due diligence and stock due diligence</title>
+<meta name="description" content="An AI due-diligence firm in your browser: source buyers and targets, run a 12-department company due diligence, or put any listed stock through fundamentals, quant risk and a 6-month scenario outlook.">
+<meta name="theme-color" content="#1d1a4f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%231d1a4f'/%3E%3Cpath d='M16 6l9 5v10l-9 5-9-5V11z' fill='none' stroke='%23e8b44a' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%238b7bff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/app.css">
-<style>
-/* hero */
-.hero{padding:clamp(28px,5vw,56px) 0 24px}
-.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:28px;align-items:center}
-.hero h1{font-size:clamp(40px,5.4vw,74px);line-height:1;margin:14px 0 16px}
-.hero h1 em{font-style:italic;color:var(--cobalt)}
-.hero .lead{font-size:17px;color:var(--ink-2);max-width:52ch;margin:0 0 22px}
-.search{display:flex;gap:8px;background:#fff;border:1px solid var(--rule);border-radius:18px;padding:8px;box-shadow:var(--shadow)}
-.search input{flex:1;min-width:0;border:0;font:500 16px var(--sans);padding:10px 12px;color:var(--ink);background:transparent}
-.search input:focus{outline:0}
-.seg{display:flex;background:#f1efe9;border-radius:12px;padding:3px}
-.seg button{border:0;background:transparent;padding:8px 12px;border-radius:9px;font:600 13px var(--sans);color:var(--ink-2);cursor:pointer;white-space:nowrap}
-.seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(22,33,58,.12)}
-.examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
-.examples>span{font-size:13px;color:var(--ink-3)}
-.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13px;color:var(--ink-2)}
-.trust span::before{content:"✓ ";color:var(--cobalt);font-weight:700}
-.viz{position:relative;aspect-ratio:1/1;max-width:520px;justify-self:end;width:100%}
-.viz canvas{width:100%;height:100%;display:block}
-.viz .legend{position:absolute;left:14px;bottom:14px;display:flex;gap:8px;flex-wrap:wrap}
-@media(max-width:900px){.hero .wrap{grid-template-columns:minmax(0,1fr)}.viz{justify-self:center;max-width:380px;order:-1}}
-@media(max-width:560px){.search{flex-wrap:wrap}.search input{flex-basis:100%}.seg{flex:1}.seg button{flex:1}.search .btn{flex:1}}
-
-/* workspace */
-.ws{display:grid;grid-template-columns:300px minmax(0,1fr);gap:18px;align-items:start}
-@media(max-width:980px){.ws{grid-template-columns:minmax(0,1fr)}}
-.side{position:sticky;top:84px}
-@media(max-width:980px){.side{position:static}}
-.side h3{font-size:15px;margin:0 0 12px}
-.side .field{margin-bottom:12px}
-.w{display:grid;grid-template-columns:1fr 34px;gap:4px 8px;font-size:13px;margin:8px 0}
-.w input{grid-column:1/-1;width:100%;accent-color:var(--cobalt)}
-.w span:last-child{text-align:right;color:var(--ink-3);font-family:var(--mono);font-size:12px}
-.presets{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.hist{display:flex;gap:6px;flex-wrap:wrap}
-.hist button{font-size:12px}
-
-/* pipeline + log */
-.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.stage{position:relative;padding:14px;border-radius:16px;background:#fff;border:1px solid var(--rule);overflow:hidden}
-.stage b{display:block;font-size:14px}
-.stage small{color:var(--ink-3);font-size:12px}
-.stage .dot{position:absolute;top:14px;right:14px;width:10px;height:10px;border-radius:50%;background:var(--rule-2)}
-.stage.run{border-color:var(--cobalt);box-shadow:0 0 0 4px rgba(59,47,201,.1)}
-.stage.run .dot{background:var(--cobalt);animation:pulse 1.2s infinite}
-.stage.done .dot{background:var(--mint)}
-.stage.run::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:40%;background:var(--cobalt);animation:bar 1.4s var(--ease) infinite}
-@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(59,47,201,.15)}}
-@keyframes bar{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
-@media(max-width:700px){.pipe{grid-template-columns:1fr 1fr}}
-.log{margin-top:12px;font:12.5px/1.7 var(--mono);color:var(--ink-2);max-height:150px;overflow:auto;background:#fff;border:1px solid var(--rule);border-radius:14px;padding:12px 14px}
-.log div::before{content:"› ";color:var(--cobalt)}
-.empty{text-align:center;padding:48px 20px}
-.empty h3{font:400 28px var(--display);margin-bottom:8px}
-.empty p{color:var(--ink-2);margin:0 auto;max-width:44ch}
-.err{background:#fff1ec;border:1px solid #ffc9b8;color:#8a2c14;border-radius:14px;padding:12px 16px;margin-top:12px;display:flex;justify-content:space-between;gap:12px;align-items:center}
-
-/* profile */
-.profile{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start}
-.profile h2{font-size:32px}
-.facts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
-.kv div{background:#fff;border:1px solid var(--rule);border-radius:12px;padding:10px 12px}
-.kv small{display:block;font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
-.kv b{font-size:14px}
-@media(max-width:640px){.kv{grid-template-columns:minmax(0,1fr)}.profile{grid-template-columns:minmax(0,1fr)}}
-
-/* table */
-.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
-.bar .sp{flex:1}
-.tbl{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13.5px}
-th{text-align:left;font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:10px 8px;border-bottom:1px solid var(--rule);white-space:nowrap}
-td{padding:11px 8px;border-bottom:1px solid #eeebe3;vertical-align:middle}
-tr.row{cursor:pointer;transition:background .15s}
-tr.row:hover{background:#faf8f3}
-tr.sel{background:#ecebff}
-.sc{display:inline-block;min-width:32px;text-align:center;border-radius:7px;padding:3px 0;font:600 12px var(--sans)}
-.tot{font:600 16px var(--sans)}
-.meter{height:6px;border-radius:9px;background:#ece9e1;overflow:hidden;width:70px;margin-top:4px}
-.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--cobalt),var(--lilac))}
-.star{border:0;background:transparent;font-size:18px;cursor:pointer;color:var(--rule-2);padding:4px}
-.star[aria-pressed="true"]{color:#b8860b}
-.cb{width:17px;height:17px;accent-color:var(--cobalt)}
-
-/* detail */
-.detail{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:16px;margin-top:16px}
-@media(max-width:760px){.detail{grid-template-columns:minmax(0,1fr)}}
-.detail h3{font-size:22px}
-.k{font:500 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:14px 0 4px}
-.memo h2{font-size:28px;margin:6px 0 14px}
-.memo h3{font-size:15px;margin:18px 0 6px;color:var(--cobalt)}
-.memo ul{margin:0;padding-left:20px}
-.memo li{margin:4px 0}
-.srcs a{display:block;font-size:13px;color:var(--ink-2);text-decoration:none;padding:7px 0;border-bottom:1px solid #eeebe3}
-.srcs a:hover{color:var(--cobalt)}
-.srcs a::before{content:"↗ ";color:var(--cobalt)}
-.cmp{display:grid;gap:14px}
-.cmp-row{display:grid;grid-template-columns:110px repeat(var(--n),minmax(0,1fr));gap:10px;align-items:center;font-size:13px}
-.cmp-row .b{height:10px;border-radius:9px;background:#ece9e1;overflow:hidden}
-.cmp-row .b i{display:block;height:100%}
-:root{--bg:#eef0f8;--cobalt:#3b2fc9;--cobalt-2:#2a1f9e;--tomato:#c8962e;--sun:#d4a017;--lilac:#a78bfa;--rule:#dcdfeb;--rule-2:#c3c8db}
-body{background:radial-gradient(1100px 600px at 90% -10%,#d9d6ff 0,transparent 60%),radial-gradient(800px 500px at -10% 30%,#f3e6c4 0,transparent 55%),var(--bg)}
-.top{background:rgba(238,240,248,.8)}
-.hero h1 em,h1 em{color:#3b2fc9}
-</style>
+<link rel="stylesheet" href="assets/dd.css">
 </head>
 <body>
-<header class="top">
+<header class="top dark">
   <div class="wrap">
-    <a class="brand" href="#top"><i style="background:linear-gradient(135deg,#3b2fc9,#8b5cf6)">◆</i>Deal Sourcing Agent</a>
-    <nav aria-label="Sections"><a href="#how">How it works</a><a href="#app">Workspace</a><a href="#faq">FAQ</a></nav>
+    <a class="brand" href="#top"><i class="logo">⬡</i>Diligence Desk</a>
+    <nav aria-label="Sections"><a href="#sourcing" data-go="sourcing">Deal sourcing</a><a href="#company" data-go="company">Company DD</a><a href="#stock" data-go="stock">Stock DD</a><a href="#firm">The firm</a></nav>
     <span class="sp"></span>
     <span class="status" data-status>Live web data</span>
     <a class="back" href="index.html">← Aryan's portfolio</a>
@@ -129,51 +24,76 @@ body{background:radial-gradient(1100px 600px at 90% -10%,#d9d6ff 0,transparent 6
 </header>
 
 <main id="top">
-<section class="hero">
+<!-- ================= HERO (3D) ================= -->
+<section class="dhero">
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="glow" aria-hidden="true"></div>
   <div class="wrap">
-    <div>
-      <p class="eyebrow"><b>European M&amp;A</b> · 4 AI agents · live sources</p>
-      <h1>Find the right <em>buyer</em> for any European company.</h1>
-      <p class="lead">Type a company. Four agents read live sources, build the buyer or target universe, score each name on eight pillars and draft a first deal memo.</p>
-      <form class="search" id="searchForm" role="search">
+    <div class="hcopy">
+      <p class="eyebrow"><b>AI due-diligence firm</b> · 3 desks · 16 agents · live sources</p>
+      <h1 id="hTitle">From first look to <em>investment committee.</em></h1>
+      <p class="lead" id="hLead">Source buyers and targets across Europe, run a full 12-department due diligence on any company, or stress-test a listed stock for the next six months.</p>
+      <div class="tabs" role="tablist" aria-label="Desks">
+        <button role="tab" data-tab="sourcing" aria-selected="true"><span>01</span>Deal sourcing</button>
+        <button role="tab" data-tab="company" aria-selected="false"><span>02</span>Company due diligence</button>
+        <button role="tab" data-tab="stock" aria-selected="false"><span>03</span>Stock due diligence</button>
+      </div>
+
+      <!-- search boxes, one per desk -->
+      <form class="search" id="searchForm" role="search" data-for="sourcing">
         <label class="sr" for="co">Company</label>
         <input id="co" autocomplete="off" placeholder="e.g. Ipsen, Believe, Doctolib…" required>
         <div class="seg" role="group" aria-label="Mode">
           <button type="button" data-m="buyers" aria-pressed="true">Find buyers</button>
           <button type="button" data-m="targets" aria-pressed="false">Find targets</button>
         </div>
-        <button class="btn blue" id="run" type="submit">Run agents →</button>
+        <button class="btn gold" id="run" type="submit">Run agents →</button>
       </form>
-      <div class="examples"><span>Try</span>
+      <form class="search" id="cForm" role="search" data-for="company" hidden>
+        <label class="sr" for="cCo">Target company</label>
+        <input id="cCo" autocomplete="off" placeholder="Target company, e.g. Doctolib, Ipsen, Believe" required>
+        <label class="sr" for="cBuyer">Buyer (optional)</label>
+        <input id="cBuyer" autocomplete="off" placeholder="Buyer (optional)" class="short">
+        <button class="btn gold" id="cRun" type="submit">Start diligence →</button>
+      </form>
+      <form class="search" id="kForm" role="search" data-for="stock" hidden>
+        <label class="sr" for="kSym">Ticker or company</label>
+        <input id="kSym" autocomplete="off" placeholder="Ticker or name, e.g. AAPL, MC.PA, SAP.DE, Nvidia" required>
+        <button class="btn gold" id="kRun" type="submit">Analyse stock →</button>
+      </form>
+
+      <div class="examples" data-for="sourcing"><span>Try</span>
         <button class="chip" data-ex="Ipsen|buyers">Ipsen</button>
         <button class="chip" data-ex="Believe|buyers">Believe</button>
         <button class="chip" data-ex="Siemens Healthineers|targets">Siemens Healthineers · targets</button>
         <button class="chip" data-ex="Nexans|buyers">Nexans</button>
       </div>
-      <div class="trust"><span>Reads live web sources</span><span>8-pillar scoring you control</span><span>Memo, compare and export</span></div>
+      <div class="examples" data-for="company" hidden><span>Try</span>
+        <button class="chip" data-cx="Doctolib">Doctolib</button>
+        <button class="chip" data-cx="Believe|Warner Music Group">Believe ← Warner</button>
+        <button class="chip" data-cx="Ipsen">Ipsen</button>
+        <button class="chip" data-cx="Mistral AI">Mistral AI</button>
+      </div>
+      <div class="examples" data-for="stock" hidden><span>Try</span>
+        <button class="chip" data-kx="AAPL">Apple</button>
+        <button class="chip" data-kx="MC.PA">LVMH</button>
+        <button class="chip" data-kx="NVDA">Nvidia</button>
+        <button class="chip" data-kx="SAP.DE">SAP</button>
+        <button class="chip" data-kx="RELIANCE.NS">Reliance</button>
+      </div>
     </div>
-    <figure class="viz card" aria-hidden="true" style="margin:0">
-      <canvas id="net"></canvas>
-      <div class="legend"><span class="tag blue">● Strategic</span><span class="tag amber">● Private equity</span><span class="tag red">● Target</span></div>
-    </figure>
+    <div class="hstats" aria-hidden="true">
+      <div><b id="hsA">8</b><small id="hsAl">buyers scored</small></div>
+      <div><b id="hsB">8</b><small id="hsBl">pillars</small></div>
+      <div><b id="hsC">4</b><small id="hsCl">agents</small></div>
+    </div>
   </div>
 </section>
 
-<section class="sec" id="how" style="padding-top:24px">
-  <div class="wrap">
-    <div class="sec-head"><div><p class="eyebrow">How it works</p><h2>Four agents, <em>one pipeline.</em></h2></div><p>Each agent hands its work to the next, the way an analyst team would. You see every step and every source.</p></div>
-    <div class="steps">
-      <div class="card step rv"><div class="n" style="background:var(--cobalt)">1</div><h3>Profile</h3><p>Reads the company: sector, size, ownership and what makes it attractive.</p></div>
-      <div class="card step rv"><div class="n" style="background:var(--tomato)">2</div><h3>Source</h3><p>Builds a universe of 8 strategic and financial counterparties across Europe.</p></div>
-      <div class="card step rv"><div class="n" style="background:#b8860b">3</div><h3>Score</h3><p>Rates each on 8 pillars. Drag the weights to re-rank instantly.</p></div>
-      <div class="card step rv"><div class="n" style="background:#8b5cf6">4</div><h3>Memo</h3><p>Drafts a preliminary deal memo with valuation framing, risks and diligence questions.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="app" style="padding-top:12px">
-  <div class="wrap">
-    <div class="sec-head"><div><p class="eyebrow">Workspace</p><h2>Your <em>deal desk.</em></h2></div></div>
+<!-- ================= DESK 1: SOURCING ================= -->
+<section class="desk" id="d-sourcing" data-desk="sourcing">
+  <div class="wrap" id="s-app">
+    <div class="sec-head"><div><p class="eyebrow"><b>Desk 01</b> · Deal sourcing</p><h2>Find the right <em>counterparty.</em></h2></div><p>Four agents profile the company, build a universe of 8 strategic and financial counterparties, score them on eight pillars and draft the memo. Send any name straight to due diligence.</p></div>
     <div class="ws">
       <aside class="side">
         <div class="card pad">
@@ -193,189 +113,75 @@ body{background:radial-gradient(1100px 600px at 90% -10%,#d9d6ff 0,transparent 6
           <div class="hist" id="hist"></div>
         </div>
       </aside>
-
       <div>
         <div class="pipe" id="pipe"></div>
         <div class="log" id="log" hidden></div>
         <div id="msg"></div>
         <div id="out" style="margin-top:16px">
-          <div class="card empty">
-            <h3>Who are we sourcing for?</h3>
-            <p>Search a company above, or pick an example. Results, sources and the memo appear here.</p>
-          </div>
+          <div class="card empty"><h3>Who are we sourcing for?</h3><p>Search a company above, or pick an example. Results, sources and the memo appear here.</p></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="sec" id="faq">
+<!-- ================= DESK 2: COMPANY DD ================= -->
+<section class="desk" id="d-company" data-desk="company" hidden>
+  <div class="wrap" id="c-app">
+    <div class="sec-head"><div><p class="eyebrow"><b>Desk 02</b> · Company due diligence</p><h2>Twelve departments, <em>one verdict.</em></h2></div><p>Each department of the firm reviews the target in turn, flags red issues, and writes its data-room requests. The investment committee then gives a verdict and the protections to ask for in the SPA.</p></div>
+    <div class="board" id="cBoard"></div>
+    <div class="log" id="cLog" hidden></div>
+    <div id="cMsg"></div>
+    <div id="cOut" style="margin-top:16px">
+      <div class="card empty"><h3>Which company are we diligencing?</h3><p>Type a target above. Optionally add the buyer, so synergies and integration are written for that deal.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DESK 3: STOCK DD ================= -->
+<section class="desk" id="d-stock" data-desk="stock" hidden>
+  <div class="wrap" id="k-app">
+    <div class="sec-head"><div><p class="eyebrow"><b>Desk 03</b> · Stock due diligence</p><h2>The next six months, <em>in probabilities.</em></h2></div><p>Live prices drive the quant desk: volatility, beta, momentum, drawdowns and 3,000 simulated paths. The research desk adds fundamentals, catalysts and bull, base and bear cases. You get ranges, not a single guess.</p></div>
+    <div class="board kb" id="kBoard"></div>
+    <div class="log" id="kLog" hidden></div>
+    <div id="kMsg"></div>
+    <div id="kOut" style="margin-top:16px">
+      <div class="card empty"><h3>Which stock?</h3><p>Type a ticker (AAPL, MC.PA, SAP.DE, RELIANCE.NS) or a company name above.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= THE FIRM ================= -->
+<section class="sec" id="firm">
+  <div class="wrap">
+    <div class="sec-head"><div><p class="eyebrow">The firm</p><h2>Built like a <em>due-diligence house.</em></h2></div><p>Every department is its own agent with its own brief, sources and output, the way a transaction-services team splits the work.</p></div>
+    <div class="depts" id="deptGrid"></div>
+  </div>
+</section>
+
+<section class="sec" id="faq" style="padding-top:8px">
   <div class="wrap" style="max-width:900px">
     <div class="sec-head"><div><p class="eyebrow">FAQ</p><h2>Good to <em>know.</em></h2></div></div>
     <div class="faq card pad">
-      <details><summary>Where does the data come from?</summary><p>Each run searches the live web and passes the top results to the agents. The sources used are listed next to the results so you can open and check them.</p></details>
-      <details><summary>How is the score calculated?</summary><p>The scoring agent rates each counterparty from 0 to 100 on eight pillars: strategic fit, financial capacity, value accretion, synergies, regulatory ease, cultural fit, deal precedent and timing. The total is a weighted average using your sliders.</p></details>
-      <details><summary>Can I rely on the numbers?</summary><p>Treat them as a first screen, not a valuation. Figures are AI estimates built from public sources; check them against filings and a market data provider before using them in a deal.</p></details>
-      <details><summary>Is my search stored?</summary><p>Only in your own browser, so your recent searches show up next time. Nothing is saved on a server.</p></details>
+      <details><summary>Where does the data come from?</summary><p>Company and research agents search the live web on each run and list every source used. Stock prices come from free market-data feeds (Yahoo Finance, with Stooq as backup), up to two years of daily closes.</p></details>
+      <details><summary>How is the six-month outlook built?</summary><p>Two views are combined. The quant desk resamples the stock's own daily returns over the last year to simulate 3,000 possible six-month paths, which gives a range and the odds of being up or down. The research desk writes bull, base and bear cases with probabilities from fundamentals and upcoming catalysts. The desk view weighs both.</p></details>
+      <details><summary>Is this Jane Street's model?</summary><p>No. Trading firms keep their models private. The trading-desk view uses widely published principles those desks are known for: think in expected value, size risk by volatility, compare what the market implies with what has happened, and always ask what would make you wrong.</p></details>
+      <details><summary>Can I rely on it?</summary><p>Use it as a first screen. Figures are AI estimates from public sources and simulations from past prices; neither predicts the future. Nothing here is investment advice.</p></details>
       <details><summary>Who built this?</summary><p>Aryan Kothari, an analyst in Paris. <a href="index.html">See the portfolio</a>.</p></details>
     </div>
   </div>
 </section>
 </main>
 
-<footer class="foot"><div class="wrap"><span>© <span id="yr"></span> Aryan Kothari · Deal Sourcing Agent</span><span>AI-generated first screen from public sources, not investment advice.</span><a href="index.html">Back to portfolio →</a></div></footer>
+<footer class="foot"><div class="wrap"><span>© <span id="yr"></span> Aryan Kothari · Diligence Desk</span><span>AI-generated first screen from public sources. Not investment advice.</span><a href="index.html">Back to portfolio →</a></div></footer>
 
 <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle"><div class="scrim" data-close></div><div class="panel"><div class="panel-head"><b id="dTitle">Compare</b><button class="x" data-close aria-label="Close">×</button></div><div id="dBody" style="padding:22px"></div></div></div>
 
 <script src="assets/app.js"></script>
-<script>
-const {ask,esc,safeUrl,store,toast,download,copy}=App;
-const $=(id)=>document.getElementById(id);
-$("yr").textContent=new Date().getFullYear();
-const PILLARS=[["strategic","Strategic fit"],["capacity","Financial capacity"],["accretion","Value accretion"],["synergy","Synergies"],["regulatory","Regulatory ease"],["cultural","Cultural fit"],["precedent","Deal precedent"],["timing","Timing"]];
-const PRESETS={strategic:[22,10,12,18,12,10,8,8],pe:[10,24,16,6,8,6,14,16],flat:[12,12,12,12,12,12,12,12]};
-const STAGES=[["Profile agent","Reads the company"],["Sourcing agent","Builds the universe"],["Scoring agent","Scores 8 pillars"],["Memo agent","Drafts the memo"]];
-let mode="buyers",W=PRESETS.flat.slice(),S=null,busy=false,picked=new Set(),short=new Set(store.get("ds_short",[]));
-
-/* ---------- hero network animation ---------- */
-(function(){
-  const c=$("net"),x=c.getContext("2d"),still=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let w,h;const N=14,nodes=[];
-  for(let i=0;i<N;i++)nodes.push({a:i/N*Math.PI*2,r:.28+.14*((i*37)%10)/10,s:.0012+((i*13)%7)/9000,t:i%5===0?"pe":"st",ph:i});
-  function size(){const r=c.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);w=r.width;h=r.height;c.width=w*d;c.height=h*d;x.setTransform(d,0,0,d,0,0)}
-  new ResizeObserver(size).observe(c);size();
-  let scan=0,vis=true;new IntersectionObserver(([e])=>{vis=e.isIntersecting;if(vis&&!still)requestAnimationFrame(f)}).observe(c);
-  function f(t){
-    x.clearRect(0,0,w,h);const cx=w/2,cy=h/2-10,R=Math.min(w,h);
-    for(let k=1;k<=3;k++){x.strokeStyle="rgba(22,33,58,.07)";x.lineWidth=1;x.beginPath();x.arc(cx,cy,R*.14*k+R*.06,0,7);x.stroke()}
-    scan=(t||0)/2400%1;
-    const pts=nodes.map(n=>{const a=n.a+(still?0:(t||0)*n.s);return{...n,x:cx+Math.cos(a)*R*n.r,y:cy+Math.sin(a)*R*n.r*.9}});
-    pts.forEach((p,i)=>{const lit=Math.abs(((Math.atan2(p.y-cy,p.x-cx)/(Math.PI*2)+1)%1)-scan)<.06;
-      x.strokeStyle=lit?"rgba(59,47,201,.55)":"rgba(22,33,58,.08)";x.lineWidth=lit?2:1;x.beginPath();x.moveTo(cx,cy);x.lineTo(p.x,p.y);x.stroke();
-      x.fillStyle=p.t==="pe"?"#d4a017":"#3b2fc9";x.beginPath();x.arc(p.x,p.y,lit?8:5.5,0,7);x.fill();
-      if(lit){x.strokeStyle=p.t==="pe"?"rgba(255,201,60,.4)":"rgba(59,47,201,.3)";x.lineWidth=6;x.beginPath();x.arc(p.x,p.y,13,0,7);x.stroke()}});
-    // radar sweep
-    const g=x.createConicGradient?x.createConicGradient(scan*Math.PI*2-Math.PI*.25,cx,cy):null;
-    if(g){g.addColorStop(0,"rgba(59,47,201,0)");g.addColorStop(.12,"rgba(59,47,201,.10)");g.addColorStop(.125,"rgba(59,47,201,0)");x.fillStyle=g;x.beginPath();x.arc(cx,cy,R*.48,0,7);x.fill()}
-    x.fillStyle="#c8962e";x.beginPath();x.arc(cx,cy,14,0,7);x.fill();x.strokeStyle="#fff";x.lineWidth=3;x.stroke();
-    if(!still&&vis)requestAnimationFrame(f);
-  }
-  requestAnimationFrame(f);
-})();
-
-/* ---------- controls ---------- */
-document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{mode=b.dataset.m;document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));$("co").placeholder=mode==="buyers"?"e.g. Ipsen, Believe, Doctolib…":"Acquirer, e.g. Siemens Healthineers"});
-function drawW(){$("weights").innerHTML=PILLARS.map((p,i)=>`<label class="w"><span>${p[1]}</span><span>${W[i]}</span><input type="range" min="0" max="40" value="${W[i]}" data-i="${i}" aria-label="${p[1]} weight"></label>`).join("")}
-$("weights").oninput=e=>{const i=e.target.dataset.i;if(i==null)return;W[i]=+e.target.value;e.target.previousElementSibling.textContent=e.target.value;render()};
-document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{W=PRESETS[b.dataset.p].slice();drawW();render()});
-drawW();
-document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{const[c,m]=b.dataset.ex.split("|");$("co").value=c;document.querySelector(`.seg [data-m="${m}"]`).click();run()});
-$("searchForm").onsubmit=e=>{e.preventDefault();run()};
-function hist(){const h=store.get("ds_hist",[]);$("histCard").hidden=!h.length;$("hist").innerHTML=h.map(x=>`<button class="chip" data-h="${esc(x.c)}|${x.m}">${esc(x.c)}${x.m==="targets"?" · targets":""}</button>`).join("")}
-$("hist").onclick=e=>{const b=e.target.closest("[data-h]");if(!b)return;const[c,m]=b.dataset.h.split("|");$("co").value=c;document.querySelector(`.seg [data-m="${m}"]`).click();run()};
-hist();
-
-/* ---------- pipeline UI ---------- */
-function pipe(active,done){$("pipe").innerHTML=STAGES.map((s,i)=>`<div class="stage ${i<done?"done":i===active?"run":""}"><span class="dot"></span><b>${s[0]}</b><small>${i===active?"Working…":i<done?"Done":s[1]}</small></div>`).join("")}
-pipe(-1,0);
-function log(t){const l=$("log");l.hidden=false;const d=document.createElement("div");d.textContent=new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"})+"  "+t;l.appendChild(d);l.scrollTop=l.scrollHeight}
-function err(m,retry){$("msg").innerHTML=`<div class="err" role="alert"><span>${esc(m)}</span>${retry?'<button class="btn sm" id="retry">Try again</button>':""}</div>`;const r=$("retry");if(r)r.onclick=run}
-
-/* ---------- run ---------- */
-async function run(){
-  if(busy)return;const co=$("co").value.trim();if(!co){$("co").focus();toast("Type a company name first");return}
-  busy=true;$("run").disabled=true;$("msg").innerHTML="";$("log").innerHTML="";picked.clear();
-  const buyers=mode==="buyers",ctry=$("ctry").value,bt=$("btype").value,size=$("size").value,notes=$("notes").value.trim();
-  S={co,mode,profile:null,cands:[],sel:0,memo:null,sources:[]};
-  $("out").innerHTML='<div class="card pad"><div class="sk" style="height:110px"></div><div class="sk" style="height:260px;margin-top:14px"></div></div>';
-  document.getElementById("app").scrollIntoView({behavior:"smooth"});
-  const h=store.get("ds_hist",[]).filter(x=>!(x.c.toLowerCase()===co.toLowerCase()&&x.m===mode));h.unshift({c:co,m:mode});store.set("ds_hist",h.slice(0,6));hist();
-  const addSrc=s=>s.forEach(x=>{if(safeUrl(x.url)&&!S.sources.find(y=>y.url===x.url))S.sources.push(x)});
-  try{
-    pipe(0,0);log(`Profile agent: searching the web for ${co}`);
-    let r=await ask(`You are a senior European M&A analyst. Company: "${co}". Use the live web results if given; otherwise only facts you are confident about. If you do not recognise it, say so and set confidence "low".
-Return ONLY JSON: {"profile":{"name":"","hq":"","sector":"","subsector":"","revenue":"approx. latest revenue, labelled approx.","ownership":"listed|PE-backed|family|state|private|unknown","summary":"max 40 words","why_attractive":"max 25 words","facts":["3 short facts"],"confidence":"high|medium|low"}}`,`${co} company profile revenue ownership`);
-    S.profile=r.data.profile;addSrc(r.sources);log(`Profile agent: read ${r.sources.length} sources, done`);render();
-    pipe(1,1);log(`Sourcing agent: building the ${buyers?"buyer":"target"} universe`);
-    r=await ask(`European M&A sourcing agent. ${buyers?"Find the 8 most plausible BUYERS for":"Find the 8 most plausible ACQUISITION TARGETS for the acquirer"} "${co}". Profile: ${JSON.stringify(S.profile)}.
-Constraints: region ${ctry||"all of Europe"}; counterparties ${bt==="pe"?"private equity only":bt==="strategic"?"strategic only":"mix of strategic and private equity"}; deal size ${size||"any"}; notes: ${notes||"none"}. Do not invent past deals: if none known write "none known".
-Return ONLY JSON: {"candidates":[{"name":"","type":"strategic|PE|infra|sovereign|family","hq":"","rationale":"max 26 words","precedent":"max 18 words","capacity":"EV capacity range"}]} with exactly 8 items.`,`${co} ${buyers?"potential acquirers buyers M&A":"acquisition targets strategy"} ${ctry}`);
-    S.cands=r.data.candidates||[];addSrc(r.sources);log(`Sourcing agent: found ${S.cands.length} counterparties`);render();
-    pipe(2,2);log("Scoring agent: rating 8 pillars for each name");
-    r=await ask(`European M&A scoring agent. Score each candidate from 0 to 100 on eight pillars (regulatory: higher = easier antitrust/FDI). Subject: ${co} (${buyers?"seller":"acquirer"}). Candidates: ${JSON.stringify(S.cands.map(c=>({name:c.name,type:c.type,rationale:c.rationale})))}.
-Return ONLY JSON: {"scored":[{"name":"","scores":{"strategic":0,"capacity":0,"accretion":0,"synergy":0,"regulatory":0,"cultural":0,"precedent":0,"timing":0},"thesis":"max 24 words","risk":"max 18 words"}]}. Spread the scores; do not cluster.`);
-    S.cands.forEach((c,i)=>{const s=(r.data.scored||[]).find(x=>x.name===c.name)||(r.data.scored||[])[i];if(s){c.scores=s.scores;c.thesis=s.thesis;c.risk=s.risk}});
-    log("Scoring agent: done. Click a row to inspect, or draft the memo.");pipe(-1,3);render();
-  }catch(e){pipe(-1,S.cands.length?2:S.profile?1:0);err(e.message||"Something went wrong.",true);if(!S.profile)$("out").innerHTML=""}
-  busy=false;$("run").disabled=false;
-}
-
-/* ---------- render ---------- */
-const total=c=>{const s=W.reduce((a,b)=>a+b,0)||1;return PILLARS.reduce((a,p,i)=>a+W[i]*((c.scores||{})[p[0]]||0),0)/s};
-const heat=v=>`background:rgba(59,47,201,${(.08+Math.max(0,Math.min(100,v))/100*.62).toFixed(2)});color:${v>58?"#fff":"var(--ink)"}`;
-function render(){
-  if(!S||!S.profile)return;const p=S.profile;
-  let h=`<div class="card pad rv in"><div class="profile"><div><p class="eyebrow">${S.mode==="buyers"?"Target":"Acquirer"} profile</p><h2>${esc(p.name)}</h2><p style="margin:6px 0 0;color:var(--ink-2)">${esc(p.summary)}</p></div><span class="tag ${p.confidence==="high"?"green":p.confidence==="low"?"red":"amber"}">Confidence: ${esc(p.confidence)}</span></div>
-  <div class="kv"><div><small>HQ</small><b>${esc(p.hq)}</b></div><div><small>Sector</small><b>${esc(p.sector)}${p.subsector?" · "+esc(p.subsector):""}</b></div><div><small>Revenue · ownership</small><b>${esc(p.revenue)} · ${esc(p.ownership)}</b></div></div>
-  ${p.why_attractive?`<p style="margin:12px 0 0;font-size:14px"><b>Why it's interesting:</b> ${esc(p.why_attractive)}</p>`:""}
-  <div class="facts">${(p.facts||[]).map(f=>`<span class="tag">${esc(f)}</span>`).join("")}</div></div>`;
-  const cs=S.cands.slice();const scored=cs.length&&cs.every(c=>c.scores);
-  if(cs.length){
-    if(scored)cs.sort((a,b)=>total(b)-total(a));
-    h+=`<div class="card pad" style="margin-top:16px"><div class="bar"><h3 style="font-size:18px">${S.mode==="buyers"?"Buyer":"Target"} universe</h3><span class="sp"></span>
-      ${scored?`<button class="btn sm" id="cmpBtn" ${picked.size<2?"disabled":""}>Compare (${picked.size})</button><button class="btn sm" id="csv">Export CSV</button>`:""}</div>
-      <div class="tbl"><table><thead><tr>${scored?'<th></th>':''}<th>#</th><th>Counterparty</th><th>Type</th>${scored?PILLARS.map(p=>`<th title="${p[1]}">${p[1].split(" ")[0]}</th>`).join("")+"<th>Score</th><th></th>":"<th>Why</th>"}</tr></thead><tbody>`;
-    cs.forEach((c,i)=>{const k=S.cands.indexOf(c);h+=`<tr class="row ${k===S.sel?"sel":""}" data-k="${k}">${scored?`<td><input type="checkbox" class="cb" data-pick="${k}" ${picked.has(k)?"checked":""} aria-label="Select ${esc(c.name)} to compare"></td>`:""}<td class="mono">${i+1}</td><td><b>${esc(c.name)}</b><div style="color:var(--ink-3);font-size:12px">${esc(c.hq)}</div></td><td><span class="tag ${/pe|infra|sovereign/i.test(c.type)?"amber":"blue"}">${esc(c.type)}</span></td>${scored?PILLARS.map(p=>`<td><span class="sc" style="${heat(c.scores[p[0]])}">${Math.round(c.scores[p[0]]||0)}</span></td>`).join("")+`<td><div class="tot">${total(c).toFixed(0)}</div><div class="meter"><i style="width:${total(c)}%"></i></div></td><td><button class="star" data-star="${esc(c.name)}" aria-pressed="${short.has(c.name)}" aria-label="Shortlist ${esc(c.name)}">★</button></td>`:`<td style="color:var(--ink-2)">${esc(c.rationale)}</td>`}</tr>`});
-    h+="</tbody></table></div></div>";
-    const c=S.cands[S.sel];
-    if(scored&&c){h+=`<div class="detail"><div class="card pad"><p class="eyebrow">Selected</p><h3>${esc(c.name)}</h3><div class="k">Thesis</div>${esc(c.thesis)}<div class="k">Why it fits</div>${esc(c.rationale)}<div class="k">Precedent</div>${esc(c.precedent)}<div class="k">Capacity</div>${esc(c.capacity)}<div class="k">Main risk</div>${esc(c.risk)}
-      <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="mk">${S.memo&&S.memo.c===c.name?"Redraft memo":"Draft deal memo"} →</button></div></div>
-      <div class="card pad">${radar(c)}${S.sources.length?`<div class="k" style="margin-top:6px">Sources read (${S.sources.length})</div><div class="srcs">${S.sources.slice(0,8).map(s=>`<a href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer">${esc(String(s.title).slice(0,70))}</a>`).join("")}</div>`:""}</div></div>`}
-  }
-  if(S.memo)h+=memoHtml(S.memo);
-  $("out").innerHTML=h;
-}
-function radar(c){const n=8,R=82,cx=120,cy=108,pt=(i,v)=>{const a=-Math.PI/2+i*2*Math.PI/n,r=R*v/100;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]};
-  let g="";[25,50,75,100].forEach(l=>g+=`<polygon fill="none" stroke="#e2ded4" points="${PILLARS.map((_,i)=>pt(i,l).join(",")).join(" ")}"/>`);
-  PILLARS.forEach((p,i)=>{const[x,y]=pt(i,122);g+=`<text x="${x}" y="${y}" font-size="9" text-anchor="middle" fill="#6b7385" font-family="Inter">${p[1].split(" ")[0]}</text>`});
-  g+=`<polygon fill="rgba(59,47,201,.18)" stroke="#3b2fc9" stroke-width="2" points="${PILLARS.map((p,i)=>pt(i,c.scores[p[0]]||0).join(",")).join(" ")}"/>`;
-  return `<svg viewBox="0 0 240 220" width="100%" role="img" aria-label="Pillar profile of ${esc(c.name)}">${g}</svg>`}
-function memoHtml(x){const m=x.m,L=a=>"<ul>"+(a||[]).map(i=>`<li>${esc(i)}</li>`).join("")+"</ul>";
-  return `<div class="card pad memo" style="margin-top:16px" id="memo"><div class="bar"><p class="eyebrow">Preliminary memo · ${esc(x.c)}</p><span class="sp"></span><button class="btn sm" id="cp">Copy</button><button class="btn sm" id="dl">Download .md</button></div><h2>${esc(m.headline)}</h2>
-  <h3>Situation</h3><p>${esc(m.situation)}</p><h3>Rationale</h3>${L(m.rationale)}<h3>Valuation view</h3><p>${esc(m.valuation)}</p><h3>Synergies</h3>${L(m.synergies)}<h3>Risks</h3>${L(m.risks)}<h3>Structure</h3><p>${esc(m.structure)}</p><h3>Diligence priorities</h3>${L(m.diligence)}<h3>Next steps</h3>${L(m.next_steps)}
-  <p style="color:var(--ink-3);font-size:12px;margin-top:16px">AI-generated first draft from public sources. Check every figure before use.</p></div>`}
-function memoText(){const x=S.memo,m=x.m,L=a=>(a||[]).map(i=>"- "+i).join("\n");return `# ${m.headline}\n\nCounterparty: ${x.c}\n\n## Situation\n${m.situation}\n\n## Rationale\n${L(m.rationale)}\n\n## Valuation view\n${m.valuation}\n\n## Synergies\n${L(m.synergies)}\n\n## Risks\n${L(m.risks)}\n\n## Structure\n${m.structure}\n\n## Diligence priorities\n${L(m.diligence)}\n\n## Next steps\n${L(m.next_steps)}\n\n---\nDraft by Deal Sourcing Agent (aryanskothari.vercel.app). AI-generated, verify before use.\n`}
-
-/* ---------- interactions ---------- */
-$("out").addEventListener("click",async e=>{
-  const st=e.target.closest("[data-star]");if(st){const n=st.dataset.star;short.has(n)?short.delete(n):short.add(n);store.set("ds_short",[...short]);st.setAttribute("aria-pressed",short.has(n));toast(short.has(n)?n+" added to shortlist":n+" removed");return}
-  if(e.target.closest("[data-pick]"))return;
-  const r=e.target.closest("tr.row");if(r){S.sel=+r.dataset.k;render();return}
-  if(e.target.id==="mk")return memo();
-  if(e.target.id==="cp")return copy(memoText(),"Memo copied");
-  if(e.target.id==="dl")return download(`deal-memo-${S.co.replace(/\W+/g,"-").toLowerCase()}.md`,memoText(),"text/markdown");
-  if(e.target.id==="csv"){const rows=[["Rank","Counterparty","Type","HQ",...PILLARS.map(p=>p[1]),"Weighted score","Thesis","Risk"]];S.cands.slice().sort((a,b)=>total(b)-total(a)).forEach((c,i)=>rows.push([i+1,c.name,c.type,c.hq,...PILLARS.map(p=>Math.round(c.scores[p[0]]||0)),total(c).toFixed(1),c.thesis,c.risk]));return download(`deal-universe-${S.co.replace(/\W+/g,"-").toLowerCase()}.csv`,rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n"),"text/csv")}
-  if(e.target.id==="cmpBtn")return compare();
-});
-$("out").addEventListener("change",e=>{const p=e.target.dataset.pick;if(p==null)return;const k=+p;if(e.target.checked){if(picked.size>=3){e.target.checked=false;toast("Compare up to 3 at a time");return}picked.add(k)}else picked.delete(k);const b=$("cmpBtn");if(b){b.disabled=picked.size<2;b.textContent=`Compare (${picked.size})`}});
-async function memo(){
-  const c=S.cands[S.sel],b=$("mk");b.disabled=true;b.textContent="Memo agent working…";pipe(3,3);log(`Memo agent: drafting ${c.name} × ${S.profile.name}`);
-  try{const r=await ask(`You are the memo agent of a European M&A team. Write a concise preliminary deal memo. ${S.mode==="buyers"?`Buyer: ${c.name}. Target: ${S.profile.name}`:`Acquirer: ${S.profile.name}. Target: ${c.name}`}. Target profile: ${JSON.stringify(S.profile)}. Counterparty notes: ${JSON.stringify({rationale:c.rationale,precedent:c.precedent,capacity:c.capacity,risk:c.risk,scores:c.scores})}. Label every figure as an estimate. Do not invent facts.
-Return ONLY JSON: {"headline":"","situation":"max 50 words","rationale":["3-4 bullets"],"valuation":"methods and a rough multiple range, flagged indicative","synergies":["3 bullets"],"risks":["4 bullets incl. antitrust/FDI"],"structure":"max 40 words","diligence":["5 questions"],"next_steps":["4 bullets"]}`,`${c.name} ${S.profile.name} acquisition`);
-    S.memo={c:c.name,m:r.data};r.sources.forEach(x=>{if(safeUrl(x.url)&&!S.sources.find(y=>y.url===x.url))S.sources.push(x)});pipe(-1,4);log("Memo agent: done");render();$("memo").scrollIntoView({behavior:"smooth",block:"start"});
-  }catch(e){pipe(-1,3);err(e.message||"The memo failed.",false);b.disabled=false;b.textContent="Draft deal memo →"}
-}
-function compare(){
-  const cs=[...picked].map(k=>S.cands[k]),cols=["#3b2fc9","#c8962e","#b8860b"];
-  $("dTitle").textContent="Compare "+cs.length+" counterparties";
-  $("dBody").innerHTML=`<div class="cmp" style="--n:${cs.length}"><div class="cmp-row"><span></span>${cs.map((c,i)=>`<b style="color:${cols[i]}">${esc(c.name)}</b>`).join("")}</div>
-  ${PILLARS.map(p=>`<div class="cmp-row"><span>${p[1]}</span>${cs.map((c,i)=>`<div><div class="b"><i style="width:${c.scores[p[0]]}%;background:${cols[i]}"></i></div><small class="mono">${Math.round(c.scores[p[0]])}</small></div>`).join("")}</div>`).join("")}
-  <div class="cmp-row" style="border-top:1px solid var(--rule);padding-top:12px"><b>Weighted</b>${cs.map((c,i)=>`<b style="font-size:20px;color:${cols[i]}">${total(c).toFixed(0)}</b>`).join("")}</div>
-  <div class="cmp-row"><span>Thesis</span>${cs.map(c=>`<small>${esc(c.thesis)}</small>`).join("")}</div><div class="cmp-row"><span>Main risk</span>${cs.map(c=>`<small>${esc(c.risk)}</small>`).join("")}</div></div>`;
-  $("drawer").classList.add("on");document.querySelector("#drawer .x").focus();
-}
-document.querySelectorAll("[data-close]").forEach(el=>el.onclick=()=>$("drawer").classList.remove("on"));
-addEventListener("keydown",e=>{if(e.key==="Escape")$("drawer").classList.remove("on")});
-</script>
+<script src="assets/dd-core.js"></script>
+<script src="assets/dd-sourcing.js"></script>
+<script src="assets/dd-company.js"></script>
+<script src="assets/dd-stock.js"></script>
+<script type="module" src="assets/dd-3d.js"></script>
 </body>
 </html>
