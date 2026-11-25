@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MediBridge · Treatment abroad, planned like a trip</title>
 <meta name="description" content="Compare all-in packages for surgery abroad: procedure, flights, hotel and aftercare in one price. Plus online second opinions.">
-<meta name="theme-color" content="#f6f4ef">
+<meta name="theme-color" content="#fbf4ec">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23ff5a36'/%3E%3Cpath d='M13 8h6v5h5v6h-5v5h-6v-5H8v-6h5z' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -137,12 +137,16 @@ textarea.enq{width:100%;min-height:170px;font:13px/1.55 var(--sans);border:1px s
 .note h3{font-size:16px;margin-bottom:6px}
 .note p{margin:0;color:var(--ink-2);font-size:14px}
 @media(max-width:800px){.note{grid-template-columns:1fr}}
+
+:root{--bg:#fbf4ec;--cobalt:#0e8a8c;--cobalt-2:#0a6466;--tomato:#ff6b4a;--sun:#ffb547;--lilac:#7fd1c7;--rule:#eadfd2;--rule-2:#d8c9b8}
+body{background:radial-gradient(1100px 600px at 90% -10%,#cfeeea 0,transparent 60%),radial-gradient(800px 500px at -10% 30%,#ffe0d1 0,transparent 55%),var(--bg)}
+.top{background:rgba(251,244,236,.82)}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#top"><i style="background:var(--tomato)">✚</i>MediBridge</a>
+    <a class="brand" href="#top"><i style="background:linear-gradient(135deg,#0e8a8c,#ff6b4a)">✚</i>MediBridge</a>
     <nav aria-label="Sections"><a href="#treatments">Treatments</a><a href="#destinations">Destinations</a><a href="#how">How it works</a><a href="#opinion">Second opinion</a><a href="#faq">FAQ</a></nav>
     <span class="sp"></span>
     <label class="sr" for="cur">Currency</label>
@@ -174,7 +178,7 @@ textarea.enq{width:100%;min-height:170px;font:13px/1.55 var(--sans);border:1px s
     <figure class="globe" aria-hidden="true">
       <canvas id="globe"></canvas>
       <div class="floating" style="left:-2%;top:16%"><i style="background:var(--cobalt)">✈</i><div><b>Sydney → Bangkok</b>9 h · recovery 10 nights</div></div>
-      <div class="floating" style="right:0;bottom:16%;animation-delay:-3s"><i style="background:var(--tomato)">✚</i><div><b>Accredited hospital</b>checklist included</div></div>
+      <div class="floating" style="right:0;bottom:16%;animation-delay:-3s"><i style="background:linear-gradient(135deg,#0e8a8c,#ff6b4a)">✚</i><div><b>Accredited hospital</b>checklist included</div></div>
     </figure>
   </div>
 </section>
@@ -305,13 +309,13 @@ document.querySelectorAll(".stabs button").forEach(b=>b.onclick=()=>{document.qu
   let vis=true;new IntersectionObserver(([e])=>{vis=e.isIntersecting;if(vis&&!still)requestAnimationFrame(f)}).observe(c);
   function f(t){
     t=t||0;x.clearRect(0,0,w,h);const cx=w/2,cy=h/2,r=Math.min(w,h)*.4,rot=still?-80:-80+t*.006;
-    const g=x.createRadialGradient(cx-r*.3,cy-r*.3,r*.1,cx,cy,r);g.addColorStop(0,"#ffffff");g.addColorStop(1,"#e9ecfb");x.fillStyle=g;x.beginPath();x.arc(cx,cy,r,0,7);x.fill();
-    x.strokeStyle="rgba(38,67,214,.12)";x.lineWidth=1;
+    const g=x.createRadialGradient(cx-r*.3,cy-r*.3,r*.1,cx,cy,r);g.addColorStop(0,"#ffffff");g.addColorStop(1,"#d6f0ec");x.fillStyle=g;x.beginPath();x.arc(cx,cy,r,0,7);x.fill();
+    x.strokeStyle="rgba(14,138,140,.12)";x.lineWidth=1;
     for(let lat=-60;lat<=60;lat+=30){x.beginPath();let s=false;for(let lon=-180;lon<=180;lon+=6){const p=proj(lat,lon,rot,cx,cy,r);if(p.z>0){s?x.lineTo(p.x,p.y):x.moveTo(p.x,p.y);s=true}else s=false}x.stroke()}
     for(let lon=-180;lon<180;lon+=30){x.beginPath();let s=false;for(let lat=-90;lat<=90;lat+=6){const p=proj(lat,lon,rot,cx,cy,r);if(p.z>0){s?x.lineTo(p.x,p.y):x.moveTo(p.x,p.y);s=true}else s=false}x.stroke()}
     R.forEach((pair,i)=>{const a=P[pair[0]],b=P[pair[1]];x.beginPath();let s=false;for(let k=0;k<=40;k++){const q=slerp(a,b,k/40),p=proj(q[0],q[1],rot,cx,cy,r*q[2]);if(p.z>0){s?x.lineTo(p.x,p.y):x.moveTo(p.x,p.y);s=true}else s=false}x.strokeStyle="rgba(255,90,54,.55)";x.lineWidth=1.6;x.stroke();
       const tt=((t/5200)+i/R.length)%1,q=slerp(a,b,tt),p=proj(q[0],q[1],rot,cx,cy,r*q[2]);if(p.z>0){x.fillStyle="#ff5a36";x.beginPath();x.arc(p.x,p.y,4.5,0,7);x.fill();x.strokeStyle="rgba(255,90,54,.25)";x.lineWidth=6;x.beginPath();x.arc(p.x,p.y,9,0,7);x.stroke()}});
-    Object.entries(P).forEach(([k,v])=>{const p=proj(v[0],v[1],rot,cx,cy,r);if(p.z>0){const dest=["Bangkok","Delhi","Istanbul","Cancun","KL","Seoul","Dubai"].includes(k);x.fillStyle=dest?"#2643d6":"#16213a";x.beginPath();x.arc(p.x,p.y,dest?5:3.5,0,7);x.fill()}});
+    Object.entries(P).forEach(([k,v])=>{const p=proj(v[0],v[1],rot,cx,cy,r);if(p.z>0){const dest=["Bangkok","Delhi","Istanbul","Cancun","KL","Seoul","Dubai"].includes(k);x.fillStyle=dest?"#0e8a8c":"#16213a";x.beginPath();x.arc(p.x,p.y,dest?5:3.5,0,7);x.fill()}});
     x.strokeStyle="rgba(22,33,58,.08)";x.lineWidth=1;x.beginPath();x.arc(cx,cy,r,0,7);x.stroke();
     if(!still&&vis)requestAnimationFrame(f);
   }
