@@ -83,6 +83,7 @@ Return ONLY JSON: {"score":0-100,"verdict":"Proceed|Proceed with conditions|Do n
     render();
     const h = store.get("dd_hist", []).filter((x) => x.toLowerCase() !== co.toLowerCase()); h.unshift(co); store.set("dd_hist", h.slice(0, 6));
     busy = false; $("cRun").disabled = false; DD.pulse("done");
+    window.dispatchEvent(new CustomEvent("dd:company-done", { detail: S }));
   }
 
   /* ---------- helpers ---------- */
@@ -219,7 +220,7 @@ Return ONLY JSON: {"score":0-100,"verdict":"Proceed|Proceed with conditions|Do n
 Claims:\n${claims.map((c, i) => i + 1 + ". " + c).join("\n")}
 Return ONLY JSON: {"claims":[{"claim":"the claim","verdict":"Supported|Partly supported|Contradicted|Unverifiable","evidence":"what the public record shows, max 30 words","source":"title of the supporting web result or empty","ask":"the exact question or document to request from the seller, max 20 words"}],"overall":"one sentence: how much of the story holds up"}`, `${co} ${claims.slice(0, 2).join(" ")}`);
       const out = (r.data.claims || []).map((c) => ({ ...c, verdict: VC[c.verdict] !== undefined ? c.verdict : "Unverifiable" }));
-      window.__claims = out; if (S) S.claims = out;
+      window.__claims = out; window.__claimCo = co; window.__claimOverall = r.data.overall || ""; if (S) S.claims = out; $("clScore").hidden = false; window.dispatchEvent(new CustomEvent("dd:claims", { detail: { co, claims: out } }));
       const n = (v) => out.filter((c) => c.verdict === v).length;
       $("clOut").innerHTML = `<div class="cl-sum"><span class="tag green">${n("Supported")} supported</span><span class="tag amber">${n("Partly supported")} partly</span><span class="tag red">${n("Contradicted")} contradicted</span><span class="tag">${n("Unverifiable")} unverifiable</span></div><p style="margin:4px 0 6px;font-size:14px"><b>${esc(r.data.overall || "")}</b></p>` + out.map((c) => { const src = (r.sources || []).find((x) => c.source && x.title && x.title.slice(0, 25) === String(c.source).slice(0, 25)); return `<div class="cl-row"><span><span class="tag ${VC[c.verdict]}">${esc(c.verdict)}</span></span><div><b>${esc(c.claim)}</b><p>${esc(c.evidence)}</p><p class="q">Ask the seller: ${esc(c.ask)}</p>${src && safeUrl(src.url) ? `<a href="${esc(safeUrl(src.url))}" target="_blank" rel="noopener noreferrer">↗ ${esc(src.title.slice(0, 70))}</a>` : ""}</div></div>`; }).join("") + `<p class="note">Public sources only. A claim marked unverifiable is not false: it means you must get proof from the data room.</p>`;
     } catch (e) { $("clOut").innerHTML = `<div class="err" role="alert"><span>${esc(e.message || "Claim check failed")}</span></div>`; }
